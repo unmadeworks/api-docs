@@ -1,0 +1,180 @@
+FORMAT: 1A
+HOST: https://embed.unmade.com/
+
+# Unmade Customization APIs
+
+We provide a set of APIs which allows Unmade technology to be embedded into an existing
+e-commerce system, in a way that appears seamless to the end customer.
+
+![Architecture](https://unmade.s3.amazonaws.com/docs/UnmadeArchitecture.png)
+
+Unmade-powered products continue to be configured in the e-commerce system, but the PDP content
+will be provided by the Unmade customization platform via an iframe themed to match the host site.
+
+The integration can happen in two stages:
+
+1) **Front-end integration**: Unmade provides an iframe endpoint per customizable product,
+which communicates with the host site via a JavaScript
+[postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API.
+The host website must implement a small amount of functionality to bridge between
+the two systems (detailed below).
+
+2) **Back-end integration**: When the customer purchases an Unmade-powered product, the e-commerce
+system must communicate this information to Unmade using our RESTful API, so that we can send the
+design to manufacture. We also provide an API to check on order status.
+
+
+## Product [/v1/products/{slug}/{?price,ccy,locale}]
+
++ Parameters
+    + slug - The product slug (often equal to the SKU)
+    + price (number) - The price to display for the product
+    + ccy - The ISO 4217 currency code corresponding to the `price`
+    + locale (optional) - The locale to use in the user interface
+        + Default: `en-GB`
+
+
+### iframe endpoint [GET]
+
+Use this as the source on an `iframe` element to embed an Unmade-powered product in an
+external e-commerce website.
+
+```
+<iframe
+  src="<URL>"
+  frameborder="0"
+  width="100%"
+  height="500px"
+  scrolling="no">
+</iframe>
+```
+
+Certain actions performed by the customer in the iframe will result in events being sent to
+the host website using the [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
+API. A JavaScript listener, such as the following, should be implemented on the host site:
+
+
+```
+window.addEventListener("message", receiveMessage, false);
+
+function receiveMessage (event) {
+  var origin = event.origin || event.originalEvent.origin;
+  if (origin === "https://embed.unmade.com") {
+    switch (event.data.type) {
+        case 'save':
+            addToCart(e.data.payload);
+        case 'resize':
+            resizeIFrame(e.data.payload);
+        case 'click':
+            openModal(e.data.payload);
+        default:
+            break;
+    }
+  }
+}
+```
+
+The `addToCart` payload will include the same information as the Design API, described below.
+
+The `resize` event will be fired if the iframe changes size, for example if it's embedded in a
+website with a responsive design, and the customer resizes their browser. Implementation of
+`resizeIFrame` is required for a seamless experience.
+
+The `click` event will be fired if a UI element in the iframe has been clicked, and the intended
+behaviour needs to be handled by the host page. The most common example of this is a Size Guide
+button inside the iframe, which triggers a modal dialog box outside the iframe. In this case
+`e.data.payload.clicked` would be set to `"sizing"`.
+
++ Response 200 (text/html)
+
+
+## Design [/v1/designs/{design_id}/]
+
+### Retrieve design [GET]
+
+If you want to receive information on a saved design, for example to check on availability.
+
++ Parameters
+    + design_id (uuid) - ID of the Design in the form of a uuid
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+            
++ Response 200 (application/json)
+
+        {
+            "id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
+            "product": "product url",
+            "preview": "preview url",
+            "description": "Customized Product in Black & White"
+        }
+
+
+
+## Orders [/v1/orders/]
+
+### Create a new Order [POST]
+
+Once an order has been placed on the e-commerce platform, the Unmade system should be notified
+so we can send the design for manufacture.
+
++ Request (application/json)
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+               "reference": "YOUR ORDER REFERENCE",
+               "designs": [
+                 "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4"
+               ],
+               "shipping_address": {
+                   "first_name": "",
+                   "last_name": "",
+                   "company_name": "",
+                   "address_1": "",
+                   "address_2": "",
+                   "city": "",
+                   "country_area": "",
+                   "postal_code": "",
+                   "country": "GBR",
+                   "phone": ""
+               }
+            }
+
++ Response 201 (application/json)
+
+        {
+            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
+        }
+        
++ Response 400
+
+## Order [/v1/orders/{order_id}/]
+
+### Retrieve an existing order [GET]
+
+If you want to receive information on an order, for example to check on status.
+
++ Parameters
+    + order_id (uuid) - ID of the Order in the form of a uuid
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+        {
+            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
+            "design": "/v1/designs/8a2b6517-e020-46fd-8cd0-ec441d4ac4b4/",
+            "status": "knitting"
+        }
+
+
+
