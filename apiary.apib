@@ -121,7 +121,7 @@ so we can send the design for manufacture.
 
 ### Create an Order [POST]
 
-+ Request Simple Order with Designs (application/json)
++ Request Simple Order (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -153,7 +153,7 @@ so we can send the design for manufacture.
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
 
-+ Request Optional Data per Order (application/json)
++ Request Optional Partner Data per Order (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -194,7 +194,7 @@ so we can send the design for manufacture.
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
 
-+ Request Specify Quantity (application/json)
++ Request Quantity Order (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -232,7 +232,7 @@ so we can send the design for manufacture.
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
 
-+ Request Optional Data per Item (application/json)
++ Request Optional Partner Data per Item (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -276,7 +276,47 @@ so we can send the design for manufacture.
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
 
-+ Request Specify Design Size (application/json)
++ Request Include Size of the Design (application/json)
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+                "reference": "YOUR ORDER REFERENCE",
+                "order_items": [
+                    {
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "quantity": 1,
+                        "partner_data": {
+                            "barcode": "98323928238372"
+                        },
+                        "options" : {
+                            "size": "L"
+                        }
+                    },
+                ],
+                "shipping_address": {
+                    "name": "John Smith",
+                    "company_name": "unmade",
+                    "address_1": "152 Strand"
+                    "address_2": "Somerset House",
+                    "city": "London",
+                    "country_atera": "",
+                    "postal_code": "WC2R 1LA",
+                    "country": "UK",
+                    "phone": ""
+                }
+            }
+
++ Response 201 (application/json)
+
+        {
+            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
+        }
+
++ Request Same Design different Sizes (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -297,13 +337,23 @@ so we can send the design for manufacture.
                         }
                     },
                     {
-                        "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                         "quantity": 3,
                         "partner_data": {
                             "barcode": "98329845228372"
                         },
                         "options" : {
                             "size": "L"
+                        }
+                    },
+                    {
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "quantity": 2,
+                        "partner_data": {
+                            "barcode": "98329845228372"
+                        },
+                        "options" : {
+                            "size": "S"
                         }
                     }
                 ],
@@ -328,9 +378,9 @@ so we can send the design for manufacture.
 
 ## Order [/v1/orders/{order_id}/]
 
-If you want to receive information on an order, for example to check on status.
-
 ### Retrieve an existing order [GET]
+
+If you want to receive information on an order, for example to check on status.
 
 + Parameters
     + order_id (uuid) - ID of the Order in the form of a uuid
