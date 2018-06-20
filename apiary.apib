@@ -115,12 +115,13 @@ If you want to receive information on a saved design, for example to check on av
 
 ## Orders [/v1/orders/]
 
-### Create a new Order [POST]
-
 Once an order has been placed on the e-commerce platform, the Unmade system should be notified
 so we can send the design for manufacture.
 
-+ Request (application/json)
+
+### Create an Order [POST]
+
++ Request Simple Order with Designs (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -128,22 +129,22 @@ so we can send the design for manufacture.
     + Body
 
             {
-               "reference": "YOUR ORDER REFERENCE",
-               "designs": [
-                 "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4"
-               ],
-               "shipping_address": {
-                   "first_name": "",
-                   "last_name": "",
-                   "company_name": "",
-                   "address_1": "",
-                   "address_2": "",
-                   "city": "",
-                   "country_area": "",
-                   "postal_code": "",
-                   "country": "GBR",
-                   "phone": ""
-               }
+                "reference": "YOUR ORDER REFERENCE",
+                "designs": [
+                    "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                    "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
+                ],
+                "shipping_address": {
+                    "name": "John Smith",
+                    "company_name": "unmade",
+                    "address_1": "152 Strand"
+                    "address_2": "Somerset House",
+                    "city": "London",
+                    "country_atera": "",
+                    "postal_code": "WC2R 1LA",
+                    "country": "UK",
+                    "phone": ""
+                }
             }
 
 + Response 201 (application/json)
@@ -151,14 +152,13 @@ so we can send the design for manufacture.
         {
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
-        
-+ Response 400
+
 
 ## Order [/v1/orders/{order_id}/]
 
-### Retrieve an existing order [GET]
-
 If you want to receive information on an order, for example to check on status.
+
+### Retrieve an existing order [GET]
 
 + Parameters
     + order_id (uuid) - ID of the Order in the form of a uuid
