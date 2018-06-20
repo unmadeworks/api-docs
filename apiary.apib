@@ -172,9 +172,40 @@ If you want to receive information on an order, for example to check on status.
 
         {
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
-            "design": "/v1/designs/8a2b6517-e020-46fd-8cd0-ec441d4ac4b4/",
-            "status": "knitting"
+            "designs": [
+                "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
+            ],
+            "reference": "partner_order_reference",
+            "created": "2018-04-11T17:20:04.991263Z",
+            "partner_data":{
+                "customer_po_number": "1234512334X",
+            },
+            "shipping_address" : {
+                "name": "John Smith",
+                "company_name": "unmade",
+                "address_1": "152 Strand"
+                "address_2": "Somerset House",
+                "city": "London",
+                "country_atera": "",
+                "postal_code": "WC2R 1LA",
+                "country": "UK",
+                "phone": ""
+            },
+            "order_items": [
+                {
+                    "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                    "quantity": 1,
+                    "partner_data": {
+                        "barcode": "98323928238372"
+                    },
+                },
+                {
+                    "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
+                    "quantity": 3,
+                    "partner_data": {
+                        "barcode": "98329845228372"
+                    },
+                },
+            ]
         }
-
-
-
