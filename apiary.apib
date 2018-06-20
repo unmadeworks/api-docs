@@ -232,6 +232,50 @@ so we can send the design for manufacture.
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
 
++ Request Optional Data per Item (application/json)
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+                "reference": "YOUR ORDER REFERENCE",
+                "order_items": [
+                    {
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "quantity": 1,
+                        "partner_data": {
+                            "barcode": "98323928238372"
+                        }
+                    },
+                    {
+                        "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
+                        "quantity": 3,
+                        "partner_data": {
+                            "barcode": "98329845228372"
+                        }
+                    }
+                ],
+                "shipping_address": {
+                    "name": "John Smith",
+                    "company_name": "unmade",
+                    "address_1": "152 Strand"
+                    "address_2": "Somerset House",
+                    "city": "London",
+                    "country_atera": "",
+                    "postal_code": "WC2R 1LA",
+                    "country": "UK",
+                    "phone": ""
+                }
+            }
+
++ Response 201 (application/json)
+
+        {
+            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
+        }
+
 ## Order [/v1/orders/{order_id}/]
 
 If you want to receive information on an order, for example to check on status.
