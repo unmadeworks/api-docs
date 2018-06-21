@@ -121,39 +121,7 @@ so we can send the design for manufacture.
 
 ### Create an Order [POST]
 
-+ Request Simple Order (application/json)
-    + Headers
-
-            Authorization: Token ABCDEF
-
-    + Body
-
-            {
-                "reference": "YOUR ORDER REFERENCE",
-                "designs": [
-                    "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                    "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
-                ],
-                "shipping_address": {
-                    "name": "John Smith",
-                    "company_name": "unmade",
-                    "address_1": "152 Strand"
-                    "address_2": "Somerset House",
-                    "city": "London",
-                    "country_atera": "",
-                    "postal_code": "WC2R 1LA",
-                    "country": "UK",
-                    "phone": ""
-                }
-            }
-
-+ Response 201 (application/json)
-
-        {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
-        }
-
-+ Request Optional Partner Data per Order (application/json)
++ Request Order with optional partner data (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -163,98 +131,17 @@ so we can send the design for manufacture.
             {
                 "reference": "YOUR ORDER REFERENCE",
                 "partner_data": {
-                    "customer_po_number": "2352382XX"
+                    "example_po_number": "example_number",
+                    "example_po_type": "example_value",
+                    "example_shipping_method": "example_shipping_service"
                 },
                 "order_items": [
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 1
-                    },
-                    {
-                        "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
-                        "quantity": 3
-                    }
-                ],
-                "shipping_address": {
-                    "name": "John Smith",
-                    "company_name": "unmade",
-                    "address_1": "152 Strand"
-                    "address_2": "Somerset House",
-                    "city": "London",
-                    "country_atera": "",
-                    "postal_code": "WC2R 1LA",
-                    "country": "UK",
-                    "phone": ""
-                }
-            }
-
-+ Response 201 (application/json)
-
-        {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
-        }
-
-+ Request Quantity Order (application/json)
-    + Headers
-
-            Authorization: Token ABCDEF
-
-    + Body
-
-            {
-                "reference": "YOUR ORDER REFERENCE",
-                "order_items": [
-                    {
-                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 1
-                    },
-                    {
-                        "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
-                        "quantity": 3
-                    }
-                ],
-                "shipping_address": {
-                    "name": "John Smith",
-                    "company_name": "unmade",
-                    "address_1": "152 Strand"
-                    "address_2": "Somerset House",
-                    "city": "London",
-                    "country_atera": "",
-                    "postal_code": "WC2R 1LA",
-                    "country": "UK",
-                    "phone": ""
-                }
-            }
-
-+ Response 201 (application/json)
-
-        {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
-        }
-
-+ Request Optional Partner Data per Item (application/json)
-    + Headers
-
-            Authorization: Token ABCDEF
-
-    + Body
-
-            {
-                "reference": "YOUR ORDER REFERENCE",
-                "order_items": [
-                    {
-                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 1,
+                        "quantity": 2
                         "partner_data": {
                             "barcode": "98323928238372"
                         }
-                    },
-                    {
-                        "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
-                        "quantity": 3,
-                        "partner_data": {
-                            "barcode": "98329845228372"
-                        }
                     }
                 ],
                 "shipping_address": {
@@ -263,7 +150,7 @@ so we can send the design for manufacture.
                     "address_1": "152 Strand"
                     "address_2": "Somerset House",
                     "city": "London",
-                    "country_atera": "",
+                    "country_area": "",
                     "postal_code": "WC2R 1LA",
                     "country": "UK",
                     "phone": ""
@@ -273,10 +160,10 @@ so we can send the design for manufacture.
 + Response 201 (application/json)
 
         {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
+            "id": "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
         }
 
-+ Request Include Size of the Design (application/json)
++ Request Team wear order (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -285,77 +172,43 @@ so we can send the design for manufacture.
 
             {
                 "reference": "YOUR ORDER REFERENCE",
+                "partner_data": {
+                    "example_po_number": "example_number",
+                    "example_po_type": "example_value",
+                    "example_shipping_method": "example_shipping_service"
+                },
                 "order_items": [
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 1,
-                        "partner_data": {
-                            "barcode": "98323928238372"
-                        },
+                        "quantity": 2
                         "options" : {
                             "size": "L"
-                        }
-                    },
-                ],
-                "shipping_address": {
-                    "name": "John Smith",
-                    "company_name": "unmade",
-                    "address_1": "152 Strand"
-                    "address_2": "Somerset House",
-                    "city": "London",
-                    "country_atera": "",
-                    "postal_code": "WC2R 1LA",
-                    "country": "UK",
-                    "phone": ""
-                }
-            }
-
-+ Response 201 (application/json)
-
-        {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
-        }
-
-+ Request Same Design different Sizes (application/json)
-    + Headers
-
-            Authorization: Token ABCDEF
-
-    + Body
-
-            {
-                "reference": "YOUR ORDER REFERENCE",
-                "order_items": [
-                    {
-                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 1,
+                        },
                         "partner_data": {
                             "barcode": "98323928238372"
-                        },
+                        }
+                    },
+                    {
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "quantity": 3
                         "options" : {
                             "size": "M"
+                        },
+                        "partner_data": {
+                            "barcode": "98323928238372"
                         }
                     },
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 3,
-                        "partner_data": {
-                            "barcode": "98329845228372"
-                        },
-                        "options" : {
-                            "size": "L"
-                        }
-                    },
-                    {
-                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "quantity": 2,
-                        "partner_data": {
-                            "barcode": "98329845228372"
-                        },
+                        "quantity": 1
                         "options" : {
                             "size": "S"
+                        },
+                        "partner_data": {
+                            "barcode": "98323928238372"
                         }
                     }
+                    
                 ],
                 "shipping_address": {
                     "name": "John Smith",
@@ -363,7 +216,7 @@ so we can send the design for manufacture.
                     "address_1": "152 Strand"
                     "address_2": "Somerset House",
                     "city": "London",
-                    "country_atera": "",
+                    "country_area": "",
                     "postal_code": "WC2R 1LA",
                     "country": "UK",
                     "phone": ""
@@ -375,6 +228,7 @@ so we can send the design for manufacture.
         {
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
+
 
 ## Order [/v1/orders/{order_id}/]
 
@@ -394,10 +248,6 @@ If you want to receive information on an order, for example to check on status.
 
         {
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
-            "designs": [
-                "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc"
-            ],
             "reference": "partner_order_reference",
             "created": "2018-04-11T17:20:04.991263Z",
             "partner_data":{
