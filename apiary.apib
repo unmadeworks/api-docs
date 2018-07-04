@@ -248,21 +248,22 @@ If you want to receive information on an order, for example to check on status.
 
         {
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
-            "reference": "partner_order_reference",
-            "created": "2018-04-11T17:20:04.991263Z",
-            "partner_data":{
-                "customer_po_number": "1234512334X",
-            },
             "shipping_address" : {
                 "name": "John Smith",
                 "company_name": "unmade",
-                "address_1": "152 Strand"
+                "address_1": "152 Strand",
                 "address_2": "Somerset House",
                 "city": "London",
-                "country_atera": "",
+                "country_area": "",
                 "postal_code": "WC2R 1LA",
                 "country": "UK",
                 "phone": ""
+            },
+            "reference": "partner_order_reference",
+            "created": "2018-04-11T17:20:04.991263Z",
+            "state": "new",
+            "partner_data":{
+                "customer_po_number": "1234512334X"
             },
             "order_items": [
                 {
@@ -270,14 +271,26 @@ If you want to receive information on an order, for example to check on status.
                     "quantity": 1,
                     "partner_data": {
                         "barcode": "98323928238372"
-                    },
+                    }
                 },
                 {
                     "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
                     "quantity": 3,
                     "partner_data": {
                         "barcode": "98329845228372"
-                    },
-                },
+                    }
+                }
             ]
+        }
+
++ Response 401 (application/json)
+
+        {
+            "detail": "Authentication credentials were not provided."
+        }
+
++ Response 404 (application/json)
+
+        {
+            "detail": "Not found."
         }
