@@ -234,7 +234,23 @@ so we can send the design for manufacture.
 
 ### Retrieve an existing order [GET]
 
-If you want to receive information on an order, for example to check on status.
+If you want to receive information on an order, for example to check the order state.
+
+#### Order States
+
+As an order progresses through its life-cycle it will adopt one of a number of order states.
+The state of an order is provided on an order's `state` attribute and will be one of the
+following values:
+
+ - `new` : This order has been received by Unmade, but is not in production yet.
+ - `submitting` : This order is being sent to the factory for production.
+ - `submitted` : This order has been sent to the factory for production.
+ - `ready_to_ship` : This order is waiting to be picked up at the factory.
+ - `shipped` : The factory has marked this order as shipped.
+ - `cancelled` : This order has been cancelled.
+ - `hold` : This order is on hold.
+ - `failed` : This order has failed. (Error state, please contact Unmade)
+ - `uninitialised` : This order is not complete. (Error state, please contact Unmade)
 
 + Parameters
     + order_id (uuid) - ID of the Order in the form of a uuid
