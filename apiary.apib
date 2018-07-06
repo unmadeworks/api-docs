@@ -28,16 +28,16 @@ design to manufacture. We also provide an API to check on order status.
 
 + Parameters
     + slug - The product slug (often equal to the SKU)
-    + price (number) - The price to display for the product
-    + ccy - The ISO 4217 currency code corresponding to the `price`
+    + price (optional, number) - The price to display for the product
+    + ccy (optional) - The ISO 4217 currency code corresponding to the `price`
     + locale (optional) - The locale to use in the user interface
         + Default: `en-GB`
 
 
 ### iframe endpoint [GET]
 
-Use this as the source on an `iframe` element to embed an Unmade-powered product in an
-external e-commerce website.
+Use this URL as the `src` attribute value on an `iframe` element to embed an Unmade-powered product in an
+external e-commerce website.  Note that there are optional query parameters.
 
 ```
 <iframe
