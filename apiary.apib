@@ -49,6 +49,8 @@ external e-commerce website.  Note that there are optional query parameters.
 </iframe>
 ```
 
+The response to this request is a well-formed HTML document used as content for the `iframe`.
+
 Certain actions performed by the customer in the iframe will result in events being sent to
 the host website using the [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
 API. A JavaScript listener, such as the following, should be implemented on the host site:
@@ -92,7 +94,7 @@ button inside the iframe, which triggers a modal dialog box outside the iframe. 
 
 ### Retrieve design [GET]
 
-If you want to receive information on a saved design, for example to check on availability.
+Use this URL retrieve information for a specific saved design, for example the product used or the design previews created.
 
 + Parameters
     + design_id (uuid) - ID of the Design in the form of a uuid
@@ -109,8 +111,23 @@ If you want to receive information on a saved design, for example to check on av
             "product": "product url",
             "preview": "preview url",
             "description": "Customized Product in Black & White"
+            "preview_grid": "Preview grid url",
+            "secondary_previews": [],
+            "preview_grid_jpeg": "Preview grid jgeg url",
+            "preview_thumb": "Preview thumbnail url"
         }
 
++ Response 401 (application/json)
+
+        {
+            "detail": "Invalid token."
+        }
+
++ Response 404 (application/json)
+
+        {
+            "detail": "Not found."
+        }
 
 
 ## Orders [/v1/orders/]
