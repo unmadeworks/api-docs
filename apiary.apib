@@ -180,6 +180,30 @@ so we can send the design for manufacture.
             "id": "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
         }
 
++ Response 400 (application/json)
+
+        {
+            "detail": "JSON parse error"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "detail": "Authentication credentials were not provided."
+        }
+
++ Response 401 (application/json)
+
+        {
+            "detail": "Invalid token."
+        }
+
++ Response 405 (application/json)
+
+        {
+            "detail": "Unsupported media type \"type_sent\" in request."
+        }
+
 + Request Team wear order (application/json)
     + Headers
 
@@ -246,6 +270,29 @@ so we can send the design for manufacture.
             "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
         }
 
++ Response 400 (application/json)
+
+        {
+            "detail": "JSON parse error"
+        }
+
++ Response 401 (application/json)
+
+        {
+            "detail": "Authentication credentials were not provided."
+        }
+
++ Response 401 (application/json)
+
+        {
+            "detail": "Invalid token."
+        }
+
++ Response 405 (application/json)
+
+        {
+            "detail": "Unsupported media type \"type_sent\" in request."
+        }
 
 ## Order [/v1/orders/{order_id}/]
 
