@@ -413,14 +413,51 @@ following values:
             ]
         }
 
++ Response 400 (application/json)
+
+        {
+            "code": "bad_request",
+            "message": "Request payload is not valid."
+        }
+
 + Response 401 (application/json)
 
         {
-            "detail": "Authentication credentials were not provided."
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials."
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "permission_denied",
+            "message": "You do not have permission to perform this action."
         }
 
 + Response 404 (application/json)
 
         {
-            "detail": "Not found."
+            "code": "not_found",
+            "message": "Not found."
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header."
+        }
+
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request."
         }
