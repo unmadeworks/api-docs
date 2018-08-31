@@ -117,16 +117,45 @@ Use this URL retrieve information for a specific saved design, for example the p
             "preview_thumb": "Preview thumbnail url"
         }
 
-+ Response 401 (application/json)
++ Response 201 (application/json)
 
         {
-            "detail": "Invalid token."
+            "id": "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
+        }
+
++ Response 400 (application/json)
+
+        {
+            "code": "bad_request",
+            "message": "Request payload is not valid."
         }
 
 + Response 404 (application/json)
 
         {
-            "detail": "Not found."
+            "code": "not_found",
+            "message": "Not found."
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header."
+        }
+
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request."
         }
 
 
