@@ -89,6 +89,41 @@ button inside the iframe, which triggers a modal dialog box outside the iframe. 
 
 + Response 200 (text/html)
 
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header."
+        }
+
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request."
+        }
+
++ Response 429 (application/json)
+
+        {
+            "code": "throttle_request",
+            "message": "tRequest was throttled."
+        }
+
 
 ## Design [/v1/designs/{design_id}/]
 
