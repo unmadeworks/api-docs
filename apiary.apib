@@ -24,6 +24,39 @@ system must communicate this information to Unmade using our RESTful API, so tha
 design to manufacture. We also provide an API to check on order status.
 
 
+### Error responses
+Error responses from our API endpoints adhere to RESTful standards. The numeric HTTP status code reported by the web
+server can be used to determine the reason for the request failing to return a successful response (e.g. 404, meaning resource not found).
+
+We also include a `code` and a human readable message. This could be used for your logging purposes, if they need to be read by humans.
+We do not recommend writing any logic that depends on the exact text of the message e.g. using a regex or string matching.
+These messages are more likely to be subject to change, whereas response status and code are less likely to change.
+
+In addition to this, and in a deviation from a RESTful approach, we will also return the original request that was sent
+back to you, in the error response body. We take this verbose approach as we feel it offers maximum flexibility for
+developers working in various systems and technologies. And that will be included under the `original_request` key.
+
+As an example of an error response:
++ Response 400 (application/json)
+
+        {
+            "code": "bad_request",
+            "message": "Request payload is not valid.",
+            "original_request": {
+                "reference": "YOUR ORDER REFERENCE",
+                "order_items": [
+                    {
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "quantity": 2
+                        "partner_data": {
+                            "barcode": "98323928238372"
+                        }
+                    }
+                ]
+            }
+        }
+
+
 ## Product [/v1/products/{slug}/{?price,ccy,locale}]
 
 + Parameters
