@@ -281,49 +281,56 @@ so we can send the design for manufacture.
 
         {
             "code": "bad_request",
-            "message": "Request payload is not valid."
+            "message": "Request payload is not valid.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 401 (application/json)
 
         {
             "code": "authentication_failed",
-            "message": "Incorrect authentication credentials."
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 403 (application/json)
 
         {
             "code": "permission_denied",
-            "message": "You do not have permission to perform this action."
+            "message": "You do not have permission to perform this action.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 404 (application/json)
 
         {
             "code": "not_found",
-            "message": "Not found."
+            "message": "Not found.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 405 (application/json)
 
         {
             "code": "method_not_allowed",
-            "message": "Method used is not allowed"
+            "message": "Method used is not allowed",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 406 (application/json)
 
         {
             "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header."
+            "message": "Could not satisfy the request Accept header.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 415 (application/json)
 
         {
             "code": "unsupported_media_type",
-            "message": "Unsupported media type in request."
+            "message": "Unsupported media type in request.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Request Team wear order (application/json)
