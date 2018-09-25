@@ -235,6 +235,22 @@ so we can send the design for manufacture.
 
 ### Create an Order [POST]
 
+#### Order field rules
+
+For an order to be created the following fields will need to be present:
+
+ - `reference`: Your order reference needs to be present, cannot be blank and it cannot be repeated. 
+ - `shipping_address`: It's a required field that can contain the following:
+    - `name`, `address_1`, `postal_code` & `city` are required.
+    - `company_name`, `address_2`, `country_area`, `country` and `phone` are optional.
+ - `order_items` : It needs to be present, must be an array and it can be empty, each of the items will have:
+    - `design`: the id of the design that must exist is required.
+    - `quantity`: the number ordered that if not present will default to *1*.
+    - `options`: that must include the `size` of the garment and that `size` must exist.
+    - `partner_data`: optional field will undertermined keys and values.
+ - `partner_data` : It's an optional field that can contain an undertermined keys and values.
+
+
 + Request Order with optional partner data (application/json)
     + Headers
 
