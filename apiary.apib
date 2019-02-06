@@ -237,16 +237,23 @@ so we can send the design for manufacture.
 
 For an order to be created the following fields will need to be present:
 
- - `reference`: Required. Cannot be blank and cannot exist already. 
- - `shipping_address`: Required object.
-    - `name`, `address_1`, `postal_code` & `city` are required.
-    - `company_name`, `address_2`, `country_area`, `country` and `phone` are optional.
- - `order_items`: Required array. Each items has to have:
-    - `design`: The id of the design to be ordered. Required and must exist.
-    - `quantity`: Optional. Defaults to *1*.
-    - `options`: Required object. Must include `size` and allowed values are "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"
-    - `partner_data`: Optional. Undetermined key value pairs.
- - `partner_data` : Optional. Undetermined key value pairs.
+ - `reference`: **Required**. Cannot be blank and cannot exist already. 
+ - `shipping_address`: **Required object** containing:
+    - `name` **required** (max chars: 256)
+    - `address_1` **required** (max chars: 256)
+    - `postal_code` **required** (max chars: 20)
+    - `city` **required** (max chars: 256)
+    - `country` **required** (must be an ISO 3166-1 country)
+    - `company_name` *optional* (max chars: 256)
+    - `address_2` *optional* (max chars: 256)
+    - `country_area` *optional* (max chars: 128)
+    - `phone` *optional* (max chars: 30)
+ - `order_items`: **Required array** where each item has:
+    - `design`: The Unmade Design Id of the design to be ordered. **Required** and must exist in Unmade system.
+    - `quantity`: *Optional* Defaults to *1*.
+    - `options`: **Required object**. Must include `size` and allowed values are "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"
+    - `partner_data`: *Optional*. Undetermined key value pairs.
+ - `partner_data` : *Optional*. Undetermined key value pairs.
 
 
 + Request Order with optional partner data (application/json)
