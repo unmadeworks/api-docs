@@ -573,6 +573,10 @@ following values:
 |`failed`|This order has failed. (Error state, please contact Unmade)|
 |`uninitialised`|This order is not complete. (Error state, please contact Unmade)|
 
+If you have set your factory up to provide a tracking number for each shipment
+via Factory OMS then this information will be reflected in the `tracking_number`
+attribute of the order once it has been entered by the factory.
+
 + Parameters
     + order_id (uuid) - ID of the Order in the form of a uuid
 
@@ -617,7 +621,8 @@ following values:
                         "barcode": "98329845228372"
                     }
                 }
-            ]
+            ],
+            "tracking_number": ""
         }
 
 + Response 400 (application/json)
