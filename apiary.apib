@@ -787,7 +787,7 @@ The endpoint returns an array of Sequence objects, each of which contains:
 
 ### Set a Sequence as 'in_production' [PUT]
 
-Once manufacturing files have been successfully downloaded for a given Sequence, it should be marked as “in production”. This prevents the Sequence from appearing in subsequent calls to the “Get Sequences” endpoint.
+Once manufacturing files have been successfully downloaded for a given Sequence, it should be marked as `in production`. This prevents the Sequence from appearing in subsequent calls to the “Get Sequences” endpoint.
 If a Sequence has not been marked as `in_production`, it remains in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) list and its Jobs will be re-sequenced the next time auto-sequencing occurs. This is done to create even more efficient Sequences in combination with new Jobs.
 
 Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) response.
