@@ -674,9 +674,9 @@ attribute of the order once it has been entered by the factory.
 Unmade offers a web-based Order Management System called Factory OMS. The Factory OMS GUI allows factory staff to view pending orders, download production files and update production statusues.
 The Factory API provides access to this functionality without the use of the UI.
 
-Using the Factory API, jobs are created for each Design ID for which manufacturing data is required.
+Using the Factory API, Jobs are created for each Design ID for which manufacturing data is required.
 
-Once created, jobs are grouped into sequences for efficient manufacturing. Manufacturing files can then be retrieved for each job.
+Once created, Jobs are grouped into Sequences for efficient manufacturing. Manufacturing files can then be retrieved for each Job.
 
 
 ### Job [/factories/{factory_slug}/jobs/]
@@ -684,7 +684,7 @@ Once created, jobs are grouped into sequences for efficient manufacturing. Manuf
 
 ### Create a New Job [POST]
 
-If you are not using the Order API to create jobs within the Unmade system - you can use this request to create individual jobs.
+Create a job from a given Design ID.
 
 |Key|Required?|Description|
 |---|---|---|
@@ -722,9 +722,11 @@ If you are not using the Order API to create jobs within the Unmade system - you
 
 ### Get Sequences [GET]
 
-Periodically at an agreed time, Unmade will automatically group created Jobs into efficient manufacturable Sequences. This is called "Auto sequencing". These Sequences are created to:
+Periodically, Unmade will automatically group created Jobs into efficient manufacturable Sequences. This is called "Auto-sequencing". These Sequences are created to:
  - Minimise manufacture time by grouping compatible Jobs - reducing the time spent reconfiguring machines
  - Make best use of available capacity by evenly distributing Jobs across available machines
+ 
+Auto-sequencing runs at regular intervals as agreed between you and Unmade.
  
 This endpoint allows these Sequences to be retrieved when required for manufacture.
 
@@ -785,8 +787,8 @@ The endpoint returns an array of Sequence objects, each of which contains:
 
 ### Set a Sequence as 'in_production' [PUT]
 
-In order to confirm you have successfully downloaded all files, and to remove the sequence from appearing in the “Get Sequences” call, you need to set each sequence as “in production”.
-If you haven't downloaded the sequence files and don't set sequences to `in_production`, they remain in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) list and the next time the "auto sequencing" logic runs, they will be combined further with new jobs to create even more efficient sequences.
+Once manufacturing files have been successfully downloaded for a given Sequence, it should be marked as “in production”. This prevents the Sequence from appearing in subsequent calls to the “Get Sequences” endpoint.
+If a Sequence has not been marked as `in_production`, it remains in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) list and its Jobs will be re-sequenced the next time auto-sequencing occurs. This is done to create even more efficient Sequences in combination with new Jobs.
 
 Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) response.
 
