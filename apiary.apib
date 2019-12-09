@@ -671,15 +671,13 @@ attribute of the order once it has been entered by the factory.
 
 ## Group Factory API
 
-Unmade offers a web-based Order Management System called Factory OMS which allows factories to receive custom order data, download production files and track the production status.
-The Factory API lets you programatically do these steps without needing to use the user interface.
+Unmade offers a web-based Order Management System called Factory OMS. The Factory OMS GUI allows factory staff to view pending orders, download production files and update production statusues.
+The Factory API provides access to this functionality without the use of the UI.
 
-Manufacturing files are only available once a Design ID has been turned into an order (using the Order API) or once you have created a singular manufacturing job from this Design ID.
+Using the Factory API, jobs are created for each Design ID for which manufacturing data is required.
 
-This API provides manufacturing files as "sequences" of production jobs that belong together.
-A sequence is a collection of jobs that have a relationship relevant for production (such as using the same yarn feeder setup on a knitting machine). A sequence can have jobs from multiple different orders.
-An order is a collection of jobs that belong to the same customer order.
-A job is an individual design (size specific) that has manufacturing files.
+Once created, jobs are grouped into sequences for efficient manufacturing. Manufacturing files can then be retrieved for each job.
+
 
 ### Job [/factories/{factory_slug}/jobs/]
 
