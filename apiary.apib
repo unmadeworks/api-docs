@@ -41,27 +41,35 @@ The Unmade APIs use Token Authentication. Your unique token will be provided to 
 
 ### Error responses
 Error responses from our API endpoints adhere to RESTful standards. The numeric HTTP status code reported by the web
-server can be used to determine the reason for the request failing to return a successful response (e.g. 404, meaning resource not found).
+server can be used to determine the reason for the error (e.g. 404, meaning resource not found).
 
-We also include a `code` and a human readable message. This could be used for your logging purposes, if they need to be read by humans.
+These error responses always include a `code` and a human readable `message`. This could be used for your logging purposes, if they need to be read by humans.
 We do not recommend writing any logic that depends on the exact text of the message e.g. using a regex or string matching.
 These messages are more likely to be subject to change, whereas response status and code are less likely to change.
 
-In addition to this, and in a deviation from a RESTful approach, we will also return the original request that was sent
-back to you, in the error response body. We take this verbose approach as we feel it offers maximum flexibility for
-developers working in various systems and technologies. And that will be included under the `original_request` key.
+Where possible, we also include a `detail` field. This field contains specific details of the error that was encountered.
+This data is designed to aid with debugging and facillitate integration with Unmade APIs.
 
-As an example of an error response:
+In addition to the above fields, and in a deviation from a RESTful approach, we also return the body of the original request. 
+We take this verbose approach as we feel it offers maximum flexibility for developers working in various systems and technologies.
+
+The following is an example error response:
 
 **Response 400** (application/json)
 ```
 {
-    "code": "bad_request",
-    "message": "Request payload is not valid.",
-    "original_request": {
-        // returns your original request sent
-    }
-} 
+  "code": "bad_request",
+  "message": "Request payload is not valid.",
+  "detail": {
+    "field_X": [
+      "This field is required."
+    ]
+  },
+  "original_request": {
+    // Body of original request
+  }
+}
+
 ```
 ## Group Unmade Editor
 The Unmade Editor is the web interface that lets users customise a product and visualises the customisation choices in real-time using Unmade's photo-realistic visualisation technology.
