@@ -323,6 +323,8 @@ For an order to be created the following fields will need to be present:
 |`order_items`| **required array**| Array where each item has:|
 |└ `design`| **required**| The Unmade Design Id of the design to be ordered.|
 |└ `quantity`| *optional*| Defaults to *1*.|
+|└ `unit_price`| *optional*| Float with 10 maximum digits and 2 decimal places.
+|└ `currency`| *optional*| Currency code in ISO 4217 format. Defaults to `USD`.
 |└ `options`| *optional*| Object that can include `size`|
 |&nbsp;&nbsp;&nbsp;&nbsp;└ `size`| *optional*Co | Pre-agreed values, usually: "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"|
 |&nbsp;&nbsp;&nbsp;&nbsp;└ `partner_data`| *optional*| Undetermined key value pairs (order item level).|
@@ -347,6 +349,8 @@ For an order to be created the following fields will need to be present:
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                         "quantity": 2,
+                        "unit_price": 99.99,
+                        "currency": "USD",
                         "options": {
                             "size": "M"
                         },
@@ -448,6 +452,8 @@ For an order to be created the following fields will need to be present:
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                         "quantity": 2
+                        "unit_price": 99.99,
+                        "currency": "USD",
                         "options" : {
                             "size": "L"
                         },
@@ -458,6 +464,8 @@ For an order to be created the following fields will need to be present:
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                         "quantity": 3
+                        "unit_price": 99.99,
+                        "currency": "USD",
                         "options" : {
                             "size": "M"
                         },
@@ -468,6 +476,8 @@ For an order to be created the following fields will need to be present:
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                         "quantity": 1
+                        "unit_price": 99.99,
+                        "currency": "USD",
                         "options" : {
                             "size": "S"
                         },
@@ -613,6 +623,8 @@ attribute of the order once it has been entered by the factory.
                 {
                     "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                     "quantity": 1,
+                    "unit_price": 99.99,
+                    "currency": "USD",
                     "partner_data": {
                         "barcode": "98323928238372"
                     }
@@ -620,6 +632,8 @@ attribute of the order once it has been entered by the factory.
                 {
                     "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
                     "quantity": 3,
+                    "unit_price": 99.99,
+                    "currency": "USD",
                     "partner_data": {
                         "barcode": "98329845228372"
                     }
