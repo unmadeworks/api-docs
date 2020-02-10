@@ -720,7 +720,7 @@ Using the Factory API, Jobs are created for each Design ID for which manufacturi
 Once created, Jobs are grouped into Sequences for efficient manufacturing. Manufacturing files can then be retrieved for each Job.
 
 
-### Job [/factories/{factory_slug}/jobs/]
+### Job [v1/factories/{factory_slug}/jobs/]
 
 
 ### Create a New Job [POST]
@@ -759,7 +759,7 @@ Create a job from a given Design ID.
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
-### Sequence [/factories/{factory_slug}/sequences/]
+### Sequence [v1/factories/{factory_slug}/sequences/]
 
 ### Get Sequences [GET]
 
@@ -824,7 +824,7 @@ The endpoint returns an array of Sequence objects, each of which contains:
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
-### Sequence: Set In Production [/factories/{factory_slug}/sequences/{sequence_id}/set_in_production/]
+### Sequence: Set In Production [v1/factories/{factory_slug}/sequences/{sequence_id}/set_in_production/]
 
 ### Set a Sequence as 'in_production' [PUT]
 
@@ -851,7 +851,7 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
-### Job: Set Complete [/factories/{factory_slug}/jobs/{job_id}/set_complete/]
+### Job: Set Complete [v1/factories/{factory_slug}/jobs/{job_id}/set_complete/]
         
 ### Set a Job as 'complete' [PUT]
 
