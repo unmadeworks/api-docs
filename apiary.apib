@@ -201,12 +201,10 @@ Example postMessage:
       }
     ],
     components: [
-      {
-        component_name: "Buttons_ABC123",
-        component_displayname: "Buttons",
-        option_name: "Button_ABC123_001",
-        option_displayname: "Red Buttons"
-      }
+        // Details of components selected by user
+    ],
+    "embellishments": [
+        // Details of embellishments selected by user
     ]
   }
 }
@@ -238,7 +236,7 @@ Once a user has created a design using and Unmade Editor and you have saved the 
 This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
-- get structured data about some of the customisation choices made, this currently only covers size, gender and trims (such as zips) chosen.
+- get structured data about some of the customisation choices made, this currently covers selected size, gender, components and embellishments
 
 ### Retrieve a design [GET]
 
@@ -256,7 +254,28 @@ This lets you:
             "size": "<Size selected>",
             "gender": "<Gender selected>",
             "stylecode": "<Stylecode selected>",
-            "components": []
+            "components": [
+                {
+                    "component_name": "Buttons_ABC123",
+                    "component_displayname": "Buttons",
+                    "option_name": "Button_ABC123_001",
+                    "option_displayname": "Red Buttons"
+                }
+              ],
+            "embellishments": [
+                {
+                    "placement_name": "front-chest-logo",
+                    "placement_displayname": "Front Chest",
+                    "option_name": "white-logo",
+                    "option_displayname": "White Fancy Logo"
+                },
+                {
+                    "placement_name": "right-sleeve-logo",
+                    "placement_displayname": "Right Sleeve",
+                    "option_name": "large-logo",
+                    "option_displayname": "Large Fancy Logo"
+                }
+            ]
         }
 
 + Response 400 (application/json)
