@@ -168,9 +168,10 @@ If you initialise the Unmade Editor without an authenticated user then the user 
 
 The Unmade platform will perform some checks on the files that are uploaded. The file upload restrictions are:
 
-- File size limit 2MB
+- File size limit 1MB
 - SVG file type with no script elements, no embedded images or text elements
-- Single colour, no gradients or patterns fills
+- Maximum of 6 colours
+- No gradients or patterns fills
 - Limit on how many logos a user can upload, defaults to 100 logos.
 
 If the uploaded file violates any of these restrictions, an error message will be displayed in the UI and the file will not be saved.
