@@ -50,7 +50,7 @@ These messages are more likely to be subject to change, whereas response status 
 Where possible, we also include a `detail` field. This field contains specific details of the error that was encountered.
 This data is designed to aid with debugging and facillitate integration with Unmade APIs.
 
-In addition to the above fields, and in a deviation from a RESTful approach, we also return the body of the original request. 
+In addition to the above fields, and in a deviation from a RESTful approach, we also return the body of the original request.
 We take this verbose approach as we feel it offers maximum flexibility for developers working in various systems and technologies.
 
 The following is an example error response:
@@ -349,7 +349,7 @@ This lets you:
 
 + Parameters
     + design_id (uuid) - ID of the Design in the form of a uuid
-            
+
 + Response 200 (application/json)
 
         {
@@ -613,7 +613,7 @@ For an order to be created the following fields will need to be present:
                             "barcode": "98323928238372"
                         }
                     }
-                    
+
                 ],
                 "shipping_address": {
                     "name": "John Smith",
@@ -845,7 +845,7 @@ Create a job from a given Design ID.
     + Headers
 
             Authorization: Token ABCDEFGHIJKLMNOPQRSTUVWXY
-    
+
     + Body
 
             {
@@ -875,9 +875,9 @@ Create a job from a given Design ID.
 Periodically, Unmade will automatically group created Jobs into efficient manufacturable Sequences. This is called "Auto-sequencing". These Sequences are created to:
  - Minimise manufacture time by grouping compatible Jobs - reducing the time spent reconfiguring machines
  - Make best use of available capacity by evenly distributing Jobs across available machines
- 
+
 Auto-sequencing runs at regular intervals as agreed between you and Unmade.
- 
+
 This endpoint allows these Sequences to be retrieved when required for manufacture.
 
 The endpoint returns an array of Sequence objects, each of which contains:
@@ -901,7 +901,7 @@ The endpoint returns an array of Sequence objects, each of which contains:
             Authorization: Token ABCDEFGHIJKLMNOPQRSTUVWXY
 
 + Response 200 (application/json)
-    
+
     + Body
 
             [
@@ -961,7 +961,7 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
         }
 
 ### Job: Set Complete [/v1/factories/{factory_slug}/jobs/{job_id}/set_complete/]
-        
+
 ### Set a Job as 'complete' [PUT]
 
 Once a Job has been successfully manufactured and QC'd within the partner factory, it can be marked as `complete` within Unmade systems. When all Jobs for a given Sequence are complete, the Sequence is also marked as complete.
