@@ -71,6 +71,112 @@ The following is an example error response:
 }
 
 ```
+
+
+## Advanced setup
+
+If you have opted for user logo upload support in your Unmade Editor then there is one additional step for integration.
+
+In order for a user to upload a logo in the Unmade Editor your e-commerce site has to provide us with a unique identifier for that user so that we can store the logos that a user has uploaded and show them to the user when they return to the Unmade Editor.
+
+We will cover two workflows; an Unmade Editor is initialised with an authenticated user of your e-commerce site, and an Unmade Editor requests a user to be authenticated.
+
+### Secure provision of an authenticated user identifier
+
+We make use of [JWT](https://jwt.io) with the HS512 algorithm, to ensure secure communication between your e-commerce site and the Unmade Editor.
+
+Unmade will generate a shared key and provide this key to you. This shared key must be stored securely on both sides. Your e-commerce site will need to use this shared key when generating a token to be passed to the Unmade Editor iframe on initialisation.
+
+The payload that your e-commerce site will need to generate will contain an unique identifier for that authenticated user. This unique identifier must not be an email address or any other personally identifiable information. We suggest you create a new field that is a UUID (Universally Unique Identifier).
+
+The payload with the unique identifier will be encrypted by your e-commcerce site using the shared key and a JWT library to generate a JWT token and will allow Unmade to decrypt it, using the shared key.
+
+
+### Initialising an Unmade Editor with unique identifier for an authenticated user
+
+1. For your authenticated user, your e-commerce site MUST generate a payload that contains a "user" property which has the unique identifier for the authenticated user as it's value:
+
+    ```
+    {
+      "user": "3fad6a89-8cec-4350",
+    }
+    ```
+
+    Using the appropriate JWT library, your e-commerce site should encrypt this payload with the shared key. This should generate a token, that looks a bit like;
+
+    ```
+    eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg
+    ```
+
+2. Append this token to your Unmade Editor url, for example:
+
+    ```
+    https://{your-partner-subdomain}.embed.unmade.com/v1/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg
+    ```
+
+3. The Unmade will decode this token and
+
+    If the token IS valid the Unmade Editor UI will enable the ability to upload a Logo and process, save that file.
+
+    If the token is NOT valid the error will be logged and the Unmade Editor UI will disable the functionality of uploading content.
+
+    We have the following types of validation/error messages:
+    - wrong key
+    - unable to decipher
+    - missing info in the payload
+    - missing "user" property on the payload
+
+
+### Initialising an Unmade Editor without a unique identifier for an authenticated user
+
+If you initialise the Unmade Editor without an authenticated user then the user will still be able to customise the product and can be prompted to authenticate with your e-commerce site if and when they try to upload a logo.
+
+1. For an unauthenticated user, the Unmade Editor should be initialised without a JWT payload.
+
+    ```
+    https://{your-partner-subdomain}.embed.unmade.com/v1/products/{your-product}/
+    ```
+
+2. If and when the unauthenticated user clicks to upload a logo, the Unmade Editor iFrame will:
+
+    Save the design and then inform your e-commerce site that the user needs to be authenticated in order to continue and send a JavaScript postMessage() to the parent window requesting the log in action and pass along the Design ID. The payload of the postmessage will look something like this:
+
+    ```
+    {
+      type: "modal",
+      payload: {
+        show: "login",
+        params: {
+          designID: "7fad56a8def33980cc3f90"
+        }
+      }
+    }
+    ```
+
+3. Your e-commerce site will need to listen for this JavaScript postMessage() and when it is received direct the user to authenticate.
+
+    Once your e-commerce site has authenticated the user it can re-initialise the Unmade Editor with a unique identifier for the authenticated user and the saved design id and the user will be able to continue with uploading their logo. For example
+
+    ```
+    https://{your-partner-subdomaini}.embed.unmade.com/v1/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg&design_id=7fad56a8def33980cc3f90
+    ```
+
+4. The Unmade Editor will then enable the authenticated user to upload logos and continue editing their design.
+
+
+### Restrictions for user uploaded logos
+
+The Unmade platform will perform some checks on the files that are uploaded. The file upload restrictions are:
+
+- File size limit 1MB
+- SVG file type with no script elements, no embedded images or text elements
+- Maximum of 6 colours
+- No gradients or patterns fills
+- Limit on how many logos a user can upload, defaults to 100 logos.
+
+If the uploaded file violates any of these restrictions, an error message will be displayed in the UI and the file will not be saved.
+
+
 ## Group Unmade Editor
 The Unmade Editor is the web interface that lets users customise a product and visualises the customisation choices in real-time using Unmade's photo-realistic visualisation technology.
 Each customisable product we have jointly developed has its own specific Iframe URL - even if the underlying customisation editor (the options available and the user interface) are the same.
@@ -89,7 +195,7 @@ An example of how you may want to embed the iframe is below:
 </iframe>
 ```
 
-### Unmade Editor integration [/v1/products/{slug}/{?price,ccy,locale,design_id}]
+### Unmade Editor integration [/v1/products/{slug}/{?price,ccy,locale,design_id,init}]
 
 + Parameters
     + slug - The product slug (will be agreed with you)
@@ -98,6 +204,7 @@ An example of how you may want to embed the iframe is below:
     + locale (optional) - The IETF language tag to set localisation of the user interface
         + Default: `en-GB`
     + design_id (optional) - An Unmade Design ID that is compatible with this editor to be used as starting point
+    + init (optional) - An JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://unmade.docs.apiary.io/#introduction/advanced-setup) for more information.
 
 ### Iframe endpoint [GET]
 
