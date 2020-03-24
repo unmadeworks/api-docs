@@ -346,6 +346,26 @@ Example postMessage:
 }
 ```
 
+#### A note about the size of initial preview images
+
+The preview image (PNG format) returned in this postMessage is the one uploaded
+to our servers by the user's browser when they save the design. This enables us
+to make this preview available to you immediately.
+
+However this means that the larger this image is the slower and less reliable
+it will make saving a design, particularly for users on a flaky internet
+connection. For this reason we default to this image being lower resolution
+(height of 522px).
+
+You can ask your account manager to change the size of the initial preview
+image returned in this postMessage but we recommend keeping these images sizes
+(PNG format) below 200Kb.
+
+Within a minute or two of the design being saved, we will have generated full
+size versions of images for all the scenes you have set up, including this
+preview, on our servers. Later calls to [Retrieve a
+designs](#reference/design-api/retrieve-designs/retrieve-a-design) will return
+the URLs for these full size images.
 
 ### User interaction
 ```type: "UNMADE_interaction"``` *optional*
