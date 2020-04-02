@@ -348,7 +348,7 @@ Example postMessage:
 
 #### A note about the size of initial preview images
 
-The preview image (PNG format) in the ```UNMADE_design_saved``` postMessage is
+The preview image (PNG format) in the postMessage ```type: "UNMADE_design_saved"```  is
 the image uploaded to our servers by the user's browser when they save their design.
 Using this image enables us to make this preview available to you immediately.
 
@@ -363,8 +363,8 @@ image returned in this postMessage but we recommend keeping these images sizes
 
 Within a minute or two of the design being saved, we will have generated full
 size versions of images for all the scenes you have set up, including this
-preview, on our servers. Later calls to [Retrieve a
-designs](#reference/design-api/retrieve-designs/retrieve-a-design) will return
+preview, on our servers. Later calls to the [retrieve a
+design API](#reference/design-api/retrieve-designs/retrieve-a-design) will return
 the URLs for these full size images.
 
 ### User interaction
@@ -424,14 +424,20 @@ This lets you:
                     "placement_displayname": "Front Chest",
                     "option_name": "white-logo",
                     "option_displayname": "White Fancy Logo",
-                    "manufacturing_method": "embroidery",
+                    "manufacturing_method": "embroidery"
                 },
                 {
-                    "placement_name": "right-sleeve-logo",
-                    "placement_displayname": "Right Sleeve",
-                    "option_name": "large-logo",
-                    "option_displayname": "Large Fancy Logo"
+                    "placement_name": "right-sleeve-monogram",
+                    "placement_displayname": "Right Sleeve Monogram",
+                    "option_name": "large-monogram",
+                    "option_displayname": "Large Monogram",
                     "manufacturing_method": "heat-transfer",
+                    "text": "John Smith",
+                    "font": "Helvetica",
+                    "colours": [
+                        "Black",
+                        "Gray"
+                    ]
                 }
             ]
         }
