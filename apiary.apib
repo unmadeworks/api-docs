@@ -505,6 +505,7 @@ For an order to be created the following fields will need to be present:
 |└ `phone`| *optional*| (max chars: 30)|
 |`order_items`| **required array**| Array where each item has:|
 |└ `design`| **required**| The Unmade Design Id of the design to be ordered.|
+|└ `reference`| *optional*| Defaults to `""` |
 |└ `quantity`| *optional*| Defaults to *1*.|
 |└ `unit_price`| *optional*| Float with 10 maximum digits and 2 decimal places.
 |└ `currency`| *optional*| Currency code in ISO 4217 format. Defaults to `USD`.
@@ -531,6 +532,7 @@ For an order to be created the following fields will need to be present:
                 "order_items": [
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                         "quantity": 2,
                         "unit_price": 99.99,
                         "currency": "USD",
@@ -634,6 +636,7 @@ For an order to be created the following fields will need to be present:
                 "order_items": [
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                         "quantity": 2
                         "unit_price": 99.99,
                         "currency": "USD",
@@ -646,6 +649,7 @@ For an order to be created the following fields will need to be present:
                     },
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "reference": "YOUR ORDER-ITEM 2 REFERENCE",
                         "quantity": 3
                         "unit_price": 99.99,
                         "currency": "USD",
@@ -658,6 +662,7 @@ For an order to be created the following fields will need to be present:
                     },
                     {
                         "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "reference": "YOUR ORDER-ITEM 3 REFERENCE",
                         "quantity": 1
                         "unit_price": 99.99,
                         "currency": "USD",
@@ -805,6 +810,7 @@ attribute of the order once it has been entered by the factory.
             "order_items": [
                 {
                     "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                    "reference": "partner_order_item_1_reference",
                     "quantity": 1,
                     "unit_price": 99.99,
                     "currency": "USD",
@@ -814,6 +820,7 @@ attribute of the order once it has been entered by the factory.
                 },
                 {
                     "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
+                    "reference": "partner_order_item_2_reference",
                     "quantity": 3,
                     "unit_price": 99.99,
                     "currency": "USD",
