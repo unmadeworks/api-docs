@@ -881,6 +881,54 @@ attribute of the order once it has been entered by the factory.
             "message": "Unsupported media type in request."
         }
 
+### Retrieve manufacturing files from an Order [/v1/orders/{order_id}/manufacturing_files/]
+
+### Retrieve manufacturing files from an Order [GET]
+
+If you want to download the manufacturing files from an order.
+
+Note: if the manufacturing files aren't available, the keys `job_ticket` and `manufacture_files` will be `null`, this is because the manufacturing files are generated
+asynchronously once the job is created.
+
+
++ Parameters
+    + order_id (uuid) - ID of the Order in the form of a uuid
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+        {
+            "id": "a06f2da7-2a65-44ef-bfb6-81dea3f4dfeb",
+                "reference": "partner_order_reference",
+                "jobs": [
+                {
+                    "id": "fa81340e-e2a3-41ae-bd9a-f4dc01122fac",
+                    "reference": "partner_order_reference",
+                    "partner_order_reference": "partner_order_reference",
+                    "partner_item_reference": "partner_order_item_1_reference",
+                    "previews": [
+                    {
+                        "name": "Main",
+                        "image": "https://d1joez6ls07j0w.cloudfront.net/job_previews/FA81340E.png"
+                    }
+                    ],
+                    job_ticket	"https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/"
+                    manufacture_files	"https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/"                }
+                ]
+        }
+
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
+        }
+
+
 ## Group Factory API
 
 Unmade offers a web-based Order Management System called Factory OMS. The Factory OMS GUI allows factory staff to view pending orders, download production files and update production statusues.
