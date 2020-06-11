@@ -242,6 +242,14 @@ The response to this request is a well-formed HTML document used as content for 
 Use this URL as the `src` attribute value on an `<iframe>` element to embed an Unmade-powered product in an
 external e-commerce website.  Note that there are optional query parameters.
 
+|Query Parameter|Required?|Description|
+|---|---|---|
+|`price`| *optional* | The price to display for the product |
+|`ccy`| *optional* | The ISO 4217 currency code corresponding to the `price` |
+|`locale`| *optional* | The IETF language tag to set localisation of the user interface. Default: `en-GB`. |
+|`design_id`| *optional* | An Unmade Design ID that is compatible with this editor to be used as starting point |
+|`init`| *optional* | A JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://unmade.docs.apiary.io/#introduction/advanced-setup) for more information. |
+
 Depending on your specific editor UI design and the rest of the content on the page you are embedding the Unmade Iframe on, you might need to take different approaches to managing the size of the `<iframe>` element on the page. We are happy to advise and support on this.
 
 
