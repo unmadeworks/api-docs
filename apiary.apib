@@ -518,9 +518,9 @@ For an order to be created the following fields will need to be present:
 |└ `unit_price`| *optional*| Float with 10 maximum digits and 2 decimal places.
 |└ `currency`| *optional*| Currency code in ISO 4217 format. Defaults to `USD`.
 |└ `options`| *optional*| Object that can include `size`|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `size`| *optional*Co | Pre-agreed values, usually: "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `partner_data`| *optional*| Undetermined key value pairs (order item level).|
-|`partner_data`| *optional*| Undetermined key value pairs (order level).|
+|&nbsp;&nbsp;&nbsp;&nbsp;└ `size`| *optional* | Pre-agreed values, usually: "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"|
+|&nbsp;&nbsp;&nbsp;&nbsp;└ `partner_data`| *optional*| Undetermined key value pairs (order item level). These keys and values can be added to Unmade paperwork (job and/or order tickets) if the keys are configured in UnmadeOS|
+|`partner_data`| *optional*| Undetermined key value pairs (order level). These keys and values can be added to Unmade paperwork (job and/or order tickets) if the keys are configured in UnmadeOS|
 
 
 + Request Order with optional partner data (application/json)
