@@ -246,7 +246,7 @@ external e-commerce website.  Note that there are optional query parameters.
 |Query Parameter|Required?|Description|
 |---|---|---|
 |`price`| *optional* | The price to display for the product |
-|`ccy`| *optional* | The ISO 4217 currency code corresponding to the `price` |
+|`ccy`| *optional* | The ISO 4217 currency code corresponding to the `price`. Also used for in-editor upcharges, if enabled. |
 |`locale`| *optional* | The IETF language tag to set localisation of the user interface. Default: `en-GB`. |
 |`design_id`| *optional* | An Unmade Design ID that is compatible with this editor to be used as starting point |
 |`init`| *optional* | A JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://unmade.docs.apiary.io/#introduction/advanced-setup) for more information. |
@@ -433,7 +433,8 @@ This lets you:
                     "placement_displayname": "Front Chest",
                     "option_name": "white-logo",
                     "option_displayname": "White Fancy Logo",
-                    "manufacturing_method": "embroidery"
+                    "manufacturing_method": "embroidery",
+                    "upcharge": null
                 },
                 {
                     "placement_name": "right-sleeve-monogram",
@@ -446,7 +447,11 @@ This lets you:
                     "colours": [
                         "Black",
                         "Gray"
-                    ]
+                    ],
+                    "upcharge": {
+                        "value": 10.00,
+                        "currency": "USD
+                    }
                 }
             ]
         }
