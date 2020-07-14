@@ -22,6 +22,7 @@ Further to these core steps, we provide additional APIs that allow you to build 
 - **Order API** In addition to order generation, you can retrieve order data using this API to get production state and tracking number.
 - **Design API** You can get rendered images of a customer's design using this API and the Design ID the Editor has provided.
 - **Factory API** Your factories can use our Web interface to download manufacturing data, or this API.
+- **Roster API** You can create a new design using variable data using a roster base design. 
 
 ### Typical user journey through e-commerce site
 <a href="https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png">![Image showing the typical user journey through the e-commerce site](https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png)</a>
@@ -484,6 +485,45 @@ This lets you:
             "code": "unsupported_media_type",
             "message": "Unsupported media type in request."
         }
+        
+## Group Roster API
+### Create Roster Design [/v1/designs/base_design_id/roster]
+
+A roster enabled product. In order for a product to be classified as a roster product, roster fields
+should be configured for this product during product setup. Once a user saves a design for which roster
+fields have been selected for some placements, its design id can be used to create a roster design. 
+
+### Create a roster design [POST]
+#### Roster field rules
+
+For a roster design to be create the following fields will need to be present:
+
+|Key|Required?|Description|
+|---|---|---|
+|`roster_member`| **required array**| Array where each item has:|
+|└ `player-name`| **required**| The Unmade Design Id of the design to be ordered.|
+|└ `player-number`| *optional*| Defaults to `""` |
+
++ Request Order with optional partner data (application/json)
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+                "roster_member": {
+                    "player-number":
+                    "player-name":
+                },
+                
+            }
+
++ Response 201 (application/json)
+
+        {
+            "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
+        }
 
 
 ## Group Orders API
@@ -491,6 +531,7 @@ This lets you:
 
 Once an order has been placed on the e-commerce platform, the Unmade system should be notified
 so we can send the design to your factory and generate the manufacturing data for it.
+
 
 ### Create an Order [POST]
 
