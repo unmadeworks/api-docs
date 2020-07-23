@@ -492,11 +492,37 @@ This lets you:
         }
         
 ## Group Roster API
-### Create Roster Design [/v1/designs/base_design_id/roster]
 
-A roster enabled product. In order for a product to be classified as a roster product, roster fields
-should be configured for this product during product setup. Once a user saves a design for which roster
-fields have been selected for some placements, its design id can be used to create a roster design. 
+### Retrieve Roster design data 
+
+In order for a product to be classified as a roster product, roster fields
+should be configured for this product during product setup. Once a user on your
+platform saves a design with roster data selected, this can be used to create 
+a new design using the roster endpoint. Retrieving this design data is done 
+the same way as [here](https://jsapi.apiary.io/previews/unmade/reference/design-api).
+
+The difference between a regular design and roster design will be the addition
+of the **roster** key. For example purposes, *player-surname* is used as the roster field
+the user has selected when creating the design. However there can be multiple roster
+fields selected for a design (I.e. *player-name*, *player-number*, *team-name*).
+
+|Key|Required?|Description|
+|---|---|---|
+|`roster`| **required object**| Object containing the following:|
+|└ `fields`| **required array**| An array containing the roster fields chosen by the user during customisation.|
+|└ `data`| **required object**| Further information about each roster field |
+|&nbsp;&nbsp;&nbsp;&nbsp;└ `player-surname`|**required** |Roster field name configured during product setup|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `id`| **required**|ID of roster field|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `display_name`|**required** |The display name of the roster field in the UI|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `allowed_characters`|**required** |String contained the allowed characters for that roster field. Can be used for validation.|
+        
+
+### Create Roster Design [/v1/designs/base_design_id/roster/]
+
+Once a user on your platform saves a design with roster data selected, this can be used to create 
+a new design using the roster endpoint. The roster field ids that have been retrieved when getting 
+the design will be used when creating the request. Data that the user has entered for each of them
+must be mapped to each roster field id. 
 
 ### Create a roster design [POST]
 #### Roster field rules
@@ -505,9 +531,8 @@ For a roster design to be create the following fields will need to be present:
 
 |Key|Required?|Description|
 |---|---|---|
-|`roster_member`| **required array**| Array where each item has:|
-|└ `player-name`| **required**| The Unmade Design Id of the design to be ordered.|
-|└ `player-number`| *optional*| Defaults to `""` |
+|`roster_member`| **required object**| Object containing the following:|
+|└ `player-surname`| **required**| The data the user has entered for this selected roster field.|
 
 + Request Order with optional partner data (application/json)
     + Headers
@@ -518,8 +543,7 @@ For a roster design to be create the following fields will need to be present:
 
             {
                 "roster_member": {
-                    "player-number":
-                    "player-name":
+                    "player-surname": "<Surname user has entered for this field>"
                 },
                 
             }
@@ -674,6 +698,7 @@ For an order to be created the following fields will need to be present:
         }
 
 + Request Team wear order (application/json)
+    
     + Headers
 
             Authorization: Token ABCDEF
@@ -766,7 +791,7 @@ For an order to be created the following fields will need to be present:
 
 + Response 403 (application/json)
 
-        {
+        {Object containing the following:
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
             "original_request": "<the original request that was sent, which resulted in this error>"
