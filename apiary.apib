@@ -522,7 +522,14 @@ fields selected for a design (I.e. *player-name*, *player-number*, *team-name*).
 Once a user on your platform saves a design with roster data selected, this can be used to create 
 a new design using the roster endpoint. The roster field ids that have been retrieved when getting 
 the design will be used when creating the request. Data that the user has entered for each of them
-must be mapped to each roster field id. 
+must be mapped to each roster field id.
+
+The text sent with each roster field id will be validated to ensure it does not
+contain an illegal characters and also to make sure that, once rendered in the
+chosen font, it is not to wide for the placement. If there are validation
+errors we return a 401 response detailing the codes for the validation errors
+for each field. Possible validation error codes are `illegal_character`,
+`text_too_wide`.
 
 ### Create a roster design [POST]
 #### Roster field rules
@@ -543,7 +550,8 @@ For a roster design to be create the following fields will need to be present:
 
             {
                 "roster_member": {
-                    "player-surname": "<Surname user has entered for this field>"
+                    "last-name": "<Surname user has entered for this field>",
+                    "number": "<Number user has entered for this field>"
                 },
                 
             }
@@ -552,6 +560,25 @@ For a roster design to be create the following fields will need to be present:
 
         {
             "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
+        }
+
+
++ Response 401 (application/json)
+
+        {
+            "code": "bad_request",
+            "message": "Request payload is not valid.",
+            "detail": {
+                "last-name": [
+                    "text_too_wide", “illegal_characters”
+                ],
+                "number": [
+                    "textTooWide", “illegalCharacters”
+                ]
+            },
+            "original_request": {
+                // Body of original request
+            }
         }
 
 
