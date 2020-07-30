@@ -532,21 +532,28 @@ in the region for which they'd selected this field.
 The `allowed_characters` is the full set of characters which can be used to populate
 this field when creating player designs.
 
-### Create Roster Design [/v1/designs/base_design_id/roster/]
+### Create Player Designs [/v1/designs/base_design_id/roster/]
 
-Once a user on your platform saves a design with roster data selected, this can be used to create 
-a new design using the roster endpoint. The roster field ids that have been retrieved when getting 
-the design will be used when creating the request. Data that the user has entered for each of them
-must be mapped to each roster field id.
+Once the "template" roster design has been created, the `/roster/` endpoint can be used
+to populate the roster fields with the real data for your players.
 
-The text sent with each roster field id will be validated to ensure it does not
-contain an illegal characters and also to make sure that, once rendered in the
-chosen font, it is not to wide for the placement. If there are validation
-errors we return a 401 response detailing the codes for the validation errors
-for each field. Possible validation error codes are `illegal_character`,
-`text_too_wide`, `text_sanitised`.
+To create player designs, the `/roster/` endpoint accepts POST requests with payloads 
+containing the roster design ID, as well as the values of each field to be populated.
+Upon reciept of a valid payload, a new design is created, and its ID is returned. This
+ID can then be used to place orders as required.
 
-### Create a roster design [POST]
+Many player designs can be created from a single roster design.
+
+To create a player design, the `/roster/` endpoint must recieve valid values for **all**
+roster fields specified for a given roster design.
+
+The text sent with each roster field id will be validated to ensure it contains only
+allowed characters and also to make sure that, once rendered in the chosen font, it 
+is not to wide for the placement. If there are validation errors we return a 401 response 
+detailing the codes for the validation errors for each field. Possible validation error 
+codes are `illegal_character`, `text_too_wide`, `text_sanitised`.
+
+### Create a player design [POST]
 #### Roster field rules
 
 For a roster design to be create the following fields will need to be present:
