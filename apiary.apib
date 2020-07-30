@@ -551,7 +551,8 @@ The text sent with each roster field id will be validated to ensure it contains 
 allowed characters and also to make sure that, once rendered in the chosen font, it 
 is not to wide for the placement. If there are validation errors we return a 400 response 
 detailing the codes for the validation errors for each field. Possible validation error 
-codes are `illegal_character`, `text_too_wide`, `text_sanitised`.
+codes are `illegal_character`, `text_too_wide`, `text_sanitised`. Also for each error
+it might contain more details about the error such as the filtered version of the text.
 
 ### Create a player design [POST]
 #### Roster field rules
@@ -592,10 +593,20 @@ For a roster design to be create the following fields will need to be present:
             "message": "Request payload is not valid.",
             "detail": {
                 "last-name": [
-                    "text_too_wide", “illegal_characters”, "text_sanitised"
+                    {
+                        "error": "text_too_wide",
+                        "details": {"amended_text": "shorter text"}
+                    },
+                    {
+                        "error": "text_sanitised",
+                        "details": {"amended_text": "sanitised text"}
+                    }
                 ],
                 "number": [
-                    “illegalCharacters”
+                    {
+                        "error": "illegal_characters", 
+                        "details": {"amended_text": "text with no ilegal chars"}
+                    }
                 ]
             },
             "original_request": {
