@@ -495,27 +495,42 @@ This lets you:
 
 ### Retrieve Roster design data 
 
-In order for a product to be classified as a roster product, roster fields
-should be configured for this product during product setup. Once a user on your
-platform saves a design with roster data selected, this can be used to create 
-a new design using the roster endpoint. Retrieving this design data is done 
-the same way as [here](https://jsapi.apiary.io/previews/unmade/reference/design-api).
+If a given product has roster functionality enabled, an editor user will be provided
+with the option to select a roster field for any enabled region. A design saved with
+one or more of these roster fields is known as a "roster design".
 
-The difference between a regular design and roster design will be the addition
-of the **roster** key. For example purposes, *player-surname* is used as the roster field
-the user has selected when creating the design. However there can be multiple roster
-fields selected for a design (I.e. *player-name*, *player-number*, *team-name*).
+A roster design can be identified by the presence of the `roster` key in its API 
+representation. See [here](https://jsapi.apiary.io/previews/unmade/reference/design-api)
+for full details of this representation.
 
-|Key|Required?|Description|
-|---|---|---|
-|`roster`| **required object**| Object containing the following:|
-|└ `fields`| **required array**| An array containing the roster fields chosen by the user during customisation.|
-|└ `data`| **required object**| Further information about each roster field |
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `player-surname`|**required** |Roster field name configured during product setup|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `id`| **required**|ID of roster field|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `display_name`|**required** |The display name of the roster field in the UI|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ `allowed_characters`|**required** |String contained the allowed characters for that roster field. Can be used for validation.|
-        
+An example `roster` object is shown below:
+
+```json
+{
+  "roster_fields": ["player-name"],
+  "data": {
+    "player-name": {
+      "id": "player-name",
+      "display_name": "Player Name",
+      "placeholder_text": "Your Name Here",
+      "allowed_characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz0123456789"
+    }
+  }
+}
+```
+
+This indicates that a single roster field: `player-name` was selected for this roster
+design. 
+
+The `display_name` of the field is a human-readable representation of the field for 
+use when creating player designs.
+
+The `placeholder_text` field is the temporary value that the roster region is populated
+with when saved. In this example, the editor user would see the string "Your Name Here"
+in the region for which they'd selected this field.
+
+The `allowed_characters` is the full set of characters which can be used to populate
+this field when creating player designs.
 
 ### Create Roster Design [/v1/designs/base_design_id/roster/]
 
