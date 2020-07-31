@@ -532,19 +532,19 @@ in the region for which they'd selected this field.
 The `allowed_characters` is the full set of characters which can be used to populate
 this field when creating player designs.
 
-### Create Player Designs [/v1/designs/base_design_id/roster/]
+### Create Member Designs [/v1/designs/base_design_id/roster/]
 
 Once the "template" roster design has been created, the `/roster/` endpoint can be used
-to populate the roster fields with the real data for your players.
+to populate the roster fields with the real data for your members.
 
-To create player designs, the `/roster/` endpoint accepts POST requests with payloads 
+To create member designs, the `/roster/` endpoint accepts POST requests with payloads 
 containing the roster design ID, as well as the values of each field to be populated.
 Upon reciept of a valid payload, a new design is created, and its ID is returned. This
 ID can then be used to place orders as required.
 
-Many player designs can be created from a single roster design.
+Many member designs can be created from a single roster design.
 
-To create a player design, the `/roster/` endpoint must recieve valid values for **all**
+To create a member design, the `/roster/` endpoint must recieve valid values for **all**
 roster fields specified for a given roster design.
 
 The text sent with each roster field id will be validated to ensure it contains only
