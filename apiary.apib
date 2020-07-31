@@ -554,17 +554,20 @@ detailing the codes for the validation errors for each field. Possible validatio
 codes are `illegal_character`, `text_too_wide`, `text_sanitised`. Also for each error
 it might contain more details about the error such as the filtered version of the text.
 
-### Create a player design [POST]
+### Create a member design [POST]
 #### Roster field rules
 
-For a roster design to be create the following fields will need to be present:
+To create a member design, a single `roster_member` object containing the required
+values for all roster fields in the template roster design is provided:
 
 |Key|Required?|Description|
 |---|---|---|
-|`roster_member`| **required object**| Object containing the following:|
-|└ `player-surname`| **required**| The data the user has entered for this selected roster field.|
+|`roster_member`| **required object** | Object containing the following:|
+|└ `<roster-field-a>`| **required** | The value required for field A in the player design |
+|└ `<roster-field-b>`| **required** | The value required for field B in the player design |
+|└ *etc*|
 
-+ Request Order with optional partner data (application/json)
++ Request Create player design (application/json)
     + Headers
 
             Authorization: Token ABCDEF
@@ -573,8 +576,8 @@ For a roster design to be create the following fields will need to be present:
 
             {
                 "roster_member": {
-                    "last-name": "<Surname user has entered for this field>",
-                    "number": "<Number user has entered for this field>"
+                    "last-name": "Smith",
+                    "number": "99"
                 },
                 
             }
