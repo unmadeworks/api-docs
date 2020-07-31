@@ -547,12 +547,14 @@ Many member designs can be created from a single roster design.
 To create a member design, the `/roster/` endpoint must recieve valid values for **all**
 roster fields specified for a given roster design.
 
-The text sent with each roster field id will be validated to ensure it contains only
-allowed characters and also to make sure that, once rendered in the chosen font, it 
-is not to wide for the placement. If there are validation errors we return a 400 response 
+The provided values for each roster field will be validated to ensure they contain only
+allowed characters and that, once rendered in the chosen font, they are not too wide for
+their respective placement. If there are validation errors we return a 400 response 
 detailing the codes for the validation errors for each field. Possible validation error 
-codes are `illegal_character`, `text_too_wide`, `text_sanitised`. Also for each error
-it might contain more details about the error such as the filtered version of the text.
+codes are `illegal_character`, `text_too_wide`, `text_sanitised`. 
+
+Additionally, for each error type a `details` object is provided. This contains the 
+filtered / truncated text that *would* be permitted in the placement.
 
 ### Create a member design [POST]
 #### Roster field rules
