@@ -621,6 +621,21 @@ values for all roster fields in the template roster design is provided:
             }
         }
 
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
 + Response 415 (application/json)
 
         {
@@ -628,6 +643,7 @@ values for all roster fields in the template roster design is provided:
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
+
 
 ## Group Orders API
 ### Create Order [/v1/orders/]
@@ -1076,11 +1092,35 @@ asynchronously once the job is created.
                 ]
         }
 
-+ Response 404 (application/json)
++ Response 401 (application/json)
 
         {
-            "code": "not_found",
-            "message": "Not found."
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 403 (application/json)
+
+        {
+            "code": "permission_denied",
+            "message": "You do not have permission to perform this action.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
 + Response 415 (application/json)
@@ -1133,11 +1173,34 @@ Create a job from a given Design ID.
                 "reference": "REFERENCE-TEXT"
             }
 
++ Response 401 (application/json)
+
+        {
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
 + Response 403 (application/json)
 
         {
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header.",
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
@@ -1148,6 +1211,7 @@ Create a job from a given Design ID.
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
+
 
 
 ### Sequence [/v1/factories/{factory_slug}/sequences/]
@@ -1208,11 +1272,34 @@ The endpoint returns an array of Sequence objects, each of which contains:
                 }
             ]
 
++ Response 401 (application/json)
+
+        {
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
 + Response 403 (application/json)
 
         {
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header.",
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
@@ -1223,6 +1310,7 @@ The endpoint returns an array of Sequence objects, each of which contains:
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
+
 
 ### Sequence: Set In Production [/v1/factories/{factory_slug}/sequences/{sequence_id}/set_in_production/]
 
@@ -1243,11 +1331,34 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
 
 + Response 200 (application/json)
 
++ Response 401 (application/json)
+
+        {
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
 + Response 403 (application/json)
 
         {
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header.",
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
@@ -1258,6 +1369,7 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
+
 
 ### Job: Set Complete [/v1/factories/{factory_slug}/jobs/{job_id}/set_complete/]
 
@@ -1277,11 +1389,34 @@ Job IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io
 
 + Response 200 (application/json)
 
++ Response 401 (application/json)
+
+        {
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
 + Response 403 (application/json)
 
         {
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 405 (application/json)
+
+        {
+            "code": "method_not_allowed",
+            "message": "Method used is not allowed"
+        }
+
++ Response 406 (application/json)
+
+        {
+            "code": "not_acceptable",
+            "message": "Could not satisfy the request Accept header.",
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
