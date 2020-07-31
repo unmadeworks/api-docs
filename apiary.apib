@@ -621,6 +621,13 @@ values for all roster fields in the template roster design is provided:
             }
         }
 
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
+        }
+
 + Response 405 (application/json)
 
         {
@@ -755,14 +762,6 @@ For an order to be created the following fields will need to be present:
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
-+ Response 404 (application/json)
-
-        {
-            "code": "not_found",
-            "message": "Not found.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
-
 + Response 405 (application/json)
 
         {
@@ -884,14 +883,6 @@ For an order to be created the following fields will need to be present:
         {Object containing the following:
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
-
-+ Response 404 (application/json)
-
-        {
-            "code": "not_found",
-            "message": "Not found.",
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
@@ -1108,6 +1099,13 @@ asynchronously once the job is created.
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
+        }
+
 + Response 405 (application/json)
 
         {
@@ -1194,6 +1192,13 @@ Create a job from a given Design ID.
         {
             "code": "method_not_allowed",
             "message": "Method used is not allowed"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
         }
 
 + Response 406 (application/json)
@@ -1295,6 +1300,13 @@ The endpoint returns an array of Sequence objects, each of which contains:
             "message": "Method used is not allowed"
         }
 
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
+        }
+
 + Response 406 (application/json)
 
         {
@@ -1345,6 +1357,13 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
             "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
         }
 
 + Response 405 (application/json)
@@ -1410,6 +1429,13 @@ Job IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io
         {
             "code": "method_not_allowed",
             "message": "Method used is not allowed"
+        }
+
++ Response 404 (application/json)
+
+        {
+            "code": "not_found",
+            "message": "Not found."
         }
 
 + Response 406 (application/json)
