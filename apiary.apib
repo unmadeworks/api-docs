@@ -281,7 +281,8 @@ Depending on your specific editor UI design and the rest of the content on the p
 
         {
             "code": "unsupported_media_type",
-            "message": "Unsupported media type in request."
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
 
 + Response 429 (application/json)
@@ -488,7 +489,8 @@ This lets you:
 
         {
             "code": "unsupported_media_type",
-            "message": "Unsupported media type in request."
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
         
 ## Group Roster API
@@ -619,6 +621,13 @@ values for all roster fields in the template roster design is provided:
             }
         }
 
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+        }
 
 ## Group Orders API
 ### Create Order [/v1/orders/]
@@ -759,7 +768,7 @@ For an order to be created the following fields will need to be present:
         {
             "code": "unsupported_media_type",
             "message": "Unsupported media type in request.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
 
 + Request Team wear order (application/json)
@@ -891,7 +900,7 @@ For an order to be created the following fields will need to be present:
         {
             "code": "unsupported_media_type",
             "message": "Unsupported media type in request.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
 
 ### Retrieve Order [/v1/orders/{order_id}/]
@@ -1022,7 +1031,8 @@ attribute of the order once it has been entered by the factory.
 
         {
             "code": "unsupported_media_type",
-            "message": "Unsupported media type in request."
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
 
 ### Retrieve manufacturing files from an Order [/v1/orders/{order_id}/manufacturing_files/]
@@ -1071,6 +1081,14 @@ asynchronously once the job is created.
         {
             "code": "not_found",
             "message": "Not found."
+        }
+
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
 
 
@@ -1122,6 +1140,15 @@ Create a job from a given Design ID.
             "message": "You do not have permission to perform this action.",
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
+
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+        }
+
 
 ### Sequence [/v1/factories/{factory_slug}/sequences/]
 
@@ -1189,6 +1216,14 @@ The endpoint returns an array of Sequence objects, each of which contains:
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+        }
+
 ### Sequence: Set In Production [/v1/factories/{factory_slug}/sequences/{sequence_id}/set_in_production/]
 
 ### Set a Sequence as 'in_production' [PUT]
@@ -1216,6 +1251,14 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
             "original_request": "<the original request that was sent, which resulted in this error>"
         }
 
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+        }
+
 ### Job: Set Complete [/v1/factories/{factory_slug}/jobs/{job_id}/set_complete/]
 
 ### Set a Job as 'complete' [PUT]
@@ -1240,4 +1283,12 @@ Job IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io
             "code": "permission_denied",
             "message": "You do not have permission to perform this action.",
             "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
++ Response 415 (application/json)
+
+        {
+            "code": "unsupported_media_type",
+            "message": "Unsupported media type in request.",
+            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
