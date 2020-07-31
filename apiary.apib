@@ -621,6 +621,14 @@ values for all roster fields in the template roster design is provided:
             }
         }
 
++ Response 401 (application/json)
+
+        {
+            "code": "authentication_failed",
+            "message": "Incorrect authentication credentials.",
+            "original_request": "<the original request that was sent, which resulted in this error>"
+        }
+
 + Response 404 (application/json)
 
         {
