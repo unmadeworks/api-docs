@@ -515,7 +515,11 @@ An example `roster` object is shown below:
       "id": "player-name",
       "display_name": "Player Name",
       "placeholder_text": "Your Name Here",
-      "allowed_characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz0123456789"
+      "allowed_characters": "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz0123456789",
+      "placements": [
+        "Center Chest",
+        "Upper Back"
+      ]
     }
   }
 }
@@ -533,6 +537,12 @@ in the region for which they'd selected this field.
 
 The `allowed_characters` is the full set of characters which can be used to populate
 this field when creating player designs.
+
+`placements` are the human-readable names of the physical placements on the garment
+to which this field will be applied. In the above example, the value provided for
+the `player-name` field would be placed in both the "Center Chest" and "Upper Back"
+placements. This data may be useful for the generation of forms for collecting these
+values from your members.
 
 ### Create Member Designs [/v1/designs/base_design_id/roster/]
 
