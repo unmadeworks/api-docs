@@ -1095,8 +1095,13 @@ asynchronously once the job is created.
                                 "image": "https://d1joez6ls07j0w.cloudfront.net/job_previews/FA81340E.png"
                             }
                         ],
-                        job_ticket: "https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/",
-                        manufacture_files: "https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/"
+                        "job_ticket": "https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/",
+                        "manufacture_files": "https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/",
+                        "artwork_ids": {
+                            "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
+                            "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
+                            "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
+                        },
                     }
                 ]
         }
@@ -1261,9 +1266,17 @@ The endpoint returns an array of Sequence objects, each of which contains:
 |└ `partner-item-reference`|The item-level reference for this job provided when creating this job's order|
 |└ `job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
 |└ `manufacture_files`|A URL that returns a zip archive containing the manufacture files for this Job|
+|└ `artwork_ids`|An object mapping embellishment manufacturing file names to their Artwork IDs|
 |└ `previews`|An array of `Preview` objects, each containing:|
 |&nbsp;&nbsp;&nbsp;&nbsp;└ `name`| This preview's name|
 |&nbsp;&nbsp;&nbsp;&nbsp;└ `image`| A URL to the image|
+
+
+##### Artwork IDs
+
+An 'Artwork ID' is an automatically-generated ID given to any embellishment manufacturing files created for this job.
+These IDs are shared wherever the same embellishment is used on multiple placements on the same garment, across many jobs, and even across many orders.
+You can use these IDs to identify jobs which share manufacturing files - which may be useful in your production processes.
 
 + Request (application/json)
     + Headers
@@ -1285,6 +1298,11 @@ The endpoint returns an array of Sequence objects, each of which contains:
                             "partner-item-reference": "YOUR ORDER ITEM REFERENCE",
                             "job_ticket": "https://example.com/JOB_ID_ticket.pdf",
                             "manufacture_files": "https://example.com/JOB_ID_panels.zip",
+                            "artwork_ids": {
+                                "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
+                                "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
+                                "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
+                            },
                             "previews": [
                                 {
                                     "name": "PREVIEW_NAME",
