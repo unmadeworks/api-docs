@@ -1257,7 +1257,8 @@ The endpoint returns an array of Sequence objects, each of which contains:
 |`machine`|The name of the machine to which this Sequence has been assigned|
 |`jobs`|An array of `Job` objects, each containing:|
 |└ `id`|The unique ID of this Job within Unmade systems|
-|└ `reference`|The reference given when creating this Job|
+|└ `partner-order-reference`|The order reference provided when creating this job's order|
+|└ `partner-item-reference`|The item-level reference for this job provided when creating this job's order|
 |└ `job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
 |└ `manufacture_files`|A URL that returns a zip archive containing the manufacture files for this Job|
 |└ `previews`|An array of `Preview` objects, each containing:|
