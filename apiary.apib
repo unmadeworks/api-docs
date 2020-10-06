@@ -324,7 +324,12 @@ function receiveMessage (event) {
 ```type: "UNMADE_design_saved"``` **required**
 
 Once a customer has finished creating their design in the Unmade Editor and click "save" or "add to bag" within the Iframe, Unmade will save the user's design, generate a `DesignID` and pass this ID to you by Post Messaging to the parent window.
+
+This action will also take place if the user triggers an action that would take them away from the Unmade Editor, for example attempting to upload content whilst not logged in.  In this case, the host website should respond to the postMessage by storing the `DesignID` and prompting the user to log in, at which point the `DesignID` can be associated with the user's account.
+
 In addition to the `DesignID`, this postMessage also includes the URL to a preview image you can immediately access (for example, to show the custom design during the checkout process) and other details about the user's design.
+
+This postMessage also includes a `meta` key, containing additional information about the event that triggered the save and whether the user was logged in or not.
 
 Please note that the payload of this message is identical in structure as the response of the [Design API](#reference/design-api) described further below.
 
@@ -332,6 +337,10 @@ Example postMessage:
 ```
 {
   type: "UNMADE_design_saved",
+  meta: {
+    triggeredBy: "upload"    // or "save" - the user action that triggered this save
+    userLoggedIn: false      // or true
+  },
   payload: {
     id: "0c9e9b2b-ee60-439a-9172-819df97d7987",     // Design ID
     product: "https://URL/ABCDEFGH/",               // URL of the Unmade editor
