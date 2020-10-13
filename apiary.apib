@@ -351,8 +351,8 @@ Example postMessage:
     stylecode: "ABC1234",
     secondary_previews: [                 // Array listing more previews
       {
-        "name": "right",        // Pre-agreed preview name
-        "image": null           // The URLs are `null` until rendered
+        "name": "right",                 // Pre-agreed preview name
+        "image": "https://PREVIEW_URL"   // URL for preview
       }
     ],
     components: [
@@ -425,7 +425,12 @@ This lets you:
             "product": "<Unmade Editor URL>",
             "preview": "<URL to the main rendering of the design>",
             "description": "<Description of the product and design>",
-            "secondary_previews": [],
+            "secondary_previews": [
+                {
+                    "name": "right",
+                    "image": "https://PREVIEW_URL"
+                }
+            ],
             "size": "<Size selected>",
             "gender": "<Gender selected>",
             "stylecode": "<Stylecode selected>",
