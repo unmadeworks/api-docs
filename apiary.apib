@@ -358,8 +358,8 @@ Example postMessage:
     components: [
         // Details of components selected by user
     ],
-    embellishments: [
-        // Details of embellishments selected by user
+    placements: [
+        // Details of placements customised by user
     ]
   }
 }
@@ -411,7 +411,7 @@ Once a user has created a design using and Unmade Editor and you have saved the 
 This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
-- get structured data about some of the customisation choices made, this currently covers selected size, gender, components and embellishments
+- get structured data about some of the customisation choices made, this currently covers selected size, gender, components and placements
 
 ### Retrieve a design [GET]
 
@@ -437,7 +437,7 @@ This lets you:
                     "option_displayname": "Red Buttons"
                 }
             ],
-            "embellishments": [
+            "placements": [
                 {
                     "placement_name": "front-chest-logo",
                     "placement_displayname": "Front Chest",
