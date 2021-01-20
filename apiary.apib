@@ -1270,22 +1270,75 @@ Auto-sequencing runs at regular intervals as agreed between you and Unmade.
 
 This endpoint allows these Sequences to be retrieved when required for manufacture.
 
-The endpoint returns an array of Sequence objects, each of which contains:
+The endpoint returns an array of `Sequence` objects, each of which contains:
 
 |Key|Description|
 |---|---|
 |`id`|The unique ID of this Sequence within Unmade systems|
 |`machine`|The name of the machine to which this Sequence has been assigned|
-|`jobs`|An array of `Job` objects, each containing:|
-|└ `id`|The unique ID of this Job within Unmade systems|
-|└ `partner-order-reference`|The order reference provided when creating this job's order|
-|└ `partner-item-reference`|The item-level reference for this job provided when creating this job's order|
-|└ `job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
-|└ `manufacture_files`|A URL that returns a zip archive containing the manufacture files for this Job|
-|└ `artwork_ids`|An object mapping embellishment manufacturing file names to their Artwork IDs|
-|└ `previews`|An array of `Preview` objects, each containing:|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `name`| This preview's name|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `image`| A URL to the image|
+|`jobs`|An array of `Job` objects (see below)|
+
+Each `Job` object contains:
+
+|Key|Description|
+|---|---|
+|`id`|The unique ID of this Job within Unmade systems|
+|`partner-order-reference`|The order reference provided when creating this job's order|
+|`partner-item-reference`|The item-level reference for this job provided when creating this job's order|
+|`job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
+|`manufacture_files`|A URL that returns a zip archive containing the manufacture files for this Job|
+|`artwork_ids`|An object mapping embellishment manufacturing file names to their Artwork IDs|
+|`artwork_dimensions`|An object containing the physical dimensions of any embellishment assets for this job|
+|`size`|The size code of this job's layplan|
+|`product_name`|The name of this job's product|
+|`product_code`|The code of this job's product|
+|`partner_data`|An object containing item-level partner data associated with this job|
+|`previews`|An array of *Preview* objects (see below)|
+|`components`|An array of *Component* objects (see below)|
+|`order`|This job's order data (see below)|
+
+Each *Preview* object contains:
+
+|Key|Description|
+|---|---|
+|`name`| This preview's name|
+|`image`| A URL to the image|
+
+Each *Component* object contains:
+
+|Key|Description|
+|---|---|
+|`name`|This component's name or code|
+|`display_name`|This component's human-readable display-name|
+|`type`|This component's type|
+|`reference`|This component's manufacturing reference|
+|`quantity`|The quantity of this component required for this job|
+
+Each job's `order` data contains:
+
+|Key|Description|
+|---|---|
+|`id`|The Unmade ID for this order (for use on `/orders` endpoints)|
+|`reference`|This unique reference provided for this order|
+|`created`|The date on which this order was created|
+|`attachments`|An object containing the URLs of any attachments associated with this order|
+|`partner_data`|An object containing order-level partner data associated with this order|
+|`shipping_address`|This order's shipping address (see below)|
+
+Each order's `shipping_address` data contains:
+
+|Key|Description|
+|---|---|
+|`name`|Recipient name|
+|`company_name`|-|
+|`address_1`|-|
+|`address_2`|-|
+|`address_3`|-|
+|`city`|-|
+|`country_area`|-|
+|`postal_code`|-|
+|`country`|Country code|
+|`phone`|-|
 
 
 ##### Artwork IDs
@@ -1304,31 +1357,87 @@ You can use these IDs to identify jobs which share manufacturing files - which m
     + Body
 
             [
-                {
-                    "id": "SEQUENCE_ID",
-                    "machine": "MACHINE_NAME",
-                    "jobs": [
-                        {
-                            "id": "JOB_ID",
-                            "partner-order-reference": "YOUR ORDER REFERENCE",
-                            "partner-item-reference": "YOUR ORDER ITEM REFERENCE",
-                            "job_ticket": "https://example.com/JOB_ID_ticket.pdf",
-                            "manufacture_files": "https://example.com/JOB_ID_panels.zip",
-                            "artwork_ids": {
-                                "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
-                                "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
-                                "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
-                            },
-                            "previews": [
-                                {
-                                    "name": "PREVIEW_NAME",
-                                    "image": "https://example.com/JOB_ID_PREVIEW_NAME.png"
-                                }
-                            ]
-                        }
-                    ]
-                }
+              {
+                "id": "SEQUENCE_ID",
+                "machine": "MACHINE_NAME",
+                "jobs": [
+                  {
+                    "id": "JOB_ID",
+                    "partner-order-reference": "YOUR ORDER REFERENCE",
+                    "partner-item-reference": "YOUR ORDER ITEM REFERENCE",
+                    "job_ticket": "https://example.com/JOB_ID_ticket.pdf",
+                    "manufacture_files": "https://example.com/JOB_ID_panels.zip",
+                    "artwork_ids": {
+                      "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
+                      "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
+                      "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
+                    },
+                    "artwork_dimensions": {
+                      "f417c83f9787abf1087bd7d16fc909e3_center-chest": {
+                        "artwork_width": 5.4235,
+                        "artwork_height": 6.2896,
+                        "units": "in"
+                      },
+                      "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": {
+                        "artwork_width": 2.12,
+                        "artwork_height": 4.31,
+                        "units": "in"
+                      },
+                      "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": {
+                        "artwork_width": 2.12,
+                        "artwork_height": 4.31,
+                        "units": "in"
+                      }
+                    },
+                    "size": "M",
+                    "product_name": "Custom Tee",
+                    "product_code": "123ABC",
+                    "partner_data": {
+                      "MY_ITEM_PARTNER_DATA_KEY": "MY_ITEM_PARTNER_DATA_VALUE"
+                    },
+                    "previews": [
+                      {
+                        "name": "PREVIEW_NAME",
+                        "image": "https://example.com/JOB_ID_PREVIEW_NAME.png"
+                      }
+                    ],
+                    "components": [
+                      {
+                        "name": "red-logo",
+                        "display_name": "Red Brand Logo",
+                        "type": "Brand Logo",
+                        "reference": "LGO-R",
+                        "quantity": 1
+                      }
+                    ],
+                    "order": {
+                      "id": "ORDER_ID",
+                      "reference": "YOUR ORDER REFERENCE",
+                      "created": "2020-10-20T10:24:35.693363Z",
+                      "attachments": {
+                        "order_ticket": "https://example.com/ORDER_ID_ticket.pdf"
+                      },
+                      "shipping_address": {
+                        "name": "Homer Simpson",
+                        "company_name": "Power Plant",
+                        "address_1": "742 Evergreen Terrace",
+                        "address_2": "Springfield",
+                        "address_3": "",
+                        "city": "Springfield",
+                        "country_area": "US",
+                        "postal_code": "98765",
+                        "country": "US",
+                        "phone": "000 9999999"
+                      },
+                      "partner_data": {
+                        "MY_PARTNER_DATA_KEY": "MY_PARTNER_DATA_VALUE"
+                      }
+                    }
+                  }
+                ]
+              }
             ]
+
 
 + Response 401 (application/json)
 
