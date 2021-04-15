@@ -1108,16 +1108,29 @@ asynchronously once the job is created.
                         "previews": [
                             {
                                 "name": "Main",
-                                "image": "https://d1joez6ls07j0w.cloudfront.net/job_previews/FA81340E.png"
+                                "image": "https://example.com/job_previews/FA81340E.png"
                             }
                         ],
-                        "job_ticket": "https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/",
-                        "manufacture_files": "https://nbteam.embed.unmade.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/",
+                        "job_ticket": "https://example.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/",
+                        "manufacture_files": "https://example.com//v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/",
                         "artwork_ids": {
                             "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
                             "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
                             "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
                         },
+                        "components" : [
+                            "name": "colourway-WT",
+                            "display_name": "White",
+                            "type": "colourway",
+                            "reference": "WT",
+                            "quantity": 1
+                        ],
+                        "partner_data" : {
+                            "mfgid": "0000118347"
+                        },
+                        "product_name": "Men's Tech Tee 2.0",
+                        "product_code": "MT726BCC",
+                        "manufacturing_template_code": "TMMT726G"
                     }
                 ]
         }
@@ -1283,6 +1296,7 @@ Each `Job` object contains:
 |Key|Description|
 |---|---|
 |`id`|The unique ID of this Job within Unmade systems|
+|`reference`|The item-level reference for this job provided when creating this job's order|
 |`partner-order-reference`|The order reference provided when creating this job's order|
 |`partner-item-reference`|The item-level reference for this job provided when creating this job's order|
 |`job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
@@ -1292,6 +1306,7 @@ Each `Job` object contains:
 |`size`|The size code of this job's layplan|
 |`product_name`|The name of this job's product|
 |`product_code`|The code of this job's product|
+|`manufacturing_template_code`|The unmade code for the manufacturing template used for this job|
 |`partner_data`|An object containing item-level partner data associated with this job|
 |`previews`|An array of *Preview* objects (see below)|
 |`components`|An array of *Component* objects (see below)|
@@ -1392,6 +1407,7 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                     "size": "M",
                     "product_name": "Custom Tee",
                     "product_code": "123ABC",
+                    "manufacturing_template_code": "TMMT726G",
                     "partner_data": {
                       "MY_ITEM_PARTNER_DATA_KEY": "MY_ITEM_PARTNER_DATA_VALUE"
                     },
