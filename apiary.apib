@@ -1098,41 +1098,45 @@ asynchronously once the job is created.
 
         {
             "id": "a06f2da7-2a65-44ef-bfb6-81dea3f4dfeb",
-                "reference": "partner_order_reference",
-                "jobs": [
-                    {
-                        "id": "fa81340e-e2a3-41ae-bd9a-f4dc01122fac",
-                        "reference": "partner_order_reference",
-                        "partner_order_reference": "partner_order_reference",
-                        "partner_item_reference": "partner_order_item_1_reference",
-                        "previews": [
-                            {
-                                "name": "Main",
-                                "image": "https://example.com/job_previews/FA81340E.png"
-                            }
-                        ],
-                        "job_ticket": "https://example.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/",
-                        "manufacture_files": "https://example.com//v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/",
-                        "artwork_ids": {
-                            "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
-                            "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
-                            "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
-                        },
-                        "components" : [
-                            "name": "colourway-WT",
-                            "display_name": "White",
-                            "type": "colourway",
-                            "reference": "WT",
-                            "quantity": 1
-                        ],
-                        "partner_data" : {
-                            "mfgid": "0000118347"
-                        },
-                        "product_name": "Men's Tech Tee 2.0",
-                        "product_code": "MT726BCC",
-                        "manufacturing_template_code": "TMMT726G"
-                    }
-                ]
+            "reference": "partner_order_reference",
+            "partner_data" :{
+                "a_key_provided": "it's value",
+                "another_key_provided": "another value"
+            },
+            "jobs": [
+                {
+                    "id": "fa81340e-e2a3-41ae-bd9a-f4dc01122fac",
+                    "reference": "partner_order_reference",
+                    "partner_order_reference": "partner_order_reference",
+                    "partner_item_reference": "partner_order_item_1_reference",
+                    "previews": [
+                        {
+                            "name": "Main",
+                            "image": "https://example.com/job_previews/FA81340E.png"
+                        }
+                    ],
+                    "job_ticket": "https://example.com/v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/job_ticket/",
+                    "manufacture_files": "https://example.com//v1/factories/new-balance-teamwear/jobs/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/manufacture_files/",
+                    "artwork_ids": {
+                        "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
+                        "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
+                        "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
+                    },
+                    "components" : [
+                        "name": "colourway-WT",
+                        "display_name": "White",
+                        "type": "colourway",
+                        "reference": "WT",
+                        "quantity": 1
+                    ],
+                    "partner_data" : {
+                        "mfgid": "0000118347"
+                    },
+                    "product_name": "Men's Tech Tee 2.0",
+                    "product_code": "MT726BCC",
+                    "manufacturing_template_code": "TMMT726G"
+                }
+            ]
         }
 
 + Response 401 (application/json)
