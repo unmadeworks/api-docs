@@ -405,6 +405,15 @@ To turn specific options within the customisation editor off, the `<iframe>` nee
 Note that this is supported as a "whitelist" approach: To turn options off, the list of all available options is sent and the missing options will be marked unavailable.
 
 
+### Asset upload handling
+```type: UNMADE_upload_svg```  *optional*
+```type: UNMADE_upload_file```  *optional*
+
+The Unmade Editor handles any the upload of logos for the users, however if configured those can be handled externally. And then the files can be received through postmessage.
+
+There are 2 types of messages that can be send ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
+dd 
+
 ## Group Design API
 ### Retrieve designs [/v1/designs/{design_id}/]
 
