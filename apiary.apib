@@ -339,7 +339,7 @@ Example postMessage:
 {
   type: "UNMADE_design_saved",
   meta: {
-    triggeredBy: "upload"    // or "save" - the user action that triggered this save
+    triggeredBy: "upload"    // see table below for possible values and their meanings
     userLoggedIn: false      // or true
   },
   payload: {
@@ -365,6 +365,12 @@ Example postMessage:
   }
 }
 ```
+
+|TriggeredBy|Description|Suggested follow-up action|
+|---|---|---|
+|`save`| When the user clicks 'add to bag' inside the Editor iframe, Unmade will save the user's design and pass the generated design ID to the parent window in a postMessage. | Add to bag: add the product to the user's cart. |
+|`upload` | In order to accept a user upload, Unmade needs a user token in the iframe URL.  When one is not provided and the user clicks upload, we save the design and postMessage the design ID so you can log them in. | Show the user a login modal, redirect them to this design ID on successful login. |
+|`share`| When the user clicks 'share' inside the Editor iframe, the process is the same as when the user clicks the 'add to bag' button. | Generate a URL that directs users to the design ID and show the user a share dialog. |
 
 #### A note about the size of initial preview images
 
