@@ -589,6 +589,11 @@ containing the roster design ID, as well as the values of each field to be popul
 Upon reciept of a valid payload, a new design is created, and its ID is returned. This
 ID can then be used to place orders as required.
 
+Successfully created member design IDs can also be queried via the 
+[Retrieve Design](https://unmade.docs.apiary.io/#reference/design-api/retrieve-designs/retrieve-a-design) 
+endpoint as normal. The `placements` data for member designs will include the 
+`origin_roster_field_key` for any placements which originated from roster fields.
+
 Many member designs can be created from a single roster design.
 
 To create a member design, the `/roster/` endpoint must recieve valid values for **all**
