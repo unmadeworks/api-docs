@@ -432,6 +432,7 @@ This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
 - get structured data about some of the customisation choices made, this currently covers selected size, gender, components and placements
+- check if on any of the placements has been applied a placeholder logo (`is_placeholder=true`) or fetch the applied logo that the user has uploaded (`original_logo_url=URL_TO_RETRIEVE_LOGO`)
 
 ### Retrieve a design [GET]
 
@@ -474,12 +475,23 @@ This lets you:
                     "is_placeholder": false,
                 },
                 {
+                    "placement_name": "back-center-logo",
+                    "placement_displayname": "Center Back",
+                    "option_name": "user-uploaded",
+                    "option_displayname": "User Uploaded",
+                    "manufacturing_method": "heat-transfer",
+                    "rotation": 0,
+                    "upcharge": null,
+                    "is_placeholder": true,
+                    "original_logo_url": "https://URL_TO_UPLOADED_LOGO"
+                },
+                {
                     "placement_name": "right-sleeve-monogram",
                     "placement_displayname": "Right Sleeve Monogram",
                     "option_name": "large-monogram",
                     "option_displayname": "Large Monogram",
                     "manufacturing_method": "heat-transfer",
-                    "is_placeholder": "false",
+                    "is_placeholder": false,
                     "text": "John Smith",
                     "font": "Helvetica",
                     "rotation": 0,
