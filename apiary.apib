@@ -928,31 +928,7 @@ For an order to be created the following fields will need to be present:
                     "postal_code": "WC2R 1LA",
                     "country": "UK",
                     "phone": ""
-                },
-                "placeholder_logos": [
-                    {
-                        "original_logo_url": "https://URL_TO_UPLOADED_LOGO_1"
-                        "designs": [
-                            {
-                                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                                "placements":  ["Logo_front", "Logo_back"]
-                            }
-                        ]
-                    },
-                    {
-                        "original_logo_url": "https://URL_TO_UPLOADED_LOGO_2"
-                        "designs": [
-                            {
-                                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                                "placements":  ["Logo_upper_back"]
-                            }
-                            {
-                                "design": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
-                                "placements":  ["Logo_front", "Logo_back"]
-                            }
-                        ]
-                    }
-                ]                
+                }            
             }
 
 + Response 201 (application/json)
@@ -1092,6 +1068,30 @@ attribute of the order once it has been entered by the factory.
             "partner_data":{
                 "customer_po_number": "1234512334X"
             },
+            "placeholder_logos": [
+                {
+                    "original_logo_url": "https://URL_TO_UPLOADED_LOGO_1"
+                    "designs": [
+                        {
+                            "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                            "placements":  ["Logo_front", "Logo_back"]
+                        }
+                    ]
+                },
+                {
+                    "original_logo_url": "https://URL_TO_UPLOADED_LOGO_2"
+                    "designs": [
+                        {
+                            "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                            "placements":  ["Logo_upper_back"]
+                        }
+                        {
+                            "design": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
+                            "placements":  ["Logo_front", "Logo_back"]
+                        }
+                    ]
+                }
+            ],   
             "order_items": [
                 {
                     "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
