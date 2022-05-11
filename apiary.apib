@@ -434,6 +434,7 @@ This lets you:
 - get structured data about some of the customisation choices made, this currently covers selected size, gender, components and placements
 - identify if on any of the placements has been applied a placeholder logo (`is_placeholder=true`) 
 - fetch the applied logo for a placement that the user has uploaded (`original_logo_url=URL_TO_RETRIEVE_LOGO`)
+- identify the source design id for grouping purposes, the source design id will be the design created originally on the editor and not via any other APIs
 
 ### Retrieve a design [GET]
 
@@ -444,6 +445,7 @@ This lets you:
 
         {
             "id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
+            "source_design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
             "product": "<Unmade Editor URL>",
             "preview": "<URL to the main rendering of the design>",
             "description": "<Description of the product and design>",
