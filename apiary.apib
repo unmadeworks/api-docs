@@ -406,6 +406,23 @@ the URLs for these full size images.
 We can optionally configure to send the Parent Window a message to trigger interactions event outside the Unmade Iframe.
 For example, if within the Unmade Iframe there is a link to a Size Guide that should trigger a modal handled by the parent window.
 
+Example postMessage:
+```
+{
+    payload: {
+        clicked: 'sizing',
+        type: "UNMADE_interaction"
+    }
+}
+```
+
+|Clicked value|Description|Suggested follow-up action|
+|---|---|---|
+|`variable_text_help`| When the user clicks the help button in the roster embellishment section of the editor | Open a modal or link with help information |
+|`logo_upload_help`| When the user clicks the help link when uploading a logo | Open a modal or link with help information |
+|`legalCopy`| When the user clicks the terms and conditions link | Open a modal or link with terms and conditions information |
+|`sizing`| When the user clicks the size guide link | Open a modal or link with size guide information |
+
 ### Component availability
 ```type: "UNMADE_ready"``` *optional*
 
