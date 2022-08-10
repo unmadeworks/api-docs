@@ -365,6 +365,9 @@ Example postMessage:
     ],
     placements: [
         // Details of placements customised by user
+    ],
+    upcharges: [
+        // Details of any upcharges in this design
     ]
   }
 }
@@ -496,7 +499,6 @@ This lets you:
                     "option_displayname": "White Fancy Logo",
                     "manufacturing_method": "embroidery",
                     "rotation": 0,
-                    "upcharge": null,
                     "is_placeholder": false,
                 },
                 {
@@ -506,7 +508,6 @@ This lets you:
                     "option_displayname": "User Uploaded",
                     "manufacturing_method": "heat-transfer",
                     "rotation": 0,
-                    "upcharge": null,
                     "is_placeholder": true,
                     "original_logo_url": "https://URL_TO_UPLOADED_LOGO"
                 },
@@ -523,12 +524,17 @@ This lets you:
                     "colours": [
                         "Black",
                         "Gray"
-                    ],
-                    "upcharge": {
-                        "value": 10.00,
-                        "currency": "USD
-                    },
+                    ]
                     "`origin_roster_field_key": null
+                }
+            ],
+            "upcharges": [
+                {
+                    "applied_to": "LeftChest",
+                    "currency": "USD",
+                    "customisation_element_id": "embroidery",
+                    "upcharge_type": "manufacturing-method",
+                    "value": "10.00"
                 }
             ]
         }
