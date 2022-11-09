@@ -22,7 +22,7 @@ Further to these core steps, we provide additional APIs that allow you to build 
 - **Order API** In addition to order generation, you can retrieve order data using this API to get production state and tracking number.
 - **Design API** You can get rendered images of a customer's design using this API and the Design ID the Editor has provided.
 - **Factory API** Your factories can use our Web interface to download manufacturing data, or this API.
-- **Roster API** You can create a new design using variable data using a roster base design. 
+- **Roster API** You can create a new design using variable data using a roster base design.
 
 ### Typical user journey through e-commerce site
 <a href="https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png">![Image showing the typical user journey through the e-commerce site](https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png)</a>
@@ -448,7 +448,7 @@ Note that this is supported as a "whitelist" approach: To turn options off, the 
 The Unmade Editor handles any the upload of logos for the users, however if configured those can be handled externally. And then the files can be received through postmessage.
 
 There are 2 types of messages that can be send ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
-dd 
+dd
 
 ## Group Design API
 ### Retrieve designs [/v1/designs/{design_id}/]
@@ -458,7 +458,7 @@ This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
 - get structured data about some of the customisation choices made, this currently covers selected size, gender, components and placements
-- identify if on any of the placements has been applied a placeholder logo (`is_placeholder=true`) 
+- identify if on any of the placements has been applied a placeholder logo (`is_placeholder=true`)
 - fetch the applied logo for a placement that the user has uploaded (`original_logo_url=URL_TO_RETRIEVE_LOGO`)
 - identify the source design id for grouping purposes, the source design id will be the design created originally on the editor and not via any other APIs
 
@@ -529,6 +529,10 @@ This lets you:
                     "`origin_roster_field_key": null
                 }
             ],
+            "variant": {
+                "name": "Striped 1",
+                "display_name": "Striped 1"
+            },
             "upcharges": [
                 {
                     "applied_to": "LeftChest",
@@ -575,16 +579,16 @@ This lets you:
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
-        
+
 ## Group Roster API
 
-### Retrieve Roster design data 
+### Retrieve Roster design data
 
 If a given product has roster functionality enabled, an editor user will be provided
 with the option to select a roster field for any enabled region. A design saved with
 one or more of these roster fields is known as a "roster design".
 
-A roster design can be identified by the presence of the `roster` key in its API 
+A roster design can be identified by the presence of the `roster` key in its API
 representation. See [here](https://jsapi.apiary.io/previews/unmade/reference/design-api)
 for full details of this representation.
 
@@ -609,9 +613,9 @@ An example `roster` object is shown below:
 ```
 
 This indicates that a single roster field: `player-name` was selected for this roster
-design. 
+design.
 
-The `display_name` of the field is a human-readable representation of the field for 
+The `display_name` of the field is a human-readable representation of the field for
 use when creating player designs.
 
 The `placeholder_text` field is the temporary value that the roster region is populated
@@ -632,14 +636,14 @@ values from your members.
 Once the "template" roster design has been created, the `/roster/` endpoint can be used
 to populate the roster fields with the real data for your members.
 
-To create member designs, the `/roster/` endpoint accepts POST requests with payloads 
+To create member designs, the `/roster/` endpoint accepts POST requests with payloads
 containing the roster design ID, as well as the values of each field to be populated.
 Upon reciept of a valid payload, a new design is created, and its ID is returned. This
 ID can then be used to place orders as required.
 
-Successfully created member design IDs can also be queried via the 
-[Retrieve Design](https://unmade.docs.apiary.io/#reference/design-api/retrieve-designs/retrieve-a-design) 
-endpoint as normal. The `placements` data for member designs will include the 
+Successfully created member design IDs can also be queried via the
+[Retrieve Design](https://unmade.docs.apiary.io/#reference/design-api/retrieve-designs/retrieve-a-design)
+endpoint as normal. The `placements` data for member designs will include the
 `origin_roster_field_key` for any placements which originated from roster fields.
 
 Many member designs can be created from a single roster design.
@@ -649,11 +653,11 @@ roster fields specified for a given roster design.
 
 The provided values for each roster field will be validated to ensure they contain only
 allowed characters and that, once rendered in the chosen font, they are not too wide for
-their respective placement. If there are validation errors we return a 400 response 
-detailing the codes for the validation errors for each field. Possible validation error 
-codes are `illegal_character`, `text_too_wide`, `text_sanitised`. 
+their respective placement. If there are validation errors we return a 400 response
+detailing the codes for the validation errors for each field. Possible validation error
+codes are `illegal_character`, `text_too_wide`, `text_sanitised`.
 
-Additionally, for each error type a `details` object is provided. This contains the 
+Additionally, for each error type a `details` object is provided. This contains the
 filtered / truncated text that *would* be permitted in the placement.
 
 ### Create a member design [POST]
@@ -681,7 +685,7 @@ values for all roster fields in the template roster design is provided:
                     "last-name": "Smith",
                     "number": "99"
                 },
-                
+
             }
 
 + Response 201 (application/json)
@@ -709,7 +713,7 @@ values for all roster fields in the template roster design is provided:
                 ],
                 "number": [
                     {
-                        "error": "illegal_characters", 
+                        "error": "illegal_characters",
                         "details": {"amended_text": "text with no ilegal chars"}
                     }
                 ]
@@ -894,7 +898,7 @@ For an order to be created the following fields will need to be present:
         }
 
 + Request Team wear order (application/json)
-    
+
     + Headers
 
             Authorization: Token ABCDEF
@@ -960,7 +964,7 @@ For an order to be created the following fields will need to be present:
                     "postal_code": "WC2R 1LA",
                     "country": "UK",
                     "phone": ""
-                }            
+                }
             }
 
 + Response 201 (application/json)
@@ -1126,7 +1130,7 @@ attribute of the order once it has been entered by the factory.
                         }
                     ]
                 }
-            ],   
+            ],
             "order_items": [
                 {
                     "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
@@ -1157,7 +1161,7 @@ attribute of the order once it has been entered by the factory.
                     "partner_data": {
                         "barcode": "98329845228372"
                         "UNMADE_ORDER_ITEM_DESIGN_ID": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
-                        "UNMADE_SOURCE_DESIGN_ID": "5e39f63b-a084-4d80-ae29-1fdb87a79922",                        
+                        "UNMADE_SOURCE_DESIGN_ID": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
                     },
                     "options": {
                         "size": "M"
