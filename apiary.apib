@@ -458,8 +458,8 @@ This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
 - get structured data about some of the customisation choices made, this currently covers selected size, gender, components and placements
-- identify if on any of the placements has been applied a placeholder logo (`is_placeholder=true`)
-- fetch the applied logo for a placement that the user has uploaded (`original_logo_url=URL_TO_RETRIEVE_LOGO`)
+- fetch the applied logo for a placement that the user has uploaded, per placement the `user_logo_upload` key will contain information about the asset including `asset_url` where the asset can be retrieved
+- identify if on any of the placements has been applied a placeholder logo within the `user_logo_upload` key there will be a `is_placeholder` key that if the value is `true` will indicate the asset is a placeholder
 - identify the source design id for grouping purposes, the source design id will be the design created originally on the editor and not via any other APIs
 
 ### Retrieve a design [GET]
