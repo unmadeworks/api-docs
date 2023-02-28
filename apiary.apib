@@ -141,25 +141,14 @@ If you initialise the Unmade Editor without an authenticated user then the user 
     https://{your-partner-subdomain}.embed.unmade.com/v1/products/{your-product}/
     ```
 
-2. If and when the unauthenticated user clicks to upload an asset, the Unmade Editor iFrame will:
+2. If and when the unauthenticated user clicks to upload an asset, the Unmade Editor iFrame will first save the design.
+We then inform your e-commerce site that the user needs to be authenticated in order to continue via a JavaScript postMessage 
+to the parent window. See [the postMessages section](https://unmade.docs.apiary.io/#reference/js-post-messaging-interactions) 
+of this document for more details on the structure of this message.
 
-    Save the design and then inform your e-commerce site that the user needs to be authenticated in order to continue and send a JavaScript postMessage() to the parent window requesting the log in action and pass along the Design ID. The payload of the postmessage will look something like this:
 
-    ```
-    {
-      type: "modal",
-      payload: {
-        show: "login",
-        params: {
-          designID: "7fad56a8def33980cc3f90"
-        }
-      }
-    }
-    ```
-
-3. Your e-commerce site will need to listen for this JavaScript postMessage() and when it is received direct the user to authenticate.
-
-    Once your e-commerce site has authenticated the user it can re-initialise the Unmade Editor with a unique identifier for the authenticated user and the saved design id and the user will be able to continue with uploading their asset. For example
+3. Upon reciept of this postMessage, your site should authenticate the user using your site's login mechanism. 
+Then re-initialise the Unmade Editor with a unique identifier for the authenticated user and the saved Design ID:
 
     ```
     https://{your-partner-subdomaini}.embed.unmade.com/v1/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg&design_id=7fad56a8def33980cc3f90
