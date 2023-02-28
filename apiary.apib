@@ -305,8 +305,6 @@ function receiveMessage (event) {
             addToCart(event.data.payload);
         case 'UNMADE_interaction':
             resizeIFrame(event.data.payload);
-        case 'UNMADE_stock_response':
-            openModal(event.data.payload);
         default:
             break;
     }
@@ -417,18 +415,6 @@ Example postMessage:
 |`save_design`| When the user clicks the save design button | Open a loading overlay |
 
 Please note that to direct the user to help content about logo uploading, we also support an HTML hyperlink instead of the postMessage functionality.
-
-### Component availability
-```type: "UNMADE_ready"``` *optional*
-
-```type: "UNMADE_stock_available"``` *optional*
-
-```type: "UNMADE_stock_response"``` *optional*
-
-If configured and agreed with Unmade, you can initialise the Unmade Editor with option availability data to make specfiic customisation options unavailable for consumers to pick. (For example if you have run out of stock).
-To turn specific options within the customisation editor off, the `<iframe>` needs to receive a postMessage specifying the available options as component names and option names matching the ones set up within the Unmade system.
-Note that this is supported as a "whitelist" approach: To turn options off, the list of all available options is sent and the missing options will be marked unavailable.
-
 
 ### Asset upload handling
 ```type: UNMADE_upload_svg```  *optional*
