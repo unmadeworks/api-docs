@@ -142,12 +142,12 @@ If you initialise the Unmade Editor without an authenticated user then the user 
     ```
 
 2. If and when the unauthenticated user clicks to upload an asset, the Unmade Editor iFrame will first save the design.
-We then inform your e-commerce site that the user needs to be authenticated in order to continue via a JavaScript postMessage 
-to the parent window. See [the postMessages section](https://unmade.docs.apiary.io/#reference/js-post-messaging-interactions) 
+We then inform your e-commerce site that the user needs to be authenticated in order to continue via a JavaScript postMessage
+to the parent window. See [the postMessages section](https://unmade.docs.apiary.io/#reference/js-post-messaging-interactions)
 of this document for more details on the structure of this message.
 
 
-3. Upon reciept of this postMessage, your site should authenticate the user using your site's login mechanism. 
+3. Upon reciept of this postMessage, your site should authenticate the user using your site's login mechanism.
 Then re-initialise the Unmade Editor with a unique identifier for the authenticated user and the saved Design ID:
 
     ```
@@ -1444,6 +1444,7 @@ Each `Job` object contains:
 |`manufacturing_template_code`|The unmade code for the manufacturing template used for this job|
 |`partner_data`|An object containing item-level partner data associated with this job|
 |`previews`|An array of *Preview* objects (see below)|
+|`personalisation`|An array of Name and Value objects for that jobs personalised information|
 |`components`|An array of *Component* objects (see below)|
 |`order`|This job's order data (see below)|
 
@@ -1453,6 +1454,13 @@ Each *Preview* object contains:
 |---|---|
 |`name`| This preview's name|
 |`image`| A URL to the image|
+
+Each *Personalisation* object contains:
+
+|Key|Description|
+|---|---|
+|`name`| The field name|
+|`value`| The value for that field |
 
 Each *Component* object contains:
 
@@ -1550,6 +1558,12 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                       {
                         "name": "PREVIEW_NAME",
                         "image": "https://example.com/JOB_ID_PREVIEW_NAME.png"
+                      }
+                    ],
+                    "personalisation": [
+                      {
+                        "name": "Number",
+                        "value": "11"
                       }
                     ],
                     "components": [
