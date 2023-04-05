@@ -738,11 +738,10 @@ values for all roster fields in the template roster design is provided:
 
 
 ## Group Orders API
-### Create Order [/v1/orders/]
+### Create and List Orders [/v1/orders/]
 
 Once an order has been placed on the e-commerce platform, the Unmade system should be notified
 so we can send the design to your factory and generate the manufacturing data for it.
-
 
 ### Create an Order [POST]
 
@@ -994,6 +993,57 @@ For an order to be created the following fields will need to be present:
             "code": "unsupported_media_type",
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+        }
+        
+### List Orders [GET]
+
+This endpoint can be used to retrieve the complete list of all orders that have been created to date.
+
+This endpoint is paginated and shows a maximum of 10 order objects per response. Use the `page` query 
+parameter to select the desired page.
+
+You can optionally provide `created_before` and `created_before` query paramaters in the format `YYYY-MM-DD`
+to filter the listed orders by their creation date.
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+        {
+            "count": 10,
+            "next": "https://example.embed.unmade.com/v1/orders/?page=2",
+            "previous": null,
+            "results": [
+                {
+                    "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
+                    "shipping_address" : {
+                        "name": "John Smith",
+                        "company_name": "unmade",
+                        "address_1": "152 Strand",
+                        "address_2": "Somerset House",
+                        "city": "London",
+                        "country_area": "",
+                        "postal_code": "WC2R 1LA",
+                        "country": "UK",
+                        "phone": ""
+                    },
+                    "reference": "partner_order_reference",
+                    "created": "2018-04-11T17:20:04.991263Z",
+                    "state": "new",
+                    "placeholder_logos": [],
+                    "partner_data": {},
+                    "order_items": [],
+                    "tracking_number": "",
+                    "is_order_portal": false,
+                    "submitted_at": null,
+                    "ready_to_ship_at": null,
+                    "shipped_at": null,
+                    "factory_order_id": null
+                }
+            ]
         }
 
 ### Retrieve Order [/v1/orders/{order_id}/]
