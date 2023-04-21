@@ -994,12 +994,12 @@ For an order to be created the following fields will need to be present:
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
-        
+
 ### List Orders [GET]
 
 This endpoint can be used to retrieve the complete list of all orders that have been created to date.
 
-This endpoint is paginated and shows a maximum of 10 order objects per response. Use the `page` query 
+This endpoint is paginated and shows a maximum of 10 order objects per response. Use the `page` query
 parameter to select the desired page.
 
 You can optionally provide `created_before` and `created_after` query paramaters in the format `YYYY-MM-DD`
@@ -1482,6 +1482,13 @@ Each `Job` object contains:
 |---|---|
 |`id`|The unique ID of this Job within Unmade systems|
 |`reference`|The item-level reference for this job provided when creating this job's order|
+|`state`|The status of the selected Job|
+|`created`|The timestamp when it was created|
+|`arrive_by_date`|Date when the Job need to get to end customer by e.g. 2020-07-27 YYYY-MM-DD|
+|`ex_factory_date`|Date when the Job need to leave the factory by e.g. 2020-07-27 YYYY-MM-DD|
+|`design_source_id`|The ID of the Job's designs parent, can be used to group similar Jobs.|
+|`order_design_group`|Order specific design source group.|
+|`changelog`|List of changes to certain fields|
 |`partner-order-reference`|The order reference provided when creating this job's order|
 |`partner-item-reference`|The item-level reference for this job provided when creating this job's order|
 |`job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
@@ -1570,7 +1577,12 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                 "machine": "MACHINE_NAME",
                 "jobs": [
                   {
+                    "url": "URL of Job in system"
                     "id": "JOB_ID",
+                    "short_id": "SHORT_JOB_ID",
+                    "product_type": "Description of production",
+                    "state":" "Job Statue",
+                    "created": "Timestamp of when Job was created e.g. 2020-07-13T11:50:23.180726Z",
                     "partner-order-reference": "YOUR ORDER REFERENCE",
                     "partner-item-reference": "YOUR ORDER ITEM REFERENCE",
                     "job_ticket": "https://example.com/JOB_ID_ticket.pdf",
@@ -1597,9 +1609,14 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                         "units": "in"
                       }
                     },
+                    "ui_state": "State of Job that is used in UI",
                     "size": "M",
                     "product_name": "Custom Tee",
                     "product_code": "123ABC",
+                    "currency": "USD",
+                    "price_per_item": "",
+                    "reference": "YOUR ORDER REFERENCE",
+                    "preview": "URL of main preview image",
                     "manufacturing_template_code": "TMMT726G",
                     "partner_data": {
                       "MY_ITEM_PARTNER_DATA_KEY": "MY_ITEM_PARTNER_DATA_VALUE"
@@ -1616,6 +1633,19 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                         "value": "11"
                       }
                     ],
+                    "quantity": 1,
+                    "arrive_by_date":"Date when the Job need to get to end customer by e.g. 2020-07-27 YYYY-MM-DD",
+                    "ex_factory_date":"Date when the Job need to leave the factory by by e.g. 2020-07-27 YYYY-MM-DD",
+                    "design_source_id": "ID of the Job's Design source",
+                    "order_design_group": "",
+                    "changelog": [
+                        {
+                            "field": "What certain field has changed",
+                            "value": "What the new value is",
+                            "modification": "Timestamp of when",
+                            "user": "The user/system which made the change if recorded.",
+                        }
+                    ],
                     "components": [
                       {
                         "name": "red-logo",
@@ -1625,12 +1655,25 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                         "quantity": 1
                       }
                     ],
+                    "manufacture_file": "URL to zip of all manufacturing files for this Job",
+                    "ticket": "URL to Job ticket PDF",
+                    "layplan": "URL to the layplan used",
+                    "supplier": {
+                        "name": "Name of the supplier",
+                        "slug": "Slug of the supplier"
+                    },
+                    "sequence": "URL to the Sequence this Job is apart of"
                     "order": {
                       "id": "ORDER_ID",
+                      "url": "URL of the Order",
+                      "state": "Order status",
                       "reference": "YOUR ORDER REFERENCE",
                       "created": "2020-10-20T10:24:35.693363Z",
+                      "shipped": "2020-10-23T10:24:35.693363Z",
+                      "tracking_method": "no-tracking",
+                      "tracking_number": "",
                       "attachments": {
-                        "order_ticket": "https://example.com/ORDER_ID_ticket.pdf"
+                        "order_ticket_csv": "https://example.com/ORDERREF_order_ticket.csv"
                       },
                       "shipping_address": {
                         "name": "Homer Simpson",
