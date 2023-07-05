@@ -353,6 +353,12 @@ Example postMessage:
     placements: [
         // Details of placements customised by user
     ],
+    design_elements: [
+        // Details (colours and patterns ) of the design elements (printed areas) customised by user 
+    ],
+    colours_used : [
+        // List of all the colours used by the user
+    ],
     upcharges: [
         // Details of any upcharges in this design
     ]
@@ -432,7 +438,7 @@ Once a user has created a design using and Unmade Editor and you have saved the 
 This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
-- get structured data about some of the customisation choices made, this currently covers selected size, gender, components and placements
+- get structured data about some of the customisation choices made, this currently covers selected size, gender, components, placements and colours and patterns used on design elements (printed areas)
 - fetch the applied logo for a placement that the user has uploaded, per placement the `user_logo_upload` key will contain information about the asset including `asset_url` where the asset can be retrieved
 - identify if on any of the placements has been applied a placeholder logo within the `user_logo_upload` key there will be a `is_placeholder` key that if the value is `true` will indicate the asset is a placeholder
 - identify the source design id for grouping purposes, the source design id will be the design created originally on the editor and not via any other APIs
@@ -508,6 +514,48 @@ This lets you:
                 "name": "Striped 1",
                 "display_name": "Striped 1"
             },
+            "design_elements":[
+                {
+                    "design_element_name": "Background_1",
+                    "design_element_displayname": "Area 1",
+                    "pattern_used": "Dots 1",
+                    "colours_used": [
+                        {
+                            "id": 3,
+                            "colour_name": "Red"
+                        },
+                        {
+                            "id": 4,
+                            "colour_name": "Black"
+                        }
+                    ]
+                },
+                {
+                    "design_element_name": "Background_2",
+                    "design_element_displayname": "Area 2",
+                    "pattern_used": null,
+                    "colours_used": [
+                        {
+                            "id": 1,
+                            "colour_name": "White"
+                        }
+                    ]
+                }
+            ],
+            "colours_used": [
+                {
+                    "id": 4
+                    "colour_name": "Black"
+                },
+                {
+                    "id": 3
+                    "colour_name": "Red"
+                },
+                {
+                    "id": 1
+                    "colour_name": "White"
+                }
+            ],
             "upcharges": [
                 {
                     "applied_to": "LeftChest",
