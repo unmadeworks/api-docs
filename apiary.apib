@@ -354,7 +354,7 @@ Example postMessage:
         // Details of placements customised by user
     ],
     design_elements: [
-        // Details (colours and patterns ) of the design elements (printed areas) customised by user 
+        // Details (colours and patterns ) of the design elements (printed areas) customised by user
     ],
     colours_used : [
         // List of all the colours used by the user
@@ -1544,6 +1544,7 @@ Each `Job` object contains:
 |`artwork_ids`|An object mapping embellishment manufacturing file names to their Artwork IDs|
 |`artwork_dimensions`|An object containing the physical dimensions of any embellishment assets for this job|
 |`size`|The size code of this job's layplan|
+|`design_element_colours`| The colours found in the Job |
 |`product_name`|The name of this job's product|
 |`product_code`|The code of this job's product|
 |`manufacturing_template_code`|The unmade code for the manufacturing template used for this job|
@@ -1576,6 +1577,20 @@ Each *Component* object contains:
 |`type`|This component's type|
 |`reference`|This component's manufacturing reference|
 |`quantity`|The quantity of this component required for this job|
+
+
+Each *design_element_colours* object contains:
+|Key|Description|
+|---|---|
+|`cmyk`| A list of CMYK values of the colour |
+|`colourName`| Human readable Name |
+|`displayColour`| HEX representation of the colour |
+|`isSpotColour`| If this is a spot colour |
+|`brandReference`| Brand internal Reference for the colour |
+|`factoryReference`| Factory's internal Reference for the colour |
+|`isDynamicBlackInGradients`| If this is a black gradient |
+|`range`| If this is a yarn will have the reference |
+
 
 Each job's `order` data contains:
 
@@ -1658,6 +1673,22 @@ You can use these IDs to identify jobs which share manufacturing files - which m
                       }
                     },
                     "ui_state": "State of Job that is used in UI",
+                    "design_element_colours": [{
+                          "cmyk": [
+                            0,
+                            0.53,
+                            0.84,
+                            0.04
+                          ],
+                          "brand": "/api/brands/3/",
+                          "colourName": "Seville Orange",
+                          "displayColour": "#f57327",
+                          "isSpotColour": true,
+                          "brandReference": "Seville Orange",
+                          "factoryReference": "Seville Orange",
+                          "isDynamicBlackInGradients": false
+                        }
+                    ],
                     "size": "M",
                     "product_name": "Custom Tee",
                     "product_code": "123ABC",
@@ -1921,3 +1952,4 @@ Job IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io
             "message": "Unsupported media type in request.",
             "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
         }
+
