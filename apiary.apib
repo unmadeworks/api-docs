@@ -3,7 +3,11 @@ HOST: https://partner-subdomain.embed.unmade.com/
 
 # Unmade Integration Reference
 
-## Integrating with Unmade
+Welcome to the Unmade OS Integration Reference.
+
+See [Integrating With Unmade](#/group-integrating-with-unmade) to get started.
+
+# Group Integrating with Unmade
 
 Unmade integration into your e-commerce site relies on 4 key steps:
 1. **Product setup**
@@ -24,12 +28,12 @@ Further to these core steps, we provide additional APIs that allow you to build 
 - **Factory API** Your factories can use our Web interface to download manufacturing data, or this API.
 - **Roster API** You can create a new design using variable data using a roster base design.
 
-### Typical user journey through e-commerce site
-<a href="https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png">![Image showing the typical user journey through the e-commerce site](https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png)</a>
+## Typical user journey through e-commerce site
+<a href="https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png"><img src="https://raw.githubusercontent.com/unmadeworks/api-docs/master/images/Apiary_CustomerJourney.png" alt="Image showing the typical user journey through the e-commerce site" width="100%"></a>
 
-## API setup
+# Group API setup
 
-### Partner-specific sub-domains
+## Partner-specific sub-domains
 Each integration with Unmade will run on partner-specific resources. This means the URLs shown throughout this documentation are just examples and you should get your specific URL from your Unmade customer contacts.
 
 ``` https://{your-partner-subdomain}.embed.unmade.com/ ```
@@ -37,13 +41,12 @@ Each integration with Unmade will run on partner-specific resources. This means 
 **Reminder** : The URL of each endpoint must end with `/` otherwise unexpected 401 errors might happen.
 
 
-### Authorization
+## Authorization
 The Unmade APIs use Token Authentication. Your unique token will be provided to you by Unmade and needs to be used in the header of your API requests like so:
-|Key | Value|
-|---|---|
-|`Authorization`| `Token ABC123123`|
 
-### Error responses
+`Authorization: Token ABC123123`
+
+## Error responses
 Error responses from our API endpoints adhere to RESTful standards. The numeric HTTP status code reported by the web
 server can be used to determine the reason for the error (e.g. 404, meaning resource not found).
 
@@ -85,7 +88,7 @@ In order for a user to upload an asset in the Unmade Editor your e-commerce site
 
 We will cover two workflows; an Unmade Editor is initialised with an authenticated user of your e-commerce site, and an Unmade Editor requests a user to be authenticated.
 
-### Secure provision of an authenticated user identifier
+## Secure provision of an authenticated user identifier
 
 We make use of [JWT](https://jwt.io) with the HS512 algorithm, to ensure secure communication between your e-commerce site and the Unmade Editor.
 
@@ -96,7 +99,7 @@ The payload that your e-commerce site will need to generate will contain an uniq
 The payload with the unique identifier will be encrypted by your e-commcerce site using the shared key and a JWT library to generate a JWT token and will allow Unmade to decrypt it, using the shared key.
 
 
-### Initialising an Unmade Editor with unique identifier for an authenticated user
+## Initialising an Unmade Editor with unique identifier for an authenticated user
 
 1. For your authenticated user, your e-commerce site MUST generate a payload that contains a "user" property which has the unique identifier for the authenticated user as it's value:
 
@@ -131,7 +134,7 @@ The payload with the unique identifier will be encrypted by your e-commcerce sit
     - missing "user" property on the payload
 
 
-### Initialising an Unmade Editor without a unique identifier for an authenticated user
+## Initialising an Unmade Editor without a unique identifier for an authenticated user
 
 If you initialise the Unmade Editor without an authenticated user then the user will still be able to customise the product and can be prompted to authenticate with your e-commerce site if and when they try to upload an asset.
 
@@ -157,7 +160,7 @@ Then re-initialise the Unmade Editor with a unique identifier for the authentica
 4. The Unmade Editor will then enable the authenticated user to upload assets and continue editing their design.
 
 
-### Restrictions for user uploaded assets
+## Restrictions for user uploaded assets
 
 The Unmade platform will perform some checks on the files that are uploaded. All uploaded files must:
 
@@ -199,7 +202,7 @@ Each user is prevented from uploading more than 400 individual assets by default
 \* *A "colour" is defined as any value of any of these attributes: `stroke`, `fill`, `stop-color`*
 
 
-## Group Unmade Editor
+# Group Unmade Editor
 The Unmade Editor is the web interface that lets users customise a product and visualises the customisation choices in real-time using Unmade's photo-realistic visualisation technology.
 Each customisable product we have jointly developed has its own specific Iframe URL - even if the underlying customisation editor (the options available and the user interface) are the same.
 
@@ -217,33 +220,25 @@ An example of how you may want to embed the iframe is below:
 </iframe>
 ```
 
-### Unmade Editor integration [/v1/products/{slug}/{?price,ccy,locale,design_id,init}]
+## Unmade Editor integration [/v1/products/{slug}/{?price,ccy,locale,design_id,init}]
 
 + Parameters
     + slug - The product slug (will be agreed with you)
     + price (optional, number) - The price to display for the product
+    + price__<product_slug> (optional, number) - If using the UnmadeOS Collections feature, prices can be specified for many individual products in this way
     + ccy (optional) - The ISO 4217 currency code corresponding to the `price`
     + locale (optional) - The IETF language tag to set localisation of the user interface
         + Default: `en-GB`
     + design_id (optional) - An Unmade Design ID that is compatible with this editor to be used as starting point
     + init (optional) - An JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://unmade.docs.apiary.io/#introduction/advanced-setup) for more information.
+    + mode (optional) - Specifying `mode=admin` will enable additional UI controls, including the ability to lock elements of the design.
 
-### Iframe endpoint [GET]
+## Iframe endpoint [GET]
 
 The response to this request is a well-formed HTML document used as content for the `<iframe>`.
 
 Use this URL as the `src` attribute value on an `<iframe>` element to embed an Unmade-powered product in an
 external e-commerce website.  Note that there are optional query parameters.
-
-|Query Parameter|Required?|Description|
-|---|---|---|
-|`price`| *optional* | The price to display for the product |
-|`price__<product_slug>` | *optional* | If using the UnmadeOS Collections feature, prices can be specified for many individual products in this way |
-|`ccy`| *optional* | The ISO 4217 currency code corresponding to the `price`. Also used for in-editor upcharges, if enabled. |
-|`locale`| *optional* | The IETF language tag to set localisation of the user interface. Default: `en-GB`. |
-|`design_id`| *optional* | An Unmade Design ID that is compatible with this editor to be used as starting point |
-|`init`| *optional* | A JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://unmade.docs.apiary.io/#introduction/advanced-setup) for more information. |
-|`mode`| *optional* | Specifying `mode=admin` will enable additional UI controls, including the ability to lock elements of the design. |
 
 Depending on your specific editor UI design and the rest of the content on the page you are embedding the Unmade Iframe on, you might need to take different approaches to managing the size of the `<iframe>` element on the page. We are happy to advise and support on this.
 
@@ -252,44 +247,55 @@ Depending on your specific editor UI design and the rest of the content on the p
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header."
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header."
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 + Response 429 (application/json)
 
-        {
-            "code": "throttle_request",
-            "message": "tRequest was throttled."
-        }
+    + Body
+
+            {
+                "code": "throttle_request",
+                "message": "tRequest was throttled."
+            }
 
 
-## Group JS post messaging interactions
+# Group JS post messaging interactions
 
-### JS post messaging in general
+## JS post messaging in general
+
 Certain actions performed by the customer in the iframe will result in events being sent to
 the host website using the [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
 API. A JavaScript listener, such as the following, should be implemented on the host site:
@@ -312,7 +318,7 @@ function receiveMessage (event) {
 }
 ```
 
-### Saved design
+## Saved design
 ```type: "UNMADE_design_saved"``` **required**
 
 Once a customer has finished creating their design in the Unmade Editor and click "save" or "add to bag" within the Iframe, Unmade will save the user's design, generate a `DesignID` and pass this ID to you by Post Messaging to the parent window.
@@ -365,17 +371,21 @@ Example postMessage:
   }
 }
 ```
-###The triggeredBy attribute in design saved postMessages
+### The triggeredBy attribute in design saved postMessages
 
 The triggeredBy attribute contains information about why the design was saved, as this is not always the user completing a design.
 
-|TriggeredBy|Description|Suggested follow-up action|
-|---|---|---|
-|`save`| When the user clicks 'add to bag' inside the Editor iframe, Unmade will save the user's design and pass the generated design ID to the parent window in a postMessage. | Add to bag: add the product to the user's cart. |
-|`upload` | In order to accept a user upload, Unmade needs a user token in the iframe URL.  When one is not provided and the user clicks upload, we save the design and postMessage the design ID so you can log them in. | Show the user a login modal, redirect them to this design ID on successful login. |
-|`share`| When the user clicks 'share' inside the Editor iframe, the process is the same as when the user clicks the 'add to bag' button. | Generate a URL that directs users to the design ID and show the user a share dialog. |
+    + `save`
+        + **Triggered:** When the user clicks 'add to bag' inside the Editor iframe, Unmade will save the user's design and pass the generated design ID to the parent window in a postMessage.
+        + **Next step:** Add to bag. Add the product to the user's cart.
+    + `upload`
+        + **Triggered:** When a user token is not provided and the user clicks upload, we save the design and postMessage the design ID so you can log them in.
+        + **Next step:** Show the user a login modal, redirect them to this design ID on successful login.
+    + `share`
+        + **Triggered:** When the user clicks 'share' inside the Editor iframe, the process is the same as when the user clicks the 'add to bag' button.
+        + **Next step:** Generate a URL that directs users to the design ID and show the user a share dialog.
 
-#### A note about the size of initial preview images
+### A note about the size of initial preview images
 
 The preview image (PNG format) in the postMessage ```type: "UNMADE_design_saved"```  is
 the image uploaded to our servers by the user's browser when they save their design.
@@ -412,13 +422,24 @@ Example postMessage:
 }
 ```
 
-|Clicked value|Description|Suggested follow-up action|
-|---|---|---|
-|`variable_text_help`| When the user clicks the help button in the roster embellishment section of the editor | Open a modal or link with help information |
-|`logo_upload_help`| When the user clicks the help link when uploading a logo | Open a modal or link with help information |
-|`legalCopy`| When the user clicks the terms and conditions link | Open a modal or link with terms and conditions information |
-|`sizing`| When the user clicks the size guide link | Open a modal or link with size guide information |
-|`save_design`| When the user clicks the save design button | Open a loading overlay |
+### The clicked attribute in interaction postMessages
+
+    + `variable_text_help`
+        + **Triggered:** When the user clicks the help button in the roster embellishment section of the editor
+        + **Next step:** Open a modal or link with help information
+    + `logo_upload_help`
+        + **Triggered:** When the user clicks the help link when uploading a logo
+        + **Next step:** Open a modal or link with help information
+    + `legalCopy`
+        + **Triggered:** When the user clicks the terms and conditions link
+        + **Next step:** Open a modal or link with terms and conditions information
+    + `sizing`
+        + **Triggered:** When the user clicks the size guide link
+        + **Next step:** Open a modal or link with size guide information
+    + `save_design`
+        + **Triggered:** When the user clicks the save design button
+        + **Next step:** Open a loading overlay
+
 
 Please note that to direct the user to help content about logo uploading, we also support an HTML hyperlink instead of the postMessage functionality.
 
@@ -429,7 +450,6 @@ Please note that to direct the user to help content about logo uploading, we als
 The Unmade Editor handles any the upload of logos for the users, however if configured those can be handled externally. And then the files can be received through postmessage.
 
 There are 2 types of messages that can be send ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
-dd
 
 ## Group Design API
 ### Retrieve designs [/v1/designs/{design_id}/]
@@ -450,162 +470,174 @@ This lets you:
 
 + Response 200 (application/json)
 
-        {
-            "id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
-            "source_design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
-            "product": "<Unmade Editor URL>",
-            "preview": "<URL to the main rendering of the design>",
-            "description": "<Description of the product and design>",
-            "secondary_previews": [
-                {
-                    "name": "right",
-                    "image": "https://PREVIEW_URL"
-                }
-            ],
-            "size": "<Size selected>",
-            "gender": "<Gender selected>",
-            "stylecode": "<Stylecode selected>",
-            "components": [
-                {
-                    "component_name": "Buttons_ABC123",
-                    "component_displayname": "Buttons",
-                    "option_name": "Button_ABC123_001",
-                    "option_displayname": "Red Buttons"
-                }
-            ],
-            "placements": [
-                {
-                    "placement_name": "front-chest-logo",
-                    "placement_displayname": "Front Chest",
-                    "option_name": "white-logo",
-                    "option_displayname": "White Fancy Logo",
-                    "manufacturing_method": "embroidery",
-                    "rotation": 0,
-                    "is_placeholder": false,
+    + Body
+
+            {
+                "id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
+                "source_design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
+                "product": "<Unmade Editor URL>",
+                "preview": "<URL to the main rendering of the design>",
+                "description": "<Description of the product and design>",
+                "secondary_previews": [
+                    {
+                        "name": "right",
+                        "image": "https://PREVIEW_URL"
+                    }
+                ],
+                "size": "<Size selected>",
+                "gender": "<Gender selected>",
+                "stylecode": "<Stylecode selected>",
+                "components": [
+                    {
+                        "component_name": "Buttons_ABC123",
+                        "component_displayname": "Buttons",
+                        "option_name": "Button_ABC123_001",
+                        "option_displayname": "Red Buttons"
+                    }
+                ],
+                "placements": [
+                    {
+                        "placement_name": "front-chest-logo",
+                        "placement_displayname": "Front Chest",
+                        "option_name": "white-logo",
+                        "option_displayname": "White Fancy Logo",
+                        "manufacturing_method": "embroidery",
+                        "rotation": 0,
+                        "is_placeholder": false,
+                    },
+                    {
+                        "placement_name": "back-center-logo",
+                        "placement_displayname": "Center Back",
+                        "option_name": "user-uploaded",
+                        "option_displayname": "User Uploaded",
+                        "manufacturing_method": "heat-transfer",
+                        "rotation": 0,
+                        "is_placeholder": true,
+                        "original_logo_url": "https://URL_TO_UPLOADED_LOGO"
+                    },
+                    {
+                        "placement_name": "right-sleeve-monogram",
+                        "placement_displayname": "Right Sleeve Monogram",
+                        "option_name": "large-monogram",
+                        "option_displayname": "Large Monogram",
+                        "manufacturing_method": "heat-transfer",
+                        "is_placeholder": false,
+                        "text": "John Smith",
+                        "font": "Helvetica",
+                        "rotation": 0,
+                        "colours": [
+                            "Black",
+                            "Gray"
+                        ]
+                        "`origin_roster_field_key": null
+                    }
+                ],
+                "variant": {
+                    "name": "Striped 1",
+                    "display_name": "Striped 1"
                 },
-                {
-                    "placement_name": "back-center-logo",
-                    "placement_displayname": "Center Back",
-                    "option_name": "user-uploaded",
-                    "option_displayname": "User Uploaded",
-                    "manufacturing_method": "heat-transfer",
-                    "rotation": 0,
-                    "is_placeholder": true,
-                    "original_logo_url": "https://URL_TO_UPLOADED_LOGO"
-                },
-                {
-                    "placement_name": "right-sleeve-monogram",
-                    "placement_displayname": "Right Sleeve Monogram",
-                    "option_name": "large-monogram",
-                    "option_displayname": "Large Monogram",
-                    "manufacturing_method": "heat-transfer",
-                    "is_placeholder": false,
-                    "text": "John Smith",
-                    "font": "Helvetica",
-                    "rotation": 0,
-                    "colours": [
-                        "Black",
-                        "Gray"
-                    ]
-                    "`origin_roster_field_key": null
-                }
-            ],
-            "variant": {
-                "name": "Striped 1",
-                "display_name": "Striped 1"
-            },
-            "design_elements":[
-                {
-                    "design_element_name": "Background_1",
-                    "design_element_displayname": "Area 1",
-                    "pattern_used": "Dots 1",
-                    "colours_used": [
-                        {
-                            "id": 3,
-                            "colour_name": "Red"
-                        },
-                        {
-                            "id": 4,
-                            "colour_name": "Black"
-                        }
-                    ]
-                },
-                {
-                    "design_element_name": "Background_2",
-                    "design_element_displayname": "Area 2",
-                    "pattern_used": null,
-                    "colours_used": [
-                        {
-                            "id": 1,
-                            "colour_name": "White"
-                        }
-                    ]
-                }
-            ],
-            "colours_used": [
-                {
-                    "id": 4
-                    "colour_name": "Black"
-                },
-                {
-                    "id": 3
-                    "colour_name": "Red"
-                },
-                {
-                    "id": 1
-                    "colour_name": "White"
-                }
-            ],
-            "upcharges": [
-                {
-                    "applied_to": "LeftChest",
-                    "currency": "USD",
-                    "customisation_element_id": "embroidery",
-                    "upcharge_type": "manufacturing-method",
-                    "value": "10.00"
-                }
-            ]
-        }
+                "design_elements":[
+                    {
+                        "design_element_name": "Background_1",
+                        "design_element_displayname": "Area 1",
+                        "pattern_used": "Dots 1",
+                        "colours_used": [
+                            {
+                                "id": 3,
+                                "colour_name": "Red"
+                            },
+                            {
+                                "id": 4,
+                                "colour_name": "Black"
+                            }
+                        ]
+                    },
+                    {
+                        "design_element_name": "Background_2",
+                        "design_element_displayname": "Area 2",
+                        "pattern_used": null,
+                        "colours_used": [
+                            {
+                                "id": 1,
+                                "colour_name": "White"
+                            }
+                        ]
+                    }
+                ],
+                "colours_used": [
+                    {
+                        "id": 4
+                        "colour_name": "Black"
+                    },
+                    {
+                        "id": 3
+                        "colour_name": "Red"
+                    },
+                    {
+                        "id": 1
+                        "colour_name": "White"
+                    }
+                ],
+                "upcharges": [
+                    {
+                        "applied_to": "LeftChest",
+                        "currency": "USD",
+                        "customisation_element_id": "embroidery",
+                        "upcharge_type": "manufacturing-method",
+                        "value": "10.00"
+                    }
+                ]
+            }
 
 + Response 400 (application/json)
 
-        {
-            "code": "bad_request",
-            "message": "Request payload is not valid."
-        }
+    + Body
+
+            {
+                "code": "bad_request",
+                "message": "Request payload is not valid."
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header."
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header."
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
 
-## Group Roster API
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
-### Retrieve Roster design data
+# Group Roster API
+
+## Retrieve Roster design data
 
 If a given product has roster functionality enabled, an editor user will be provided
 with the option to select a roster field for any enabled region. A design saved with
@@ -654,14 +686,14 @@ the `player-name` field would be placed in both the "Center Chest" and "Upper Ba
 placements. This data may be useful for the generation of forms for collecting these
 values from your members.
 
-### Create Member Designs [/v1/designs/base_design_id/roster/]
+## Create Member Designs [/v1/designs/base_design_id/roster/]
 
 Once the "template" roster design has been created, the `/roster/` endpoint can be used
 to populate the roster fields with the real data for your members.
 
 To create member designs, the `/roster/` endpoint accepts POST requests with payloads
 containing the roster design ID, as well as the values of each field to be populated.
-Upon reciept of a valid payload, a new design is created, and its ID is returned. This
+Upon receipt of a valid payload, a new design is created, and its ID is returned. This
 ID can then be used to place orders as required.
 
 Successfully created member design IDs can also be queried via the
@@ -683,18 +715,12 @@ codes are `illegal_character`, `text_too_wide`, `text_sanitised`.
 Additionally, for each error type a `details` object is provided. This contains the
 filtered / truncated text that *would* be permitted in the placement.
 
-### Create a member design [POST]
+## Create a member design [POST]
 #### Roster field rules
 
 To create a member design, a single `roster_member` object containing the required
 values for all roster fields in the template roster design is provided:
 
-|Key|Required?|Description|
-|---|---|---|
-|`roster_member`| **required object** | Object containing the following:|
-|└ `<roster-field-a>`| **required** | The value required for field A in the player design |
-|└ `<roster-field-b>`| **required** | The value required for field B in the player design |
-|└ *etc*|
 
 + Request Create player design (application/json)
     + Headers
@@ -705,122 +731,133 @@ values for all roster fields in the template roster design is provided:
 
             {
                 "roster_member": {
-                    "last-name": "Smith",
-                    "number": "99"
-                },
-
+                    "<roster_field_a>": "foo",
+                    "<roster_field_b": "99"
+                }
             }
 
 + Response 201 (application/json)
 
-        {
-            "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
-        }
+    + Body
+
+            {
+                "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
+            }
 
 
 + Response 400 (application/json)
 
-        {
-            "code": "bad_request",
-            "message": "Request payload is not valid.",
-            "detail": {
-                "last-name": [
-                    {
-                        "error": "text_too_wide",
-                        "details": {"amended_text": "shorter text"}
-                    },
-                    {
-                        "error": "text_sanitised",
-                        "details": {"amended_text": "sanitised text"}
-                    }
-                ],
-                "number": [
-                    {
-                        "error": "illegal_characters",
-                        "details": {"amended_text": "text with no ilegal chars"}
-                    }
-                ]
-            },
-            "original_request": {
-                // Body of original request
+    + Body
+
+            {
+                "code": "bad_request",
+                "message": "Request payload is not valid.",
+                "detail": {
+                    "last-name": [
+                        {
+                            "error": "text_too_wide",
+                            "details": {"amended_text": "shorter text"}
+                        },
+                        {
+                            "error": "text_sanitised",
+                            "details": {"amended_text": "sanitised text"}
+                        }
+                    ],
+                    "number": [
+                        {
+                            "error": "illegal_characters",
+                            "details": {"amended_text": "text with no ilegal chars"}
+                        }
+                    ]
+                },
+                "original_request": {
+                    // Body of original request
+                }
             }
-        }
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 
-## Group Orders API
-### Create and List Orders [/v1/orders/]
+# Group Orders API
+## Create and List Orders [/v1/orders/]
 
 Once an order has been placed on the e-commerce platform, the Unmade system should be notified
 so we can send the design to your factory and generate the manufacturing data for it.
 
-### Create an Order [POST]
+## Create an Order [POST]
 
 #### Order field rules
 
 For an order to be created the following fields will need to be present:
 
-|Key|Required?|Description|
-|---|---|---|
-|`reference`| **required** | (Cannot be blank and cannot exist already. Max chars: 256)|
-|`shipping_address`| **required object**| Object containing the following:|
-|└ `name`|**required**|(max chars: 256)|
-|└ `address_1`|**required**|(max chars: 256)|
-|└ `postal_code`|**required**|(max chars: 20)|
-|└ `city`| **required**| (max chars: 256)|
-|└ `country`| **required**| (must be an ISO 3166-1 country)|
-|└ `company_name`| *optional*| (max chars: 256)|
-|└ `address_2`| *optional*| (max chars: 256)|
-|└ `country_area`| *optional*| (max chars: 128)|
-|└ `phone`| *optional*| (max chars: 30)|
-|└ `email`| *optional*| (max chars: 254)|
-|`order_items`| **required array**| Array where each item has:|
-|└ `design`| **required**| The Unmade Design Id of the design to be ordered.|
-|└ `reference`| *optional*| Defaults to `""` |
-|└ `quantity`| *optional*| Defaults to *1*.|
-|└ `unit_price`| *optional*| Float with 10 maximum digits and 2 decimal places.
-|└ `currency`| *optional*| Currency code in ISO 4217 format. Defaults to `USD`.
-|└ `options`| *optional*| Object that can include `size`|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `size`| *optional* | Pre-agreed values, usually: "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `partner_data`| *optional*| Undetermined key value pairs (order item level). These keys and values can be added to Unmade paperwork (job and/or order tickets) if the keys are configured in UnmadeOS|
-|`partner_data`| *optional*| Undetermined key value pairs (order level). These keys and values can be added to Unmade paperwork (job and/or order tickets) if the keys are configured in UnmadeOS|
+    + `reference` **required**: Cannot be blank and cannot exist already. Max chars: 256
+    + `shipping_address` **required object**: Object containing the following:
+        + `name` **required**: max chars: 256
+        + `address_1` **required**: max chars: 256
+        + `postal_code` **required**: max chars: 20
+        + `city` **required**: max chars: 256
+        + `country` **required**: must be an ISO 3166-1 country
+        + `company_name` *optional*: max chars: 256
+        + `address_2` *optional*: max chars: 256
+        + `country_area` *optional*: max chars: 128
+        + `phone` *optional*: max chars: 30
+        + `email` *optional*: max chars: 254
+    + `order_items` **required array**: Array where each item has:
+        + `design` **required**: The Unmade Design Id of the design to be ordered
+        + `reference` *optional*: Defaults to `""`
+        + `quantity` *optional*: Defaults to *1*
+        + `unit_price` *optional*: Float with 10 maximum digits and 2 decimal places
+        + `currency` *optional*: Currency code in ISO 4217 format. Defaults to `USD`
+        + `options` *optional*: Object that can include:
+            + `size` *optional*: Pre-agreed values, usually: "XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "One Size"
+            + `partner_data` *optional*: Undetermined key value pairs (order item level). These keys and values can be added to Unmade paperwork (job and/or order tickets) if the keys are configured in UnmadeOS
+    + `partner_data` *optional*: Undetermined key value pairs (order level). These keys and values can be added to Unmade paperwork (job and/or order tickets) if the keys are configured in UnmadeOS
 
 
 + Request Order with optional partner data (application/json)
@@ -867,57 +904,71 @@ For an order to be created the following fields will need to be present:
 
 + Response 201 (application/json)
 
-        {
-            "id": "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
-        }
+    + Body
+
+            {
+                "id": "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
+            }
 
 + Response 400 (application/json)
 
-        {
-            "code": "bad_request",
-            "message": "Request payload is not valid.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "bad_request",
+                "message": "Request payload is not valid.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 + Request Team wear order (application/json)
 
@@ -991,57 +1042,71 @@ For an order to be created the following fields will need to be present:
 
 + Response 201 (application/json)
 
-        {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
-        }
+    + Body
+
+            {
+                "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1"
+            }
 
 + Response 400 (application/json)
 
-        {
-            "code": "bad_request",
-            "message": "Request payload is not valid.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "bad_request",
+                "message": "Request payload is not valid.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {Object containing the following:
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 ### List Orders [GET]
 
@@ -1054,47 +1119,50 @@ You can optionally provide `created_before` and `created_after` query paramaters
 to filter the listed orders by their creation date.
 
 + Request
+
     + Headers
 
             Authorization: Token ABCDEF
 
 + Response 200 (application/json)
 
-        {
-            "count": 10,
-            "next": "https://example.embed.unmade.com/v1/orders/?page=2",
-            "previous": null,
-            "results": [
-                {
-                    "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
-                    "shipping_address" : {
-                        "name": "John Smith",
-                        "company_name": "unmade",
-                        "address_1": "152 Strand",
-                        "address_2": "Somerset House",
-                        "city": "London",
-                        "country_area": "",
-                        "postal_code": "WC2R 1LA",
-                        "country": "UK",
-                        "phone": ""
-                    },
-                    "reference": "partner_order_reference",
-                    "created": "2018-04-11T17:20:04.991263Z",
-                    "state": "new",
-                    "placeholder_logos": [],
-                    "partner_data": {},
-                    "order_items": [],
-                    "tracking_number": "",
-                    "is_order_portal": false,
-                    "submitted_at": null,
-                    "ready_to_ship_at": null,
-                    "shipped_at": null,
-                    "factory_order_id": null
-                }
-            ]
-        }
+    + Body
 
-### Retrieve Order [/v1/orders/{order_id}/]
+            {
+                "count": 10,
+                "next": "https://example.embed.unmade.com/v1/orders/?page=2",
+                "previous": null,
+                "results": [
+                    {
+                        "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
+                        "shipping_address" : {
+                            "name": "John Smith",
+                            "company_name": "unmade",
+                            "address_1": "152 Strand",
+                            "address_2": "Somerset House",
+                            "city": "London",
+                            "country_area": "",
+                            "postal_code": "WC2R 1LA",
+                            "country": "UK",
+                            "phone": ""
+                        },
+                        "reference": "partner_order_reference",
+                        "created": "2018-04-11T17:20:04.991263Z",
+                        "state": "new",
+                        "placeholder_logos": [],
+                        "partner_data": {},
+                        "order_items": [],
+                        "tracking_number": "",
+                        "is_order_portal": false,
+                        "submitted_at": null,
+                        "ready_to_ship_at": null,
+                        "shipped_at": null,
+                        "factory_order_id": null
+                    }
+                ]
+            }
+
+## Retrieve Order [/v1/orders/{order_id}/]
 
 ### Retrieve an existing order [GET]
 
@@ -1104,30 +1172,28 @@ If you want to receive information on an order, for example to check the order s
 
 When an order The order response will contain the following fields:
 
-|Key|Description|
-|---|---|
-|`id`|Order id on UnmadeOS
-|`reference`|Your order reference|
-|`created`|Timestamp when the order was created on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*|
-|`state`|State of the order on UnmadeOS|
-|`partner_data`| Undetermined key value pairs sent on order creation|
-|`tracking_number`| If the order has been shipped and the vendor has enter the tracking number|
-|`shipping_address`|  Object containing the address received|
-|`order_items`| Array where each item has:|
-|└ `reference`| Optional reference sent defaults to `""`|
-|└ `quantity`| Positive number, defaults to *1* if none was sent|
-|└ `unit_price`| Float with 10 maximum digits and 2 decimal places it can be null|
-|└ `currency`| Currency code in ISO 4217 format. Defaults to `USD`|
-|└ `arrive_by_date`| Timestamp for when the order needs to arrive to the customer on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*|
-|└ `ex_factory_date`| Timestamp for when the order needs to leave the factory on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*|
-|└ `options`| Object that includes the `size`|
-|└ `factory`| Factory where the garment will be manufactured|
-|└ `partner_data`| Undetermined key value pairs. It will contain the *UNMADE_SOURCE_DESIGN_ID* key automatically generated by UnmadeOS to track which was the base design for this order line item. And *UNMADE_ORDER_ITEM_DESIGN_ID* another key included automatically that represents the design of the line item with the size fulfilled and any roster customisations|
-|`placeholder_logos`| Array containing the placeholders logos used by any design present on the order, if none is present will be an empty array|
-|└ `original_logo_url`| URL where the logo was uploaded and from where it can be retrieved|
-|└ `designs`| Array of designs that use the logo|
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `design`| Unmade Design ID |
-|&nbsp;&nbsp;&nbsp;&nbsp;└ `placements`| Array of placement names of the design where the logo is used|
+    + `id`: Order id on UnmadeOS
+    + `reference`: Your order reference
+    + `created`: Timestamp when the order was created on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
+    + `state`: State of the order on UnmadeOS
+    + `partner_data`:  Undetermined key value pairs sent on order creation
+    + `tracking_number`:  If the order has been shipped and the vendor has enter the tracking number
+    + `shipping_address`:  Object containing the address received
+    + `order_items`: Array where each item has:
+        + `reference`:  Optional reference sent defaults to `""`
+        + `quantity`:  Positive number, defaults to *1* if none was sent
+        + `unit_price`:  Float with 10 maximum digits and 2 decimal places it can be null
+        + currency`:  Currency code in ISO 4217 format. Defaults to `USD`
+        + `arrive_by_date`:  Timestamp for when the order needs to arrive to the customer on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
+        + `ex_factory_date`:   Timestamp for when the order needs to leave the factory on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
+        + `options`:  Object that includes the `size`
+        + `factory`:  Factory where the garment will be manufactured
+        + `partner_data`:  Undetermined key value pairs. It will contain the *UNMADE_SOURCE_DESIGN_ID* key automatically generated by UnmadeOS to track which was the base design for this order line item. And *UNMADE_ORDER_ITEM_DESIGN_ID* another key included automatically that represents the design of the line item with the size fulfilled and any roster customisations
+        + `placeholder_logos`:  Array containing the placeholders logos used by any design present on the order, if none is present will be an empty array
+            + `original_logo_url`:  URL where the logo was uploaded and from where it can be retrieved
+            + `designs`: Array of designs that use the logo
+                + `design`:  Unmade Design ID
+                + `placements`:  Array of placement names of the design where the logo is used
 
 #### Order States
 
@@ -1135,17 +1201,15 @@ As an order progresses through its life-cycle it will adopt one of a number of o
 The state of an order is provided on an order's `state` attribute and will be one of the
 following values:
 
-| Order state | Description |
-| --- | --- |
-|`new`|This order has been received by Unmade, but is not in production yet.|
-|`submitting`| This order is being sent to the factory for production.|
-|`submitted`|This order has been sent to the factory for production.|
-|`ready_to_ship`|This order is waiting to be picked up at the factory.|
-|`shipped`|The factory has marked this order as shipped.|
-|`cancelled`|This order has been cancelled.|
-|`hold`|This order is on hold.|
-|`failed`|This order has failed. (Error state, please contact Unmade)|
-|`uninitialised`|This order is not complete. (Error state, please contact Unmade)|
+    + `new`: This order has been received by Unmade, but is not in production yet
+    + `submitting`: This order is being sent to the factory for production
+    + `submitted`: This order has been sent to the factory for production
+    + `ready_to_ship`: This order is waiting to be picked up at the factory
+    + `shipped`: The factory has marked this order as shipped
+    + `cancelled`: This order has been cancelled
+    + `hold`: This order is on hold
+    + `failed`: This order has failed. (Error state, please contact Unmade)
+    + `uninitialised`: This order is not complete. (Error state, please contact Unmade)
 
 If you have set your factory up to provide a tracking number for each shipment
 via Factory OMS then this information will be reflected in the `tracking_number`
@@ -1161,139 +1225,155 @@ attribute of the order once it has been entered by the factory.
 
 + Response 200 (application/json)
 
-        {
-            "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
-            "shipping_address" : {
-                "name": "John Smith",
-                "company_name": "unmade",
-                "address_1": "152 Strand",
-                "address_2": "Somerset House",
-                "city": "London",
-                "country_area": "",
-                "postal_code": "WC2R 1LA",
-                "country": "UK",
-                "phone": ""
-            },
-            "reference": "partner_order_reference",
-            "created": "2018-04-11T17:20:04.991263Z",
-            "state": "new",
-            "partner_data":{
-                "customer_po_number": "1234512334X"
-            },
-            "placeholder_logos": [
-                {
-                    "original_logo_url": "https://URL_TO_UPLOADED_LOGO_1"
-                    "designs": [
-                        {
-                            "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                            "placements":  ["Logo_front", "Logo_back"]
-                        }
-                    ]
+    + Body
+
+            {
+                "id": "25f5bcd3-ace3-4272-956b-f78fe55ab8f1",
+                "shipping_address" : {
+                    "name": "John Smith",
+                    "company_name": "unmade",
+                    "address_1": "152 Strand",
+                    "address_2": "Somerset House",
+                    "city": "London",
+                    "country_area": "",
+                    "postal_code": "WC2R 1LA",
+                    "country": "UK",
+                    "phone": ""
                 },
-                {
-                    "original_logo_url": "https://URL_TO_UPLOADED_LOGO_2"
-                    "designs": [
-                        {
-                            "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                            "placements":  ["Logo_upper_back"]
-                        }
-                        {
-                            "design": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
-                            "placements":  ["Logo_front", "Logo_back"]
-                        }
-                    ]
-                }
-            ],
-            "order_items": [
-                {
-                    "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                    "reference": "partner_order_item_1_reference",
-                    "quantity": 1,
-                    "unit_price": 99.99,
-                    "arrive_by_date": "2018-05-01T17:20:04.991263Z",
-                    "ex_factory_date": "2018-04-22T17:20:04.991263Z"
-                    "currency": "USD",
-                    "partner_data": {
-                        "barcode": "98323928238372",
-                        "UNMADE_ORDER_ITEM_DESIGN_ID": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                        "UNMADE_SOURCE_DESIGN_ID": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
-                    },
-                    "options": {
-                        "size": "M"
-                    },
-                    "factory": "Demo Factory",
+                "reference": "partner_order_reference",
+                "created": "2018-04-11T17:20:04.991263Z",
+                "state": "new",
+                "partner_data":{
+                    "customer_po_number": "1234512334X"
                 },
-                {
-                    "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
-                    "reference": "partner_order_item_2_reference",
-                    "quantity": 3,
-                    "unit_price": 99.99,
-                    "arrive_by_date": "2018-05-01T17:20:04.991263Z",
-                    "ex_factory_date": "2018-04-22T17:20:04.991263Z"
-                    "currency": "USD",
-                    "partner_data": {
-                        "barcode": "98329845228372"
-                        "UNMADE_ORDER_ITEM_DESIGN_ID": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
-                        "UNMADE_SOURCE_DESIGN_ID": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
+                "placeholder_logos": [
+                    {
+                        "original_logo_url": "https://URL_TO_UPLOADED_LOGO_1"
+                        "designs": [
+                            {
+                                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                                "placements":  ["Logo_front", "Logo_back"]
+                            }
+                        ]
                     },
-                    "options": {
-                        "size": "M"
+                    {
+                        "original_logo_url": "https://URL_TO_UPLOADED_LOGO_2"
+                        "designs": [
+                            {
+                                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                                "placements":  ["Logo_upper_back"]
+                            }
+                            {
+                                "design": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
+                                "placements":  ["Logo_front", "Logo_back"]
+                            }
+                        ]
+                    }
+                ],
+                "order_items": [
+                    {
+                        "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                        "reference": "partner_order_item_1_reference",
+                        "quantity": 1,
+                        "unit_price": 99.99,
+                        "arrive_by_date": "2018-05-01T17:20:04.991263Z",
+                        "ex_factory_date": "2018-04-22T17:20:04.991263Z"
+                        "currency": "USD",
+                        "partner_data": {
+                            "barcode": "98323928238372",
+                            "UNMADE_ORDER_ITEM_DESIGN_ID": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                            "UNMADE_SOURCE_DESIGN_ID": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
+                        },
+                        "options": {
+                            "size": "M"
+                        },
+                        "factory": "Demo Factory",
                     },
-                    "factory": "Demo Factory",
-                }
-            ],
-            "tracking_number": ""
-        }
+                    {
+                        "design": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
+                        "reference": "partner_order_item_2_reference",
+                        "quantity": 3,
+                        "unit_price": 99.99,
+                        "arrive_by_date": "2018-05-01T17:20:04.991263Z",
+                        "ex_factory_date": "2018-04-22T17:20:04.991263Z"
+                        "currency": "USD",
+                        "partner_data": {
+                            "barcode": "98329845228372"
+                            "UNMADE_ORDER_ITEM_DESIGN_ID": "44dcbb2e-7491-11e8-adc0-fa7ae01bbebc",
+                            "UNMADE_SOURCE_DESIGN_ID": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
+                        },
+                        "options": {
+                            "size": "M"
+                        },
+                        "factory": "Demo Factory",
+                    }
+                ],
+                "tracking_number": ""
+            }
 
 + Response 400 (application/json)
 
-        {
-            "code": "bad_request",
-            "message": "Request payload is not valid."
-        }
+    + Body
+
+            {
+                "code": "bad_request",
+                "message": "Request payload is not valid."
+            }
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials."
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials."
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action."
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action."
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header."
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header."
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 ### Retrieve manufacturing files from an Order [/v1/orders/{order_id}/manufacturing_files/]
 
@@ -1315,190 +1395,206 @@ asynchronously once the job is created.
 
 + Response 200 (application/json)
 
-        {
-            "id": "a06f2da7-2a65-44ef-bfb6-81dea3f4dfeb",
-            "reference": "partner_order_reference",
-            "summary": "https://example.com/v1/factories/new-balance-teamwear/orders/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/summary_pdf/",
-            "partner_data" :{
-                "a_key_provided": "it's value",
-                "another_key_provided": "another value"
-            },
-            "jobs": [
-                {
-                    "url": "URL of Job in system"
-                    "id": "JOB_ID",
-                    "short_id": "SHORT_JOB_ID",
-                    "product_type": "Description of production",
-                    "state":" "Job Statue",
-                    "created": "Timestamp of when Job was created e.g. 2020-07-13T11:50:23.180726Z",
-                    "partner-order-reference": "YOUR ORDER REFERENCE",
-                    "partner-item-reference": "YOUR ORDER ITEM REFERENCE",
-                    "manufacture_files": "https://example.com/JOB_ID_panels.zip",
-                    "artwork_ids": {
-                      "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
-                      "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
-                      "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
-                    },
-                    "artwork_dimensions": {
-                      "f417c83f9787abf1087bd7d16fc909e3_center-chest": {
-                        "artwork_width": 5.4235,
-                        "artwork_height": 6.2896,
-                        "units": "in"
-                      },
-                      "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": {
-                        "artwork_width": 2.12,
-                        "artwork_height": 4.31,
-                        "units": "in"
-                      },
-                      "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": {
-                        "artwork_width": 2.12,
-                        "artwork_height": 4.31,
-                        "units": "in"
-                      }
-                    },
-                    "ui_state": "State of Job that is used in UI",
-                    "design_element_colours": [{
-                          "cmyk": [
-                            0,
-                            0.53,
-                            0.84,
-                            0.04
-                          ],
-                          "brand": "/api/brands/3/",
-                          "colourName": "Seville Orange",
-                          "displayColour": "#f57327",
-                          "isSpotColour": true,
-                          "brandReference": "Seville Orange",
-                          "factoryReference": "Seville Orange",
-                          "isDynamicBlackInGradients": false
-                        }
-                    ],
-                    "size": "M",
-                    "product_name": "Custom Tee",
-                    "product_code": "123ABC",
-                    "currency": "USD",
-                    "price_per_item": "",
-                    "reference": "YOUR ORDER REFERENCE",
-                    "preview": "URL of main preview image",
-                    "manufacturing_template_code": "TMMT726G",
-                    "partner_data": {
-                      "MY_ITEM_PARTNER_DATA_KEY": "MY_ITEM_PARTNER_DATA_VALUE"
-                    },
-                    "previews": [
-                      {
-                        "name": "PREVIEW_NAME",
-                        "image": "https://example.com/JOB_ID_PREVIEW_NAME.png"
-                      }
-                    ],
-                    "personalisation": [
-                      {
-                        "name": "Number",
-                        "value": "11"
-                      }
-                    ],
-                    "quantity": 1,
-                    "arrive_by_date":"Date when the Job need to get to end customer by e.g. 2020-07-27 YYYY-MM-DD",
-                    "ex_factory_date":"Date when the Job need to leave the factory by by e.g. 2020-07-27 YYYY-MM-DD",
-                    "design_source_id": "ID of the Job's Design source",
-                    "order_design_group": "",
-                    "changelog": [
-                        {
-                            "field": "What certain field has changed",
-                            "value": "What the new value is",
-                            "modification": "Timestamp of when",
-                            "user": "The user/system which made the change if recorded.",
-                        }
-                    ],
-                    "components": [
-                      {
-                        "name": "red-logo",
-                        "display_name": "Red Brand Logo",
-                        "type": "Brand Logo",
-                        "reference": "LGO-R",
-                        "quantity": 1
-                      }
-                    ],
-                    "manufacture_file": "URL to zip of all manufacturing files for this Job",
-                    "ticket": "URL to Job ticket PDF",
-                    "layplan": "URL to the layplan used",
-                    "supplier": {
-                        "name": "Name of the supplier",
-                        "slug": "Slug of the supplier"
-                    },
-                    "sequence": {
-                        "id": "Sequence ID",
-                        "short_id": "Sequence Short ID",
-                        "created": "2021-12-20T11:08:36.830898Z",
-                        "state": "accepted",
-                        "jobs": [
-                            "List of jobs in this sequence"
+    + Body
+
+            {
+                "id": "a06f2da7-2a65-44ef-bfb6-81dea3f4dfeb",
+                "reference": "partner_order_reference",
+                "summary": "https://example.com/v1/factories/new-balance-teamwear/orders/fa81340e-e2a3-41ae-bd9a-f4dc01122fac/summary_pdf/",
+                "partner_data" :{
+                    "a_key_provided": "it's value",
+                    "another_key_provided": "another value"
+                },
+                "jobs": [
+                    {
+                        "url": "URL of Job in system"
+                        "id": "JOB_ID",
+                        "short_id": "SHORT_JOB_ID",
+                        "product_type": "Description of production",
+                        "state":" "Job Statue",
+                        "created": "Timestamp of when Job was created e.g. 2020-07-13T11:50:23.180726Z",
+                        "partner-order-reference": "YOUR ORDER REFERENCE",
+                        "partner-item-reference": "YOUR ORDER ITEM REFERENCE",
+                        "manufacture_files": "https://example.com/JOB_ID_panels.zip",
+                        "artwork_ids": {
+                          "f417c83f9787abf1087bd7d16fc909e3_center-chest": "f417c83f9787abf1087bd7d16fc909e3",
+                          "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": "0ce34cd9a970caff888e51bf82df6be0",
+                          "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": "0ce34cd9a970caff888e51bf82df6be0"
+                        },
+                        "artwork_dimensions": {
+                          "f417c83f9787abf1087bd7d16fc909e3_center-chest": {
+                            "artwork_width": 5.4235,
+                            "artwork_height": 6.2896,
+                            "units": "in"
+                          },
+                          "0ce34cd9a970caff888e51bf82df6be0_left-sleeve": {
+                            "artwork_width": 2.12,
+                            "artwork_height": 4.31,
+                            "units": "in"
+                          },
+                          "0ce34cd9a970caff888e51bf82df6be0_right-sleeve": {
+                            "artwork_width": 2.12,
+                            "artwork_height": 4.31,
+                            "units": "in"
+                          }
+                        },
+                        "ui_state": "State of Job that is used in UI",
+                        "design_element_colours": [{
+                              "cmyk": [
+                                0,
+                                0.53,
+                                0.84,
+                                0.04
+                              ],
+                              "brand": "/api/brands/3/",
+                              "colourName": "Seville Orange",
+                              "displayColour": "#f57327",
+                              "isSpotColour": true,
+                              "brandReference": "Seville Orange",
+                              "factoryReference": "Seville Orange",
+                              "isDynamicBlackInGradients": false
+                            }
                         ],
-                        "grouping": [],
-                        "external_url": "URl for sequence in other system",
-                        "url": "URl for sequence",
-                    },
-                    "order": "URL for the order"
+                        "size": "M",
+                        "product_name": "Custom Tee",
+                        "product_code": "123ABC",
+                        "currency": "USD",
+                        "price_per_item": "",
+                        "reference": "YOUR ORDER REFERENCE",
+                        "preview": "URL of main preview image",
+                        "manufacturing_template_code": "TMMT726G",
+                        "partner_data": {
+                          "MY_ITEM_PARTNER_DATA_KEY": "MY_ITEM_PARTNER_DATA_VALUE"
+                        },
+                        "previews": [
+                          {
+                            "name": "PREVIEW_NAME",
+                            "image": "https://example.com/JOB_ID_PREVIEW_NAME.png"
+                          }
+                        ],
+                        "personalisation": [
+                          {
+                            "name": "Number",
+                            "value": "11"
+                          }
+                        ],
+                        "quantity": 1,
+                        "arrive_by_date":"Date when the Job need to get to end customer by e.g. 2020-07-27 YYYY-MM-DD",
+                        "ex_factory_date":"Date when the Job need to leave the factory by by e.g. 2020-07-27 YYYY-MM-DD",
+                        "design_source_id": "ID of the Job's Design source",
+                        "order_design_group": "",
+                        "changelog": [
+                            {
+                                "field": "What certain field has changed",
+                                "value": "What the new value is",
+                                "modification": "Timestamp of when",
+                                "user": "The user/system which made the change if recorded.",
+                            }
+                        ],
+                        "components": [
+                          {
+                            "name": "red-logo",
+                            "display_name": "Red Brand Logo",
+                            "type": "Brand Logo",
+                            "reference": "LGO-R",
+                            "quantity": 1
+                          }
+                        ],
+                        "manufacture_file": "URL to zip of all manufacturing files for this Job",
+                        "ticket": "URL to Job ticket PDF",
+                        "layplan": "URL to the layplan used",
+                        "supplier": {
+                            "name": "Name of the supplier",
+                            "slug": "Slug of the supplier"
+                        },
+                        "sequence": {
+                            "id": "Sequence ID",
+                            "short_id": "Sequence Short ID",
+                            "created": "2021-12-20T11:08:36.830898Z",
+                            "state": "accepted",
+                            "jobs": [
+                                "List of jobs in this sequence"
+                            ],
+                            "grouping": [],
+                            "external_url": "URl for sequence in other system",
+                            "url": "URl for sequence",
+                        },
+                        "order": "URL for the order"
+                      }
+                    ]
                   }
                 ]
-              }
-            ]
-        }
+            }
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 + Response 425 (application/json)
 
-        {
-            "code": "not_available_yet",
-            "message": "Not available yet `Please wait and then try again`",
-        }
+    + Body
+
+            {
+                "code": "not_available_yet",
+                "message": "Not available yet `Please wait and then try again`",
+            }
 
 
-## Group Factory API
+# Group Factory API
 
 Unmade offers a web-based Order Management System called Factory OMS. The Factory OMS GUI allows factory staff to view pending orders, download production files and update production statusues.
 The Factory API provides access to this functionality without the use of the UI.
@@ -1508,17 +1604,15 @@ Using the Factory API, Jobs are created for each Design ID for which manufacturi
 Once created, Jobs are grouped into Sequences for efficient manufacturing. Manufacturing files can then be retrieved for each Job.
 
 
-### Job [/v1/factories/{factory_slug}/jobs/]
+## Job [/v1/factories/{factory_slug}/jobs/]
 
 
 ### Create a New Job [POST]
 
 Create a job from a given Design ID.
 
-|Key|Required?|Description|
-|---|---|---|
-|`design_id`|**required**|The ID generated by the Unmade Editor when a customer creates their Design.|
-|`reference`|**required**|Should uniquely identify the Job to be created. Will be present on all paperwork and associated manufacturing files.|
+    + `design_id` **required**: The ID generated by the Unmade Editor when a customer creates their Design
+    + `reference` **required**: Should uniquely identify the Job to be created. Will be present on all paperwork and associated manufacturing files
 
 + Request (application/json)
     + Headers
@@ -1527,64 +1621,77 @@ Create a job from a given Design ID.
 
     + Body
 
-            {
-                "design_id": "DESIGN_ID",
-                "reference": "REFERENCE"
-            }
+                {
+                    "design_id": "DESIGN_ID",
+                    "reference": "REFERENCE"
+                }
 
-+ Response 201
++ Response 201 (application/json)
 
-            {
-                "id": "JOB_ID",
-                "reference": "REFERENCE-TEXT"
-            }
+    + Body
+
+                {
+                    "id": "JOB_ID",
+                    "reference": "REFERENCE-TEXT"
+                }
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
 
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 
 ### Sequence [/v1/factories/{factory_slug}/sequences/]
@@ -1601,105 +1708,90 @@ This endpoint allows these Sequences to be retrieved when required for manufactu
 
 The endpoint returns an array of `Sequence` objects, each of which contains:
 
-|Key|Description|
-|---|---|
-|`id`|The unique ID of this Sequence within Unmade systems|
-|`machine`|The name of the machine to which this Sequence has been assigned|
-|`jobs`|An array of `Job` objects (see below)|
+    + `id`: The unique ID of this Sequence within Unmade systems
+    + `machine`: The name of the machine to which this Sequence has been assigned
+    + `jobs`: An array of `Job` objects (see below)
 
 Each `Job` object contains:
 
-|Key|Description|
-|---|---|
-|`id`|The unique ID of this Job within Unmade systems|
-|`reference`|The item-level reference for this job provided when creating this job's order|
-|`state`|The status of the selected Job|
-|`created`|The timestamp when it was created|
-|`arrive_by_date`|Date when the Job need to get to end customer by e.g. 2020-07-27 YYYY-MM-DD|
-|`ex_factory_date`|Date when the Job need to leave the factory by e.g. 2020-07-27 YYYY-MM-DD|
-|`design_source_id`|The ID of the Job's designs parent, can be used to group similar Jobs.|
-|`order_design_group`|Order specific design source group.|
-|`changelog`|List of changes to certain fields|
-|`partner-order-reference`|The order reference provided when creating this job's order|
-|`partner-item-reference`|The item-level reference for this job provided when creating this job's order|
-|`job_ticket`|A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job|
-|`manufacture_files`|A URL that returns a zip archive containing the manufacture files for this Job|
-|`artwork_ids`|An object mapping embellishment manufacturing file names to their Artwork IDs|
-|`artwork_dimensions`|An object containing the physical dimensions of any embellishment assets for this job|
-|`size`|The size code of this job's layplan|
-|`design_element_colours`| The colours found in the Job |
-|`product_name`|The name of this job's product|
-|`product_code`|The code of this job's product|
-|`manufacturing_template_code`|The unmade code for the manufacturing template used for this job|
-|`partner_data`|An object containing item-level partner data associated with this job|
-|`previews`|An array of *Preview* objects (see below)|
-|`personalisation`|An array of Name and Value objects for that jobs personalised information|
-|`components`|An array of *Component* objects (see below)|
-|`order`|This job's order data (see below)|
+    + `id`: The unique ID of this Job within Unmade systems
+    + `reference`: The item-level reference for this job provided when creating this job's order
+    + `state`: The status of the selected Job
+    + `created`: The timestamp when it was created
+    + `arrive_by_date`: Date when the Job need to get to end customer by e.g. 2020-07-27 YYYY-MM-DD
+    + `ex_factory_date`: Date when the Job need to leave the factory by e.g. 2020-07-27 YYYY-MM-DD
+    + `design_source_id`: The ID of the Job's designs parent, can be used to group similar Jobs
+    + `order_design_group`: Order specific design source group
+    + `changelog`: List of changes to certain fields
+    + `partner-order-reference`: The order reference provided when creating this job's order
+    + `partner-item-reference`: The item-level reference for this job provided when creating this job's order
+    + `job_ticket`: A URL that returns a PDF Job Ticket containing relevant manufacturing and QC information for this Job
+    + `manufacture_files`: A URL that returns a zip archive containing the manufacture files for this Job
+    + `artwork_ids`: An object mapping embellishment manufacturing file names to their Artwork IDs
+    + `artwork_dimensions`: An object containing the physical dimensions of any embellishment assets for this job
+    + `size`: The size code of this job's layplan
+    + `design_element_colours`:  The colours found in the Job
+    + `product_name`: The name of this job's product
+    + `product_code`: The code of this job's product
+    + `manufacturing_template_code`: The unmade code for the manufacturing template used for this job
+    + `partner_data`: An object containing item-level partner data associated with this job
+    + `previews`: An array of *Preview* objects (see below)
+    + `personalisation`: An array of Name and Value objects for that jobs personalised information
+    + `components`: An array of *Component* objects (see below)
+    + `order`: This job's order data (see below)
 
 Each *Preview* object contains:
 
-|Key|Description|
-|---|---|
-|`name`| This preview's name|
-|`image`| A URL to the image|
+    + `name`: This preview's name|
+    + `image`: A URL to the image|
 
 Each *Personalisation* object contains:
 
-|Key|Description|
-|---|---|
-|`name`| The field name|
-|`value`| The value for that field |
+    + `name`: The field name|
+    + `value`: The value for that field |
 
 Each *Component* object contains:
 
-|Key|Description|
-|---|---|
-|`name`|This component's name or code|
-|`display_name`|This component's human-readable display-name|
-|`type`|This component's type|
-|`reference`|This component's manufacturing reference|
-|`quantity`|The quantity of this component required for this job|
+    + `name`: This component's name or code|
+    + `display_name`: This component's human-readable display-name|
+    + `type`: This component's type|
+    + `reference`: This component's manufacturing reference|
+    + `quantity`: The quantity of this component required for this job|
 
 
 Each *design_element_colours* object contains:
-|Key|Description|
-|---|---|
-|`cmyk`| A list of CMYK values of the colour |
-|`colourName`| Human readable Name |
-|`displayColour`| HEX representation of the colour |
-|`isSpotColour`| If this is a spot colour |
-|`brandReference`| Brand internal Reference for the colour |
-|`factoryReference`| Factory's internal Reference for the colour |
-|`isDynamicBlackInGradients`| If this is a black gradient |
-|`range`| If this is a yarn will have the reference |
+
+    + `cmyk`: A list of CMYK values of the colour
+    + `colourName`: Human readable Name
+    + `displayColour`: HEX representation of the colour
+    + `isSpotColour`: If this is a spot colour
+    + `brandReference`: Brand internal Reference for the colour
+    + `factoryReference`: Factory's internal Reference for the colour
+    + `isDynamicBlackInGradients`: If this is a black gradient
+    + `range`: If this is a yarn will have the reference
 
 
 Each job's `order` data contains:
 
-|Key|Description|
-|---|---|
-|`id`|The Unmade ID for this order (for use on `/orders` endpoints)|
-|`reference`|This unique reference provided for this order|
-|`created`|The date on which this order was created|
-|`attachments`|An object containing the URLs of any attachments associated with this order|
-|`partner_data`|An object containing order-level partner data associated with this order|
-|`shipping_address`|This order's shipping address (see below)|
+    + `id`: The Unmade ID for this order (for use on `/orders` endpoints)
+    + `reference`: This unique reference provided for this order
+    + `created`: The date on which this order was created
+    + `attachments`: An object containing the URLs of any attachments associated with this order
+    + `partner_data`: An object containing order-level partner data associated with this order
+    + `shipping_address`: This order's shipping address (see below)
 
 Each order's `shipping_address` data contains:
 
-|Key|Description|
-|---|---|
-|`name`|Recipient name|
-|`company_name`|-|
-|`address_1`|-|
-|`address_2`|-|
-|`address_3`|-|
-|`city`|-|
-|`country_area`|-|
-|`postal_code`|-|
-|`country`|Country code|
-|`phone`|-|
+    + `name`
+    + `company_name`
+    + `address_1`
+    + `address_2`
+    + `address_3`
+    + `city`
+    + `country_area`
+    + `postal_code`
+    + `country`: Country code
+    + `phone`
 
 
 ##### Artwork IDs
@@ -1874,49 +1966,61 @@ You can use these IDs to identify jobs which share manufacturing files - which m
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 
 ### Sequence: Set In Production [/v1/factories/{factory_slug}/sequences/{sequence_id}/set_in_production/]
@@ -1929,60 +2033,71 @@ If a Sequence has not been marked as `in_production`, it remains in the [Get Seq
 Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) response.
 
 + Request (application/json)
+
     + Headers
 
             Authorization: Token ABCDEFGHIJKLMNOPQRSTUVWXY
 
-    + Parameters
-        + sequence_id (str) - Unmade Sequence ID
 
 + Response 200 (application/json)
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
 
 ### Job: Set Complete [/v1/factories/{factory_slug}/jobs/{job_id}/set_complete/]
@@ -1994,58 +2109,69 @@ Once a Job has been successfully manufactured and QC'd within the partner factor
 Job IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) response.
 
 + Request (application/json)
+
     + Headers
 
             Authorization: Token ABCDEFGHIJKLMNOPQRSTUVWXY
 
-    + Parameters
-        + job_id (str) - Unmade Job ID
 
 + Response 200 (application/json)
 
 + Response 401 (application/json)
 
-        {
-            "code": "authentication_failed",
-            "message": "Incorrect authentication credentials.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 403 (application/json)
 
-        {
-            "code": "permission_denied",
-            "message": "You do not have permission to perform this action.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 405 (application/json)
 
-        {
-            "code": "method_not_allowed",
-            "message": "Method used is not allowed"
-        }
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
 
 + Response 404 (application/json)
 
-        {
-            "code": "not_found",
-            "message": "Not found."
-        }
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
 
 + Response 406 (application/json)
 
-        {
-            "code": "not_acceptable",
-            "message": "Could not satisfy the request Accept header.",
-            "original_request": "<the original request that was sent, which resulted in this error>"
-        }
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
 
 + Response 415 (application/json)
 
-        {
-            "code": "unsupported_media_type",
-            "message": "Unsupported media type in request.",
-            "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
-        }
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request.",
+                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+            }
 
