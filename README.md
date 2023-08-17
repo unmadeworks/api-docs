@@ -16,3 +16,8 @@ docker-compose up dev
 You can then navigate to [http://localhost:3000/](http://localhost:3000/)
 to see a live preview.
 
+## Deployment
+
+When you've made your changes to the `apiary.apib` file, just push any changes
+to the `main` branch and the pages site will be automatically updated via a
+GitHub action.
