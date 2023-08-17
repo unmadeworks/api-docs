@@ -13,6 +13,6 @@ services:
 
     render:
         image: "funbox/blueprinter"
-        command: -i apiary.apib -o docs.html
+        command: -i apiary.apib -o index.html
         volumes:
             - .:/app
