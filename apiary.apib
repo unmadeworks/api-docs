@@ -146,7 +146,7 @@ If you initialise the Unmade Editor without an authenticated user then the user 
 
 2. If and when the unauthenticated user clicks to upload an asset, the Unmade Editor iFrame will first save the design.
 We then inform your e-commerce site that the user needs to be authenticated in order to continue via a JavaScript postMessage
-to the parent window. See [the postMessages section](https://unmade.docs.apiary.io/#reference/js-post-messaging-interactions)
+to the parent window. See [the postMessages section](https://engineering.unmade.com/api-docs/#/group-js-post-messaging-interactions)
 of this document for more details on the structure of this message.
 
 
@@ -230,7 +230,7 @@ An example of how you may want to embed the iframe is below:
     + locale (optional) - The IETF language tag to set localisation of the user interface
         + Default: `en-GB`
     + design_id (optional) - An Unmade Design ID that is compatible with this editor to be used as starting point
-    + init (optional) - An JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://unmade.docs.apiary.io/#introduction/advanced-setup) for more information.
+    + init (optional) - An JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://engineering.unmade.com/api-docs/#/group-api-setup#header-advanced-setup) for more information.
     + mode (optional) - Specifying `mode=admin` will enable additional UI controls, including the ability to lock elements of the design.
 
 ## Iframe endpoint [GET]
@@ -644,7 +644,7 @@ with the option to select a roster field for any enabled region. A design saved 
 one or more of these roster fields is known as a "roster design".
 
 A roster design can be identified by the presence of the `roster` key in its API
-representation. See [here](https://jsapi.apiary.io/previews/unmade/reference/design-api)
+representation. See [here](https://engineering.unmade.com/api-docs/#/group-design-api)
 for full details of this representation.
 
 An example `roster` object is shown below:
@@ -697,7 +697,7 @@ Upon receipt of a valid payload, a new design is created, and its ID is returned
 ID can then be used to place orders as required.
 
 Successfully created member design IDs can also be queried via the
-[Retrieve Design](https://unmade.docs.apiary.io/#reference/design-api/retrieve-designs/retrieve-a-design)
+[Retrieve Design](https://engineering.unmade.com/api-docs/#/group-design-api/resource-v1-designs-design_id-10bff8d2)
 endpoint as normal. The `placements` data for member designs will include the
 `origin_roster_field_key` for any placements which originated from roster fields.
 
@@ -2028,9 +2028,9 @@ You can use these IDs to identify jobs which share manufacturing files - which m
 ### Set a Sequence as 'in_production' [PUT]
 
 Once manufacturing files have been successfully downloaded for a given Sequence, it should be marked as `in production`. This prevents the Sequence from appearing in subsequent calls to the “Get Sequences” endpoint.
-If a Sequence has not been marked as `in_production`, it remains in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) list and its Jobs will be re-sequenced the next time auto-sequencing occurs. This is done to create even more efficient Sequences in combination with new Jobs.
+If a Sequence has not been marked as `in_production`, it remains in the [Get Sequences](https://engineering.unmade.com/api-docs/#/group-factory-api/resource-v1-factories-factory_slug-sequences-690efc0e) list and its Jobs will be re-sequenced the next time auto-sequencing occurs. This is done to create even more efficient Sequences in combination with new Jobs.
 
-Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) response.
+Sequence IDs are provided in the [Get Sequences](https://engineering.unmade.com/api-docs/#/group-factory-api/resource-v1-factories-factory_slug-sequences-690efc0e) response.
 
 + Request (application/json)
 
@@ -2106,7 +2106,7 @@ Sequence IDs are provided in the [Get Sequences](https://unmadefactory.docs.apia
 
 Once a Job has been successfully manufactured and QC'd within the partner factory, it can be marked as `complete` within Unmade systems. When all Jobs for a given Sequence are complete, the Sequence is also marked as complete.
 
-Job IDs are provided in the [Get Sequences](https://unmadefactory.docs.apiary.io/#reference/0/sequence/get-sequences) response.
+Job IDs are provided in the [Get Sequences](https://engineering.unmade.com/api-docs/#/group-factory-api/resource-v1-factories-factory_slug-sequences-690efc0e) response.
 
 + Request (application/json)
 
