@@ -635,6 +635,89 @@ This lets you:
                 "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
             }
 
+# Group Transfer Preview API
+
+The Transfer Previews allows you to generate preview images which show
+how a given Design would appear when applied to a different Product. These
+images could be used for cross-selling or marketing purposes by your site.
+
+For more info on this functionality, see the [live demo](https://engineering.unmade.com/design-transfer-demo/).
+
+## Create Transfer Previews [/v1/transfer_previews/]
+
+Passing a valid Product Slug and Design ID to this endpoint creates one
+Transfer Preview for each scene available for the target product's default
+size.
+
+You can then use the provided image URLs to load the images in your site.
+These previews function in the same way to normal `/v1/previews/` URLs and
+are generated on demand when first requested. The URLs are suitable for
+direct use in an `<img>` element, or could be saved to your backend for
+future use.
+
+## Create Transfer Previews [POST]
+
+
++ Request Create Transfer Preview (application/json)
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+                "product": "<product-slug>",
+                "design": "<design-id>"
+            }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "previews": [
+                    {
+                        "name": "front",
+                        "image": "v1/transfer_previews/1/preview/",
+                        "thumbnail": "v1/transfer_previews/1/thumbnail/"
+                    },
+                    {
+                        "name": "back",
+                        "image": "v1/transfer_previews/2/preview/",
+                        "thumbnail": "v1/transfer_previews/2/thumbnail/"
+                    }
+                ]
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials.",
+                "original_request": "<the original request that was sent, which resulted in this error>"
+            }
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
+
++ Response 405 (application/json)
+
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
+
+
 # Group Roster API
 
 ## Retrieve Roster design data
