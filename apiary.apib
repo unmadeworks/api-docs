@@ -788,6 +788,7 @@ Many member designs can be created from a single roster design.
 
 To create a member design, the `/roster/` endpoint must recieve valid values for **all**
 roster fields specified for a given roster design.
+You can send empty values (e.g. `""` or `null`), for example to generate a design without a name or number.
 
 The provided values for each roster field will be validated to ensure they contain only
 allowed characters and that, once rendered in the chosen font, they are not too wide for
