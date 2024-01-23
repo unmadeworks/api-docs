@@ -794,7 +794,7 @@ The provided values for each roster field will be validated to ensure they conta
 allowed characters and that, once rendered in the chosen font, they are not too wide for
 their respective placement. If there are validation errors we return a 400 response
 detailing the codes for the validation errors for each field. Possible validation error
-codes are `illegal_character`, `text_too_wide`, `text_sanitised`.
+codes are `illegal_character`, `text_too_wide`, `text_sanitised`, `text_truncated`, `text_too_long`.
 
 Additionally, for each error type a `details` object is provided. This contains the
 filtered / truncated text that *would* be permitted in the placement.
