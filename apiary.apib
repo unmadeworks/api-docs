@@ -1256,8 +1256,11 @@ When an order The order response will contain the following fields:
 
     + `id`: Order id on UnmadeOS
     + `reference`: Your order reference
-    + `created`: Timestamp when the order was created on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
     + `state`: State of the order on UnmadeOS
+    + `created`: Timestamp when the order was created on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
+    + `submitted_at`: Timestamp when the order was submitted on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
+    + `ready_to_ship_at`: Timestamp when the order was set as ready to ship on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
+    + `shipped_at`: Timestamp when the order was shipped on ISO 8601 UTC time i.e.: *2022-04-28T15:32:21Z*
     + `partner_data`:  Undetermined key value pairs sent on order creation
     + `tracking_number`:  If the order has been shipped and the vendor has enter the tracking number
     + `shipping_address`:  Object containing the address received
@@ -1323,7 +1326,10 @@ attribute of the order once it has been entered by the factory.
                     "phone": ""
                 },
                 "reference": "partner_order_reference",
-                "created": "2018-04-11T17:20:04.991263Z",
+                "created": "2024-03-11T14:45:08.202787Z",
+                "submitted_at": "2024-03-11T14:45:26.927265Z",
+                "ready_to_ship_at": "2024-03-11T15:06:22.628851Z",
+                "shipped_at": "2024-03-11T15:07:19.383732Z",
                 "state": "new",
                 "partner_data":{
                     "customer_po_number": "1234512334X"
