@@ -1682,6 +1682,364 @@ asynchronously once the job is created.
             }
 
 
+# Group Factory API
+
+The Factory API allows you to interact with orders that have been placed and move them through the various
+stages of production. The typical workflow is as follows:
+
+<a href="https://github.com/unmadeworks/api-docs/assets/13105806/c638182b-ab00-4141-96de-e4fe77de2a1f">
+  <img src="https://github.com/unmadeworks/api-docs/assets/13105806/c638182b-ab00-4141-96de-e4fe77de2a1f" alt="Image showing the typical user journey through the e-commerce site" width="100%">
+</a>
+
+
+#### Factory Slugs
+
+All Factory API endpoints begin with `/v2/factories/<factory_slug>` where `factory_slug` is the unique identifier
+for each of your factory locations. These slugs will be provided to you by Unmade. Each API token provided to you
+can have access to **one or more individual factory locations**, depending on your specific requirements.
+
+#### Order States
+
+During production, orders progress through the following states:
+
+ - `new`: The order has not yet begun production
+ - `in_production`: The order has been accepted and is now in production
+ - `ready-to-ship`: The order has been produced and is awaiting shipping
+ - `shipped`: The order has left the factory
+ - `cancelled`: The order has been cancelled
+
+#### Job States
+
+After creation, the line items from a given order are split into one or more production jobs. These jobs represent
+one or more individual garments to be manufactured. Each job has its own production state, which are as follows:
+
+ - `new`: The job has not yet begun production
+ - `in_production`: The job has been accepted and is now in production
+ - `ready-to-ship`: The job has been produced and is awaiting shipping
+ - `shipped`: The job has left the factory
+ - `cancelled`: The job has been cancelled
+
+## List Orders [/v2/factories/{factory_slug}/orders{?state,page}]
+
+Orders created using the Order API (see above) will appear in this list after they have been submitted to Unmade
+Factory OMS. You may choose to check this endpoint daily or hourly and process any new orders as necessary.
+
+### List existing orders [GET]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + state (optional, string) - Only show orders with this state (see Order States section above for allowed values)
+    + page (optional, number) - Page number
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Retrieve Order [/v2/factories/{factory_slug}/order/{order_id}]
+
+If you have been provided with Order IDs directly from another system, you can use this endpoint to retrieve
+data on the order directly. The response from this endpoint contains the same data as the order representation
+in the list endpoint.
+
+### Retrieve existing order [GET]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique ID of the required order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## List Order Jobs [/v2/factories/{factory_slug}/orders/{order_id}/jobs{?state,page}]
+
+This endpoint allows you to retrieve manufacturing data for the individual jobs in a given order. Orders can have
+an arbitrary number of jobs, so this endpoint is paginated to show 100 jobs per page.
+
+### List order jobs [GET]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique ID of the required order
+    + state (optional, string) - Only show jobs with this state (see Job States section above for allowed values)
+    + page (optional, number) - Page number
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## List All Jobs [/v2/factories/{factory_slug}/jobs{?state,page}]
+
+If you prefer, you can also view a list of all jobs available in a given factory location. This shows jobs across
+all orders in this location. This endpoint is paginated to show 100 jobs per page.
+
+### List jobs [GET]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + state (optional, string) - Only show jobs with this state (see Job States section above for allowed values)
+    + page (optional, number) - Page number
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Retrieve Job [/v2/factories/{factory_slug}/jobs/{job_id}]
+
+The response from this endpoint contains the same data as the job representation in the list endpoints.
+
+### Retrieve job [GET]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + job_id (string) - The unique identifier of specified job
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Set Job In Production [/v2/factories/{factory_slug}/jobs/{job_id}/set_in_production]
+
+Mark this job as `in_production`. Jobs can only be marked `in_production` from the `new` state.
+
+If this job's order is the `new` state, it is automatically updated to the `in_production` state along with the given
+job.
+
+### Set Job In Production [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + job_id (string) - The unique identifier of specified job
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Set Job Ready to Ship [/v2/factories/{factory_slug}/jobs/{job_id}/set_ready_to_ship]
+
+Mark this job as `ready_to_ship`. Jobs can only be marked `ready_to_ship` from the `in_production` state.
+
+If all jobs from this job's order are now `ready_to_ship`, the order itself is automatically updated to `ready_to_ship`.
+
+### Set Job Ready to Ship [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + job_id (string) - The unique identifier of specified job
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Set Order In Production [/v2/factories/{factory_slug}/orders/{order_id}/set_in_production]
+
+Mark this order as `in_production`. Orders can only be marked `in_production` from the `new` state.
+
+This also marks all of this order's jobs as `in_production`.
+
+### Set Order In Production [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Set Order Ready to Ship [/v2/factories/{factory_slug}/orders/{order_id}/set_ready_to_ship]
+
+Mark this order as `ready_to_ship`. Orders can only be marked `ready_to_ship` from the `in_production` state.
+
+This also marks all of this order's jobs as `ready_to_ship`.
+
+### Set Order Ready to Ship [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Set Order Shipped [/v2/factories/{factory_slug}/orders/{order_id}/set_shipped]
+
+Mark this order as `shipped`. Orders can only be marked `shipped` from the `ready_to_ship` state.
+
+This also marks all of this order's jobs as `shipped`.
+
+### Set Order Ready to Ship [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+
+## Set Order Cancelled [/v2/factories/{factory_slug}/orders/{order_id}/set_cancelled]
+
+Mark this order as `cancelled`. Orders can be cancelled from any state.
+
+This also marks all of this order's jobs as `cancelled`.
+
+### Set Order Cancelled [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Set Order Tracking Number [/v2/factories/{factory_slug}/orders/{order_id}/set_tracking_number]
+
+Use this endpoint to provide a tracking number which has been created for shipping this order
+
+### Set Order Tracking Number [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Update Order Ex-Factory Date [/v2/factories/{factory_slug}/orders/{order_id}/update_ex_factory_date]
+
+Use this endpoint to update the date at which this order is expected to leave the factory location.
+
+This updates the ex-factory dates of all jobs in this order.
+
+### Update Order Ex-Factory Date [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + order_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+## Update Job Ex-Factory Date [/v2/factories/{factory_slug}/jobs/{job_id}/update_ex_factory_date]
+
+Use this endpoint to update the date at which this job is expected to leave the factory location.
+
+### Set Order Tracking Number [POST]
+
++ Parameters
+    + factory_slug (string) - The unique identifier of required factory location
+    + job_id (string) - The unique identifier of specified order
+
++ Request
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {}
+
+
+
 # Group Deprecated Endpoints
 
 These endpoints have been deprecated. Documentation remains available here for reference.
