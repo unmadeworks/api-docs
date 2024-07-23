@@ -16,6 +16,14 @@ docker-compose up dev
 You can then navigate to [http://localhost:3000/](http://localhost:3000/)
 to see a live preview.
 
+Use:
+
+```shell
+docker-compose up dev-v2
+```
+
+to work on the V2 docs. This page is deployed under `/v2`.
+
 ## Deployment
 
 When you've made your changes to the `apiary.apib` file, just push any changes
