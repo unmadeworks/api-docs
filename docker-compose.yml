@@ -11,8 +11,23 @@ services:
           - "3000:3000"
           - "3001:3001"
 
+    dev-v2:
+        image: "funbox/blueprinter"
+        command: -i apiary_v2.apib -s -p 3000
+        volumes:
+            - .:/app
+        ports:
+            - "3000:3000"
+            - "3001:3001"
+
     render:
         image: "funbox/blueprinter"
         command: -i apiary.apib -o index.html --favicon images/favicon.png
+        volumes:
+            - .:/app
+
+    render-v2:
+        image: "funbox/blueprinter"
+        command: -i apiary_v2.apib -o v2.html --favicon images/favicon.png
         volumes:
             - .:/app
