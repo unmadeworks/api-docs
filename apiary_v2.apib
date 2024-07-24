@@ -1231,4 +1231,670 @@ the listed orders by their creation date.
           }
 
 
+# Group Factory API
 
+After an Ecommerce order has been created, Unmade begins a process of converting the various line items in the order 
+into production jobs which can then be manufactured at your vendor factory. The Factory API is used to interact with
+all order data related to this production process.
+
+Each Ecommerce Order maps to exactly one Factory API Order. The same order ID can be used in the order endpoints on both
+APIs.
+
+The Factory API is accessed via `https://factory.unmade.com/`. All requests require your authorization token which is 
+passed as an HTTP request header.
+
+## Order States
+
+During production, orders progress through the following states:
+
+ - `new`: The order has not yet begun production
+ - `in_production`: The order has been accepted and is now in production
+ - `ready-to-ship`: The order has been produced and is awaiting shipping
+ - `shipped`: The order has left the factory
+ - `cancelled`: The order has been cancelled
+
+## List Orders [/factory.unmade.com/v2/orders/{?state,page,created_before,created_after}]
+## List Orders [GET]
+
+This endpoint can be used to retrieve the complete list of all orders that have been created to date.
+
+This endpoint is paginated and shows a maximum of 10 order objects per response. Use the `page` query parameter to 
+select the desired page.
+
+You can optionally provide `created_before` and `created_after` query parameters in the format `YYYY-MM-DD` to filter 
+the listed orders by their creation date.
+
++ Parameters
+    + state (optional, string) - Show orders with this state (see Order States section above for allowed values)
+    + page (optional, number) - Page number
+    + created_before (optional, string) - Show orders created before this date (`YYYY-MM-DD`)
+    + created_after (optional, string) - Show orders created after this date (`YYYY-MM-DD`)
+
++ Request List Orders
+
+    + Headers
+
+          Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {}
+
+## Retrieve Order [/factory.unmade.com/v2/orders/{order_id}/]
+## Retrieve an existing order [GET]
+
+After an order has been submitted to production, you can use this endpoint to pull order data into your own systems or
+query production states.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Retrieve Order
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 400 (application/json)
+    
+    + Body
+    
+          {
+             "code": "bad_request",
+             "message": "Request payload is not valid.",
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Retrieve Order Shipping Address [/factory.unmade.com/v2/orders/{order_id}/shipping_address]
+## Retrieve Shipping Address[GET]
+
+When an order has progressed to the `ready_to_ship` state, this endpoint can be used to retrieve the shipping address 
+for the order. For orders not in this state, this endpoint will respond with an HTTP 404.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Retrieve Shipping Address
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Set Order In Production [/factory.unmade.com/v2/orders/{order_id}/set_in_production]
+## Set In Production[POST]
+
+Once an order has been ingested into your systems and has entered production with your vendor, this endpoint is used to
+inform Unmade that production has begun. This state change is automatically propagated to the associated Ecommerce order
+to allow the end consumer to be notified if required. This state change also automatically propagates to all associated
+jobs in this order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Set Order In Production
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Set Order Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/set_ready_to_ship]
+## Set Ready to Ship[POST]
+
+Once an order has completed production and is ready to ship from your vendor, this endpoint is used to inform Unmade 
+that the order is ready to ship. This state change is automatically propagated to the associated Ecommerce order to 
+allow the end consumer to be notified if required. This state change also automatically propagates to all associated
+jobs in this order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Set Order Ready to Ship
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Set Order Shipped [/factory.unmade.com/v2/orders/{order_id}/set_shipped]
+## Set Shipped[POST]
+
+Once an order has finally been shipped from your vendor, this endpoint is used to inform Unmade that the order is on the
+way to the destination address. This state change is automatically propagated to the associated Ecommerce order to 
+allow the end consumer to be notified if required. This state change also automatically propagates to all associated
+jobs in this order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Set Order Shipped
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Set Order Tracking Number [/factory.unmade.com/v2/orders/{order_id}/set_tracking_number]
+## Set Tracking Number[POST]
+
+If relevant for the shipping configuration for your integration, this endpoint can be used to provide a tracking number
+that has been generated in a third-party shipping system. If provided, this tracking number propagates up to this 
+order's associated Ecommerce order to allow the Ecommerce system to pass it on to the end-consumer. 
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Set Order Tracking Number
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/set_ex_factory_date]
+## Set Order Ex-factory Date[POST]
+
+On creation, Unmade assigns all Ecommerce orders with a default Ex-factory date based on a lead time estimate which has
+been pre-agreed with you and your vendor. This serves as a target date by which the order is expected to have left the
+factory location. In the case of unforeseen delays (or unexpectedly quicker production!) this endpoint can be used to 
+pass an updated Ex-factory date to Unmade. If provided, this updated date propagates up to this order's associated 
+Ecommerce order to allow the Ecommerce system to notify to the end-consumer. 
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Set Order Ex-factory Date
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## List Jobs [/factory.unmade.com/v2/orders/{order_id}/jobs{?page}]
+## List Jobs[GET]
+
+This endpoint can be used to retrieve a paginated list of the individual jobs associated with a given production order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + page (optional, number) - Page number
+
++ Request List Order Items
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {}
+
+## Retrieve Job [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}]
+## Retrieve Job[GET]
+
+This endpoint can be used to retrieve data for a specific job in a given order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + job_id (string) - ID of the job in the form of a uuid
+
++ Request Retrieve Order Item
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {}
+
+## Set Job In Production [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_in_production]
+## Set In Production[POST]
+
+If a given order consists of a large number of jobs, production for these jobs may begin at different times. In such a 
+case, it is possible to inform Unmade that individual jobs have begun production using this endpoint. This updates the 
+state of this job's order to `in_production`, but does not affect the state of the other jobs in this order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + job_id (string) - ID of the job in the form of a uuid
+
++ Request Retrieve Order Item
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {}
+
+## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship]
+## Set Ready to Ship[POST]
+
+If a given order consists of a large number of jobs, production for these jobs may be completed at different times. In 
+such a case, it is possible to inform Unmade that individual jobs have completed production and are ready to ship using 
+this endpoint. This updates the state of this job's order to `ready_to_ship`, but does not affect the state of the other
+jobs in this order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + job_id (string) - ID of the job in the form of a uuid
+
++ Request Retrieve Order Item
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {}
