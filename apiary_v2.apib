@@ -59,9 +59,6 @@ These messages are more likely to be subject to change, whereas response status 
 Where possible, we also include a `detail` field. This field contains specific details of the error that was encountered.
 This data is designed to aid with debugging and facillitate integration with Unmade APIs.
 
-```
-
-
 ## Advanced setup
 
 If you have opted for user-uploaded asset support in your Unmade Editor then there is one additional step for integration.
@@ -277,9 +274,8 @@ Depending on your specific editor UI design and the rest of the content on the p
 
 ## JS post messaging in general
 
-Certain actions performed by the customer in the iframe will result in events being sent to
-the host website using the [postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage)
-API. A JavaScript listener, such as the following, should be implemented on the host site:
+Certain actions performed by the customer in the iframe will result in events being sent to the host website using the
+[postMessage](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) API. A JavaScript listener, such as the following, should be implemented on the host site:
 
 ```
 window.addEventListener("message", receiveMessage, false);
@@ -368,24 +364,20 @@ The triggeredBy attribute contains information about why the design was saved, a
 
 ### A note about the size of initial preview images
 
-The preview image (PNG format) in the postMessage ```type: "UNMADE_design_saved"```  is
-the image uploaded to our servers by the user's browser when they save their design.
-Using this image enables us to make this preview available to you immediately.
+The preview image (PNG format) in the postMessage ```type: "UNMADE_design_saved"```  is the image uploaded to our 
+servers by the user's browser when they save their design. Using this image enables us to make this preview available 
+to you immediately.
 
-However this means that the larger this image is the slower and less reliable
-it will make saving a design, particularly for users on a flaky internet
-connection. For this reason we default to this image being lower resolution
+However, this means that the larger this image is the slower and less reliable it will make saving a design, 
+particularly for users on a flaky internet connection. For this reason we default to this image being lower resolution
 (height of 522px).
 
-You can ask your account manager to change the size of the initial preview
-image returned in this postMessage but we recommend keeping these images sizes
-(PNG format) below 200Kb.
+You can ask your account manager to change the size of the initial preview image returned in this postMessage, but we 
+recommend keeping these images sizes (PNG format) below 200Kb.
 
-Within a minute or two of the design being saved, we will have generated full
-size versions of images for all the scenes you have set up, including this
-preview, on our servers. Later calls to the [retrieve a
-design API](#reference/design-api/retrieve-designs/retrieve-a-design) will return
-the URLs for these full size images.
+Within a minute or two of the design being saved, we will have generated full size versions of images for all the 
+scenes you have set up, including this preview, on our servers. Later calls to the [retrieve a_design API](#reference/design-api/retrieve-designs/retrieve-a-design) will 
+return the URLs for these full size images.
 
 ### User interaction
 ```type: "UNMADE_interaction"``` *optional*
@@ -617,23 +609,18 @@ This lets you:
 
 # Group Transfer Preview API
 
-The Transfer Previews allows you to generate preview images which show
-how a given Design would appear when applied to a different Product. These
-images could be used for cross-selling or marketing purposes by your site.
-
-For more info on this functionality, see the [live demo](https://engineering.unmade.com/design-transfer-demo/).
+The Transfer Previews allows you to generate preview images which show how a given Design would appear when applied to 
+a different Product. These images could be used for cross-selling or marketing purposes by your site. For more info on 
+this functionality, see the [live demo](https://engineering.unmade.com/design-transfer-demo/).
 
 ## Create Transfer Previews [/v2/transfer_previews/]
 
-Passing a valid Product Slug and Design ID to this endpoint creates one
-Transfer Preview for each scene available for the target product's default
-size.
+Passing a valid Product Slug and Design ID to this endpoint creates one Transfer Preview for each scene available for 
+the target product's default size.
 
-You can then use the provided image URLs to load the images in your site.
-These previews function in the same way to normal `/v2/previews/` URLs and
-are generated on demand when first requested. The URLs are suitable for
-direct use in an `<img>` element, or could be saved to your backend for
-future use.
+You can then use the provided image URLs to load the images in your site. These previews function in the same way to 
+normal `/v2/previews/` URLs and are generated on demand when first requested. The URLs are suitable for direct use in an
+`<img>` element, or could be saved to your backend for future use.
 
 ## Create Transfer Previews [POST]
 
@@ -701,12 +688,10 @@ future use.
 
 ## Retrieve Roster design data
 
-If a given product has roster functionality enabled, an editor user will be provided
-with the option to select a roster field for any enabled region. A design saved with
-one or more of these roster fields is known as a "roster design".
+If a given product has roster functionality enabled, an editor user will be provided with the option to select a roster 
+field for any enabled region. A design saved with one or more of these roster fields is known as a "roster design".
 
-A roster design can be identified by the presence of the `roster` key in its API
-representation. See [here](https://engineering.unmade.com/api-docs/#/group-design-api)
+A roster design can be identified by the presence of the `roster` key in its API representation. See [here](https://engineering.unmade.com/api-docs/#/group-design-api)
 for full details of this representation.
 
 An example `roster` object is shown below:
@@ -729,60 +714,53 @@ An example `roster` object is shown below:
 }
 ```
 
-This indicates that a single roster field: `player-name` was selected for this roster
-design.
+This indicates that a single roster field: `player-name` was selected for this roster design.
 
-The `display_name` of the field is a human-readable representation of the field for
-use when creating player designs.
+The `display_name` of the field is a human-readable representation of the field for use when creating player designs.
 
-The `placeholder_text` field is the temporary value that the roster region is populated
-with when saved. In this example, the editor user would see the string "Your Name Here"
-in the region for which they'd selected this field.
+The `placeholder_text` field is the temporary value that the roster region is populated with when saved. In this 
+example, the editor user would see the string "Your Name Here" in the region for which they'd selected this field.
 
-The `allowed_characters` is the full set of characters which can be used to populate
-this field when creating player designs.
+The `allowed_characters` is the full set of characters which can be used to populate this field when creating player 
+designs.
 
-`placements` are the human-readable names of the physical placements on the garment
-to which this field will be applied. In the above example, the value provided for
-the `player-name` field would be placed in both the "Center Chest" and "Upper Back"
-placements. This data may be useful for the generation of forms for collecting these
-values from your members.
+`placements` are the human-readable names of the physical placements on the garment to which this field will be applied. 
+In the above example, the value provided for the `player-name` field would be placed in both the "Center Chest" and 
+"Upper Back" placements. This data may be useful for the generation of forms for collecting these values from your 
+members.
 
 ## Create Member Designs [/v2/designs/base_design_id/roster/]
 
-Once the "template" roster design has been created, the `/roster/` endpoint can be used
-to populate the roster fields with the real data for your members.
+Once the "template" roster design has been created, the `/roster/` endpoint can be used to populate the roster fields 
+with the real data for your members.
 
-To create member designs, the `/roster/` endpoint accepts POST requests with payloads
-containing the roster design ID, as well as the values of each field to be populated.
-Upon receipt of a valid payload, a new design is created, and its ID is returned. This
-ID can then be used to place orders as required.
+To create member designs, the `/roster/` endpoint accepts POST requests with payloads containing the roster design ID, 
+as well as the values of each field to be populated. Upon receipt of a valid payload, a new design is created, and its 
+ID is returned. This ID can then be used to place orders as required.
 
-Successfully created member design IDs can also be queried via the
-[Retrieve Design](https://engineering.unmade.com/api-docs/#/group-design-api/resource-v2-designs-design_id-10bff8d2)
-endpoint as normal. The `placements` data for member designs will include the
-`origin_roster_field_key` for any placements which originated from roster fields.
+Successfully created member design IDs can also be queried via the [Retrieve Design](https://engineering.unmade.com/api-docs/#/group-design-api/resource-v2-designs-design_id-10bff8d2)
+endpoint as normal. The `placements` data for member designs will include the `origin_roster_field_key` for any 
+placements which originated from roster fields.
 
 Many member designs can be created from a single roster design.
 
-To create a member design, the `/roster/` endpoint must recieve valid values for **all**
-roster fields specified for a given roster design.
-You can send empty values (e.g. `""` or `null`), for example to generate a design without a name or number.
+To create a member design, the `/roster/` endpoint must recieve valid values for **all** roster fields specified for a 
+given roster design. You can send empty values (e.g. `""` or `null`), for example to generate a design without a name or
+number.
 
-The provided values for each roster field will be validated to ensure they contain only
-allowed characters and that, once rendered in the chosen font, they are not too wide for
-their respective placement. If there are validation errors we return a 400 response
-detailing the codes for the validation errors for each field. Possible validation error
+The provided values for each roster field will be validated to ensure they contain only allowed characters and that, 
+once rendered in the chosen font, they are not too wide for their respective placement. If there are validation errors 
+we return a 400 response detailing the codes for the validation errors for each field. Possible validation error
 codes are `illegal_character`, `text_too_wide`, `text_sanitised`, `text_truncated`, `text_too_long`.
 
-Additionally, for each error type a `details` object is provided. This contains the
-filtered / truncated text that *would* be permitted in the placement.
+Additionally, for each error type a `details` object is provided. This contains the filtered / truncated text that 
+*would* be permitted in the placement.
 
 ## Create a member design [POST]
 #### Roster field rules
 
-To create a member design, a single `roster_member` object containing the required
-values for all roster fields in the template roster design is provided:
+To create a member design, a single `roster_member` object containing the required values for all roster fields in the 
+template roster design is provided:
 
 
 + Request Create player design (application/json)
