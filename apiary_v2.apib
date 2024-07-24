@@ -59,26 +59,6 @@ These messages are more likely to be subject to change, whereas response status 
 Where possible, we also include a `detail` field. This field contains specific details of the error that was encountered.
 This data is designed to aid with debugging and facillitate integration with Unmade APIs.
 
-In addition to the above fields, and in a deviation from a RESTful approach, we also return the body of the original request.
-We take this verbose approach as we feel it offers maximum flexibility for developers working in various systems and technologies.
-
-The following is an example error response:
-
-**Response 400** (application/json)
-```
-{
-  "code": "bad_request",
-  "message": "Request payload is not valid.",
-  "detail": {
-    "field_X": [
-      "This field is required."
-    ]
-  },
-  "original_request": {
-    // Body of original request
-  }
-}
-
 ```
 
 
@@ -280,8 +260,7 @@ Depending on your specific editor UI design and the rest of the content on the p
 
             {
                 "code": "unsupported_media_type",
-                "message": "Unsupported media type in request.",
-                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+                "message": "Unsupported media type in request."
             }
 
 + Response 429 (application/json)
@@ -633,8 +612,7 @@ This lets you:
 
             {
                 "code": "unsupported_media_type",
-                "message": "Unsupported media type in request.",
-                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+                "message": "Unsupported media type in request."
             }
 
 # Group Transfer Preview API
@@ -697,8 +675,7 @@ future use.
 
             {
                 "code": "authentication_failed",
-                "message": "Incorrect authentication credentials.",
-                "original_request": "<the original request that was sent, which resulted in this error>"
+                "message": "Incorrect authentication credentials."
             }
 
 + Response 404 (application/json)
@@ -853,9 +830,6 @@ values for all roster fields in the template roster design is provided:
                             "details": {"amended_text": "text with no ilegal chars"}
                         }
                     ]
-                },
-                "original_request": {
-                    // Body of original request
                 }
             }
 
@@ -865,8 +839,7 @@ values for all roster fields in the template roster design is provided:
 
             {
                 "code": "authentication_failed",
-                "message": "Incorrect authentication credentials.",
-                "original_request": "<the original request that was sent, which resulted in this error>"
+                "message": "Incorrect authentication credentials."
             }
 
 + Response 404 (application/json)
@@ -893,8 +866,7 @@ values for all roster fields in the template roster design is provided:
 
             {
                 "code": "not_acceptable",
-                "message": "Could not satisfy the request Accept header.",
-                "original_request": "<the original request that was sent, which resulted in this error>"
+                "message": "Could not satisfy the request Accept header."
             }
 
 + Response 415 (application/json)
@@ -903,8 +875,7 @@ values for all roster fields in the template roster design is provided:
 
             {
                 "code": "unsupported_media_type",
-                "message": "Unsupported media type in request.",
-                "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+                "message": "Unsupported media type in request."
             }
 
 
@@ -966,8 +937,7 @@ generating manufacturing files.
     
           {
              "code": "bad_request",
-             "message": "Request payload is not valid.",
-             "original_request": "<the original request that was sent, which resulted in this error>"
+             "message": "Request payload is not valid."
           }
 
 + Response 401 (application/json)
@@ -976,8 +946,7 @@ generating manufacturing files.
 
           {
               "code": "authentication_failed",
-              "message": "Incorrect authentication credentials.",
-              "original_request": "<the original request that was sent, which resulted in this error>"
+              "message": "Incorrect authentication credentials."
           }
 
 + Response 403 (application/json)
@@ -986,8 +955,7 @@ generating manufacturing files.
 
           {
               "code": "permission_denied",
-              "message": "You do not have permission to perform this action.",
-              "original_request": "<the original request that was sent, which resulted in this error>"
+              "message": "You do not have permission to perform this action."
           }
 
 + Response 405 (application/json)
@@ -996,8 +964,7 @@ generating manufacturing files.
 
           {
               "code": "method_not_allowed",
-              "message": "Method used is not allowed",
-              "original_request": "<the original request that was sent, which resulted in this error>"
+              "message": "Method used is not allowed"
           }
 
 + Response 406 (application/json)
@@ -1006,8 +973,7 @@ generating manufacturing files.
 
           {
               "code": "not_acceptable",
-              "message": "Could not satisfy the request Accept header.",
-              "original_request": "<the original request that was sent, which resulted in this error>"
+              "message": "Could not satisfy the request Accept header."
           }
 
 + Response 415 (application/json)
@@ -1016,8 +982,7 @@ generating manufacturing files.
 
           {
               "code": "unsupported_media_type",
-              "message": "Unsupported media type in request.",
-              "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+              "message": "Unsupported media type in request."
           }
 
 
