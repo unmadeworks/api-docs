@@ -451,7 +451,7 @@ Please note that to direct the user to help content about logo uploading, we als
 
 The Unmade Editor handles any the upload of logos for the users, however if configured those can be handled externally. And then the files can be received through postmessage.
 
-There are 2 types of messages that can be send ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
+There are 2 types of messages that can be sent ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
 
 ## Group Design API
 ### Retrieve designs [/v2/designs/{design_id}/]
@@ -906,4 +906,364 @@ values for all roster fields in the template roster design is provided:
                 "message": "Unsupported media type in request.",
                 "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
             }
+
+
+# Group Ecommerce Orders API
+
+The Ecommerce Orders API is accessed via your `https://partner-subdomain.embed.unmade.com/` URL. All requests require 
+your authorization token which is passed as an HTTP request header.
+
+## Order States
+
+As an order progresses through its lifecycle it will adopt one of a number of order states. These states are as:
+follows:
+
+    + `new`: This order has been received by Unmade, but is not in production yet
+    + `submitting`: This order is being sent to the factory for production
+    + `submitted`: This order has been sent to the factory for production
+    + `in_production`: The manufacturing of the order has started at the factory
+    + `ready_to_ship`: This order is waiting to be picked up at the factory
+    + `shipped`: The factory has marked this order as shipped
+    + `cancelled`: This order has been cancelled
+    + `hold`: This order is on hold
+    + `failed`: This order has failed. (Error state, please contact Unmade)
+
+## Create Orders [/v2/orders/]
+## Create an Order [POST]
+
+Once an order has been placed on the ecommerce platform, the Unmade system should be notified to begin the process of 
+generating manufacturing files.
+
++ Request Create Order
+    + Headers
+
+          Authorization: Token ABCDEF
+
+    + Body
+
+          {}
+
++ Request With Partner Data
+    + Headers
+
+          Authorization: Token ABCDEF
+
+    + Body
+
+          {}
+
++ Response 201 (application/json)
+
+    + Body
+
+          {
+            "id": "c9b86945-45a6-4a43-beaf-361a7f0d8a77"
+          }
+
++ Response 400 (application/json)
+    
+    + Body
+    
+          {
+             "code": "bad_request",
+             "message": "Request payload is not valid.",
+             "original_request": "<the original request that was sent, which resulted in this error>"
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+              "original_request": "<the original request that was sent, which resulted in this error>"
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+              "original_request": "<the original request that was sent, which resulted in this error>"
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+              "original_request": "<the original request that was sent, which resulted in this error>"
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+              "original_request": "<the original request that was sent, which resulted in this error>"
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+              "original_request": "Not able to parse the request: `Unsupported media type \"type sent\" in request.`"
+          }
+
+
+## Retrieve Order [/v2/orders/{order_id}/]
+## Retrieve an existing order [GET]
+
+After an order has been created, this endpoint can be used to retrieve order data for example to check the order state.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Retrieve Order
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 400 (application/json)
+    
+    + Body
+    
+          {
+             "code": "bad_request",
+             "message": "Request payload is not valid.",
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Retrieve Shipping Address [/v2/orders/{order_id}/shipping_address]
+## Retrieve shipping address for existing order[GET]
+
+When an order has progressed to the `ready_to_ship` state, this endpoint can be used to retrieve the shipping address 
+for the order. For orders not in this state, this endpoint will respond with an HTTP 404.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Retrieve Shipping Address
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+          {}
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## List Order Items [/v2/orders/{order_id}/items{?page}]
+## List Order Items [GET]
+
+This endpoint can be used to retrieve a paginated list of the individual items in a given order. 
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + page (optional, number) - Page number
+
++ Request List Order Items
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+          }
+
+## Retrieve Order Item [/v2/orders/{order_id}/items/{item_id}]
+## Retrieve Order Item [GET]
+
+This endpoint can be used to retrieve data for a specific item in a given order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + item_id (string) - ID of the item
+
++ Request Retrieve Order Item
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+          }
+
+## Cancel Order [/v2/orders/set_cancelled]
+## Cancel Order [POST]
+
+This endpoint can be used to cancel an order after creation. Depending on production and billing arrangements between
+you, your vendor and Unmade, cancellation may not be possible if the order has progressed past a certain state. Contact
+Unmade for details of when cancellation is possible for your specific case.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Cancel Order
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+          }
+
+## List Orders [/v2/orders/{?state,page,created_before,created_after}]
+## List Orders [GET]
+
+This endpoint can be used to retrieve the complete list of all orders that have been created to date.
+
+This endpoint is paginated and shows a maximum of 10 order objects per response. Use the `page` query parameter to 
+select the desired page.
+
+You can optionally provide `created_before` and `created_after` query parameters in the format `YYYY-MM-DD` to filter 
+the listed orders by their creation date.
+
++ Parameters
+    + state (optional, string) - Show orders with this state (see Order States section above for allowed values)
+    + page (optional, number) - Page number
+    + created_before (optional, string) - Show orders created before this date (`YYYY-MM-DD`)
+    + created_after (optional, string) - Show orders created after this date (`YYYY-MM-DD`)
+
++ Request List Orders
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+          }
+
+
 
