@@ -449,11 +449,14 @@ This lets you:
                 "id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
                 "source_design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
                 "product": "<Unmade Editor URL>",
-                "preview": "<URL to the main rendering of the design>",
                 "description": "<Description of the product and design>",
-                "secondary_previews": [
+                "previews": [
                     {
-                        "name": "right",
+                        "name": "front",
+                        "image": "https://PREVIEW_URL"
+                    },
+                    {
+                        "name": "front",
                         "image": "https://PREVIEW_URL"
                     }
                 ],
@@ -874,14 +877,29 @@ follows:
     + `ready_to_ship`: This order is waiting to be picked up at the factory
     + `shipped`: The factory has marked this order as shipped
     + `cancelled`: This order has been cancelled
-    + `hold`: This order is on hold
+    + `hold`: This order is on hold and has not yet been submitted for manufacturing
     + `failed`: This order has failed. (Error state, please contact Unmade)
 
 ## Create Orders [/v2/orders/]
 ## Create an Order [POST]
 
 Once an order has been placed on the ecommerce platform, the Unmade system should be notified to begin the process of 
-generating manufacturing files.
+generating manufacturing files. To do this, pass a unique order reference, a shipping address and one or more order
+items to this endpoint via an HTTP POST request. Each item must reference an Unmade Design ID. The same Design ID can be
+used for multiple order items, if provided with different `size` values inside the `options` object. To order multiple
+identical garments in the same size, use the `quantity` value.
+
+Optionally, arbitrary key-value pairs can be passed as a `partner_data` object at both the order and order item level. 
+This may be used by your system to provide your internal ID or similar reference for this order which may be relevant
+for integration with your vendor.
+
+Two order-item level `partner_data` keys will be automatically added to all items:
+
+  - `UNMADE_SOURCE_DESIGN_ID`: The Design ID originally saved by the user in the editor
+  - `UNMADE_ORDER_ITEM_DESIGN_ID`: The Design ID that was originally passed to create this item
+
+Note these two Design IDs may be different, for example when the Roster API has been used to generate member designs
+outside of the editor.
 
 + Request Create Order
     + Headers
@@ -890,7 +908,31 @@ generating manufacturing files.
 
     + Body
 
-          {}
+          {
+            "reference": "YOUR ORDER REFERENCE",
+            "order_items": [
+              {
+                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                "reference": "YOUR ORDER-ITEM 1 REFERENCE",
+                "quantity": 2,
+                "unit_price": 99.99,
+                "currency": "USD",
+                "options": {
+                  "size": "M"
+                }
+              }
+            ],
+            "shipping_address": {
+              "name": "John Smith",
+              "company_name": "unmade",
+              "address_1": "152 Strand",
+              "address_2": "Somerset House",
+              "city": "London",
+              "postal_code": "WC2R 1LA",
+              "country": "GB",
+              "phone": "0123456789"
+            }
+          }
 
 + Request With Partner Data
     + Headers
@@ -899,7 +941,52 @@ generating manufacturing files.
 
     + Body
 
-          {}
+          {
+            "reference": "YOUR ORDER REFERENCE",
+            "partner_data": {
+              "example_po_number": "example_number",
+              "example_po_type": "example_value",
+              "example_shipping_method": "example_shipping_service"
+            },
+            "order_items": [
+              {
+                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                "reference": "YOUR ORDER-ITEM 1 REFERENCE",
+                "quantity": 2,
+                "unit_price": 99.99,
+                "currency": "USD",
+                "options": {
+                  "size": "M"
+                },
+                "partner_data": {
+                  "barcode": "98323928238372"
+                }
+              },
+              {
+                "design": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
+                "reference": "YOUR ORDER-ITEM 2 REFERENCE",
+                "quantity": 7,
+                "unit_price": 120.00,
+                "currency": "USD",
+                "options": {
+                  "size": "L"
+                },
+                "partner_data": {
+                  "barcode": "121345353"
+                }
+              }
+            ],
+            "shipping_address": {
+              "name": "John Smith",
+              "company_name": "unmade",
+              "address_1": "152 Strand",
+              "address_2": "Somerset House",
+              "city": "London",
+              "postal_code": "WC2R 1LA",
+              "country": "GB",
+              "phone": "0123456789"
+            }
+          } 
 
 + Response 201 (application/json)
 
@@ -981,15 +1068,28 @@ After an order has been created, this endpoint can be used to retrieve order dat
 
     + Body
 
-          {}
-
-+ Response 400 (application/json)
-    
-    + Body
-    
           {
-             "code": "bad_request",
-             "message": "Request payload is not valid.",
+            "id": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
+            "reference": "UMD12345",
+            "created": "2024-07-28T18:05:36.806548Z",
+            "submitted_at": "2024-07-28T18:05:53.714553Z",
+            "num_items": 12,
+            "order_items": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/items/",
+            "shipping_address": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/shipping_address/",
+            "manufacturing_order": "https://factory.unmade.com/v2/orders/fd792895-1e32-41b1-90af-683f0cf9f753/",
+            "partner_data": {
+              "my_partner_data_key": "foo"
+            },
+            "supplier": {
+              "name": "Factory A",
+              "slug": "factory-a"
+            },
+            "state": "submitted",
+            "tracking_number": "",
+            "is_order_portal": false,
+            "is_test_order": false,
+            "ready_to_ship_at": null,
+            "shipped_at": null
           }
 
 + Response 401 (application/json)
@@ -1041,7 +1141,8 @@ After an order has been created, this endpoint can be used to retrieve order dat
 ## Retrieve shipping address for existing order[GET]
 
 When an order has progressed to the `ready_to_ship` state, this endpoint can be used to retrieve the shipping address 
-for the order. For orders not in this state, this endpoint will respond with an HTTP 404.
+for the order. For orders not in this state, this endpoint will respond with an HTTP 400 with an appropriate error
+message.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1055,7 +1156,27 @@ for the order. For orders not in this state, this endpoint will respond with an 
 
     + Body
 
-          {}
+          {
+              "name": "John Smith",
+              "company_name": "unmade",
+              "address_1": "152 Strand",
+              "address_2": "Somerset House",
+              "city": "London",
+              "country_area": "London",
+              "postal_code": "WC2R 1LA",
+              "country": "UK",
+              "phone": "0123456789",
+              "email": "js@example.com"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Shipping address not available when order is not ready_to_ship.",
+          }
 
 + Response 401 (application/json)
 
@@ -1131,7 +1252,37 @@ This endpoint can be used to retrieve a paginated list of the individual items i
     + Body
 
           {
+            "count": 12,
+            "next": "https://partner.embed.unmade.com/v2/orders/123456/items?page=2",
+            "previous": null,
+            "results": [
+              {
+                "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "quantity": 1,
+                "partner_data": {
+                  "UNMADE_SOURCE_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                  "UNMADE_ORDER_ITEM_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753"
+                },
+                "options": {
+                  "size": "L"
+                },
+                "unit_price": {
+                  "value": 120.00,
+                  "currency": "USD"
+                },
+                "reference": "D60033C14A",
+                "supplier": {
+                  "name": "Factory A",
+                  "slug": "factory-a"
+                },
+                "manufacturing_job": "https://factory.unmade.com/v2/orders/123456/jobs/876543/"
+                "arrive_by_date": "2024-08-11",
+                "ex_factory_date": "2024-07-28"
+              },
+              // ... remaining items 
+            ]
           }
+          
 
 ## Retrieve Order Item [/v2/orders/{order_id}/items/{item_id}]
 ## Retrieve Order Item [GET]
@@ -1153,9 +1304,30 @@ This endpoint can be used to retrieve data for a specific item in a given order.
     + Body
 
           {
+            "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "quantity": 1,
+            "partner_data": {
+              "UNMADE_SOURCE_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753",
+              "UNMADE_ORDER_ITEM_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753"
+            },
+            "options": {
+              "size": "L"
+            },
+            "unit_price": {
+              "value": 120.00,
+              "currency": "USD"
+            },
+            "reference": "D60033C14A",
+            "supplier": {
+              "name": "Factory A",
+              "slug": "factory-a"
+            },
+            "manufacturing_job": "https://factory.unmade.com/v2/orders/123456/jobs/876543/"
+            "arrive_by_date": "2024-08-11",
+            "ex_factory_date": "2024-07-28"
           }
 
-## Cancel Order [/v2/orders/set_cancelled]
+## Cancel Order [/v2/orders/{order_id}/set_cancelled]
 ## Cancel Order [POST]
 
 This endpoint can be used to cancel an order after creation. Depending on production and billing arrangements between
@@ -1176,6 +1348,8 @@ Unmade for details of when cancellation is possible for your specific case.
     + Body
 
           {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "cancelled"
           }
 
 ## List Orders [/v2/orders/{?state,page,created_before,created_after}]
@@ -1206,8 +1380,36 @@ the listed orders by their creation date.
     + Body
 
           {
+            "count": 99,
+            "next": "https://partner.embed.unmade.com/v2/orders/?page=2",
+            "previous": null,
+            "results": [
+              {
+                "id": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
+                "reference": "UMD12345",
+                "created": "2024-07-28T18:05:36.806548Z",
+                "submitted_at": "2024-07-28T18:05:53.714553Z",
+                "num_items": 12,
+                "order_items": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/items/",
+                "shipping_address": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/shipping_address/",
+                "manufacturing_order": "https://factory.unmade.com/v2/orders/fd792895-1e32-41b1-90af-683f0cf9f753/",
+                "partner_data": {
+                  "my_partner_data_key": "foo"
+                },
+                "supplier": {
+                  "name": "Factory A",
+                  "slug": "factory-a"
+                },
+                "state": "submitted",
+                "tracking_number": "",
+                "is_order_portal": false,
+                "is_test_order": false,
+                "ready_to_ship_at": null,
+                "shipped_at": null
+              },
+              // ...remaining orders here
+            ]
           }
-
 
 # Group Factory API
 
@@ -1227,7 +1429,7 @@ During production, orders progress through the following states:
 
  - `new`: The order has not yet begun production
  - `in_production`: The order has been accepted and is now in production
- - `ready-to-ship`: The order has been produced and is awaiting shipping
+ - `ready_to_ship`: The order has been produced and is awaiting shipping
  - `shipped`: The order has left the factory
  - `cancelled`: The order has been cancelled
 
@@ -1258,7 +1460,40 @@ the listed orders by their creation date.
 
     + Body
 
-          {}
+          {
+            "count": 12,
+            "next": "https://factory.unmade.com/v2/orders/?page=2",
+            "previous": null,
+            "results": [
+              {
+                "id": "a38c331d-cc6d-4e03-b514-91e27ae8b02e",
+                "created": "2017-07-31T16:52:50.905026Z",
+                "reference": "mc_testorder6",
+                "num_jobs": 4,
+                "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
+                "shipping_address": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/shipping_address/",
+                "ecommerce_order": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4",
+                "supplier": {
+                  "name": "Factory A",
+                  "slug": "factory-a"
+                },
+                "partner_data": {
+                  "my_partner_data_key": "foo"
+                },
+                "attachments": {
+                  "packing_slip": "https://cdn.unmade.com/order/900243544001/attachments/packing_slip.pdf",
+                  "commercial_invoice": "https://cdn.unmade.com/order/900243544001/attachments/import_invoice.pdf"
+                },
+                "summary": "https://cdn.unmade.com/order/900243544001/attachments/summary.pdf",
+                "state": "in_production",
+                "tracking_number": "",
+                "country": "US",
+                "shipped_at": null,
+                "cancelled_at": null
+              },
+              // ... remaining orders
+            ]
+          }
 
 ## Retrieve Order [/factory.unmade.com/v2/orders/{order_id}/]
 ## Retrieve an existing order [GET]
@@ -1278,7 +1513,32 @@ query production states.
 
     + Body
 
-          {}
+          {
+            "id": "a38c331d-cc6d-4e03-b514-91e27ae8b02e",
+            "created": "2017-07-31T16:52:50.905026Z",
+            "reference": "mc_testorder6",
+            "num_jobs": 4,
+            "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
+            "shipping_address": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/shipping_address/",
+            "ecommerce_order": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4",
+            "supplier": {
+              "name": "Factory A",
+              "slug": "factory-a"
+            },
+            "partner_data": {
+              "my_partner_data_key": "foo"
+            },
+            "attachments": {
+              "packing_slip": "https://cdn.unmade.com/order/900243544001/attachments/packing_slip.pdf",
+              "commercial_invoice": "https://cdn.unmade.com/order/900243544001/attachments/import_invoice.pdf"
+            },
+            "summary": "https://cdn.unmade.com/order/900243544001/attachments/summary.pdf",
+            "state": "in_production",
+            "tracking_number": "",
+            "country": "US",
+            "shipped_at": null,
+            "cancelled_at": null
+          }          
 
 + Response 400 (application/json)
     
@@ -1338,7 +1598,8 @@ query production states.
 ## Retrieve Shipping Address[GET]
 
 When an order has progressed to the `ready_to_ship` state, this endpoint can be used to retrieve the shipping address 
-for the order. For orders not in this state, this endpoint will respond with an HTTP 404.
+for the order. For orders not in this state, this endpoint will respond with an HTTP 400 with an appropriate error
+message.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1352,7 +1613,27 @@ for the order. For orders not in this state, this endpoint will respond with an 
 
     + Body
 
-          {}
+          {
+              "name": "John Smith",
+              "company_name": "unmade",
+              "address_1": "152 Strand",
+              "address_2": "Somerset House",
+              "city": "London",
+              "country_area": "London",
+              "postal_code": "WC2R 1LA",
+              "country": "UK",
+              "phone": "0123456789",
+              "email": "js@example.com"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Shipping address not available when order is not ready_to_ship.",
+          }
 
 + Response 401 (application/json)
 
@@ -1428,7 +1709,10 @@ jobs in this order.
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "in_production"
+          }
 
 + Response 401 (application/json)
 
@@ -1504,7 +1788,10 @@ jobs in this order.
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "ready_to_ship"
+          }
 
 + Response 401 (application/json)
 
@@ -1580,7 +1867,10 @@ jobs in this order.
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "shipped"
+          }
 
 + Response 401 (application/json)
 
@@ -1643,10 +1933,19 @@ If relevant for the shipping configuration for your integration, this endpoint c
 that has been generated in a third-party shipping system. If provided, this tracking number propagates up to this 
 order's associated Ecommerce order to allow the Ecommerce system to pass it on to the end-consumer. 
 
+This endpoint can only be used if the given order is `ready_to_ship`. 
+
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
 
 + Request Set Order Tracking Number
+
+    + Body
+
+          {
+              "tracking_number": "123456789"
+          }
+
     + Headers
 
             Authorization: Token ABCDEF
@@ -1655,7 +1954,19 @@ order's associated Ecommerce order to allow the Ecommerce system to pass it on t
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "tracking_number": "123456789"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Tracking number cannot be set when order is not ready_to_ship.",
+          }
 
 + Response 401 (application/json)
 
@@ -1714,11 +2025,12 @@ order's associated Ecommerce order to allow the Ecommerce system to pass it on t
 ## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/set_ex_factory_date]
 ## Set Order Ex-factory Date[POST]
 
-On creation, Unmade assigns all Ecommerce orders with a default Ex-factory date based on a lead time estimate which has
-been pre-agreed with you and your vendor. This serves as a target date by which the order is expected to have left the
-factory location. In the case of unforeseen delays (or unexpectedly quicker production!) this endpoint can be used to 
-pass an updated Ex-factory date to Unmade. If provided, this updated date propagates up to this order's associated 
-Ecommerce order to allow the Ecommerce system to notify to the end-consumer. 
+On creation, Unmade assigns all production jobs an Ex-factory date based on a lead time estimate which has been 
+pre-agreed with you and your vendor. This serves as a target date by which the piece is expected to have left the 
+factory location. Jobs within an order can have different Ex-factory dates depending on per-product lead times. In the 
+case of unforeseen delays (or unexpectedly quicker production!) this endpoint can be used to pass an updated Ex-factory 
+date to Unmade. If provided, all jobs in the given order are assigned this updated Ex-factory date. This update also 
+propagates up to this order's associated Ecommerce order to allow the Ecommerce system to notify to the end-consumer. 
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1728,11 +2040,21 @@ Ecommerce order to allow the Ecommerce system to notify to the end-consumer.
 
             Authorization: Token ABCDEF
 
+    + Body
+
+          {
+              "ex_factory_date": "YYYY-MM-DD"
+          }
+
 + Response 201 (application/json)
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "ex_factory_date": "2024-08-19",
+              "arrive_by_date": "2024-08-29"
+          }
 
 + Response 401 (application/json)
 
@@ -1791,13 +2113,14 @@ Ecommerce order to allow the Ecommerce system to notify to the end-consumer.
 ## List Jobs [/factory.unmade.com/v2/orders/{order_id}/jobs{?page}]
 ## List Jobs[GET]
 
-This endpoint can be used to retrieve a paginated list of the individual jobs associated with a given production order.
+This endpoint can be used to retrieve a paginated list of the individual jobs associated with a given manufacturing 
+order.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
     + page (optional, number) - Page number
 
-+ Request List Order Items
++ Request List Jobs
 
     + Headers
 
@@ -1807,18 +2130,92 @@ This endpoint can be used to retrieve a paginated list of the individual jobs as
 
     + Body
 
-          {}
+          {
+            "count": 99,
+            "next": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs?page=2",
+            "previous": null,
+            "results": [
+              {
+                "id": "3db51d03-eae6-4bc0-9f04-e7c25121bd48",
+                "reference": "D20033C664",
+                "order_reference": "UM762552",
+                "product_name": "Technical Tee",
+                "product_code": "TT5251",
+                "manufacturing_template_code": "WT11452G",
+                "size": "L",
+                "quantity": 1,
+                "arrive_by_date": "2024-08-19",
+                "ex_factory_date": "2024-08-05",
+                "manufacturing_order": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/",
+                "manufacturing_files_zip": "https://factory.unmade.com/v2/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/manufacturing_files_zip/",
+                "ticket": "https://factory.unmade.com/v22/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/ticket_pdf/",
+                "design_source_id": "6489daff-b713-452c-b103-c724d307cb35",
+                "supplier": {
+                  "name": "Factory A",
+                  "slug": "factory-a"
+                },
+                "artwork_dimensions": {
+                  "UX3BI5PP5FP3PNZ7NWKHEYNV_chest-center": {
+                    "artwork_width": 279.4,
+                    "artwork_height": 117.39,
+                    "units": "mm"
+                  }
+                },
+                "artwork_ids": {
+                  "chest-center": "UX3BI5PP5FP3PNZ7NWKHEYNV"
+                },
+                "components": [
+                  {
+                    "name": "colourway-BKH",
+                    "display_name": "Black Heather",
+                    "type": "NB_colourway",
+                    "reference": "BKH"
+                  }
+                ],
+                "partner_data": {
+                  "internal_ref": "15572690633029",
+                  "UNMADE_SOURCE_DESIGN_ID": "5352d0db-bc5c-4f1b-8912-8f14c91d1733",
+                  "UNMADE_ORDER_ITEM_DESIGN_ID": "e43cc9e8-284a-4094-b8ff-52a9650dba67"
+                },
+                "previews": [
+                  {
+                    "preview": "https://cdn.unmade.com/E3DC59C3_AB4030F7.png",
+                    "name": "Front"
+                  },
+                  {
+                    "preview": "https://cdn.unmade.com/E3DC59C3_MQOCYBE6.png",
+                    "name": "Left"
+                  },
+                  {
+                    "preview": "https://cdn.unmade.com/E3DC59C3_8NVBFEUD.png",
+                    "name": "Back"
+                  },
+                  {
+                    "preview": "https://cdn.unmade.com/E3DC59C3_NFVDTF54.png",
+                    "name": "Right"
+                  }
+                ]
+              },
+              // ...remaining jobs here
+            ]
+          } 
 
 ## Retrieve Job [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}]
 ## Retrieve Job[GET]
 
-This endpoint can be used to retrieve data for a specific job in a given order.
+This endpoint can be used to retrieve data for a specific job in a given order. In addition to basic metadata, this 
+endpoint provides:
+  - Structured data describing the various customisation options chosen by the user for this job (eg. selected 
+   **components**, **text** and **colours**)
+  - URLs to one or more `previews` for this job
+  - The URL for a zip file containing all manufacturing files for this job
+  - The URL to this job's ticket PDF
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
     + job_id (string) - ID of the job in the form of a uuid
 
-+ Request Retrieve Order Item
++ Request Retrieve Job
 
     + Headers
 
@@ -1828,7 +2225,67 @@ This endpoint can be used to retrieve data for a specific job in a given order.
 
     + Body
 
-          {}
+          {
+            "id": "3db51d03-eae6-4bc0-9f04-e7c25121bd48",
+            "reference": "D20033C664",
+            "order_reference": "UM762552",
+            "product_name": "Technical Tee",
+            "product_code": "TT5251",
+            "manufacturing_template_code": "WT11452G",
+            "size": "L",
+            "quantity": 1,
+            "arrive_by_date": "2024-08-19",
+            "ex_factory_date": "2024-08-05",
+            "manufacturing_order": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/",
+            "manufacturing_files_zip": "https://factory.unmade.com/v2/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/manufacturing_files_zip/",
+            "ticket": "https://factory.unmade.com/v22/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/ticket_pdf/",
+            "design_source_id": "6489daff-b713-452c-b103-c724d307cb35",
+            "supplier": {
+              "name": "Factory A",
+              "slug": "factory-a"
+            },
+            "artwork_dimensions": {
+              "UX3BI5PP5FP3PNZ7NWKHEYNV_chest-center": {
+                "artwork_width": 279.4,
+                "artwork_height": 117.39,
+                "units": "mm"
+              }
+            },
+            "artwork_ids": {
+              "chest-center": "UX3BI5PP5FP3PNZ7NWKHEYNV"
+            },
+            "components": [
+              {
+                "name": "colourway-BKH",
+                "display_name": "Black Heather",
+                "type": "NB_colourway",
+                "reference": "BKH"
+              }
+            ],
+            "partner_data": {
+              "internal_ref": "15572690633029",
+              "UNMADE_SOURCE_DESIGN_ID": "5352d0db-bc5c-4f1b-8912-8f14c91d1733",
+              "UNMADE_ORDER_ITEM_DESIGN_ID": "e43cc9e8-284a-4094-b8ff-52a9650dba67"
+            },
+            "previews": [
+              {
+                "preview": "https://cdn.unmade.com/E3DC59C3_AB4030F7.png",
+                "name": "Front"
+              },
+              {
+                "preview": "https://cdn.unmade.com/E3DC59C3_MQOCYBE6.png",
+                "name": "Left"
+              },
+              {
+                "preview": "https://cdn.unmade.com/E3DC59C3_8NVBFEUD.png",
+                "name": "Back"
+              },
+              {
+                "preview": "https://cdn.unmade.com/E3DC59C3_NFVDTF54.png",
+                "name": "Right"
+              }
+            ]
+          }
 
 ## Set Job In Production [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_in_production]
 ## Set In Production[POST]
@@ -1851,15 +2308,17 @@ state of this job's order to `in_production`, but does not affect the state of t
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "in_production"
+          }
 
 ## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship]
 ## Set Ready to Ship[POST]
 
 If a given order consists of a large number of jobs, production for these jobs may be completed at different times. In 
 such a case, it is possible to inform Unmade that individual jobs have completed production and are ready to ship using 
-this endpoint. This updates the state of this job's order to `ready_to_ship`, but does not affect the state of the other
-jobs in this order.
+this endpoint. When all jobs in a given order are `ready_to_ship`, the order itself is marked as `ready_to_ship`. 
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1875,4 +2334,92 @@ jobs in this order.
 
     + Body
 
-          {}
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "ready_to_ship"
+          }
+
+## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ex_factory_date]
+## Set Job Ex-factory Date[POST]
+
+Just as an updated Ex-factory date can be provided for an entire order using the [Set Order Ex-Factory Date](#/group-factory-api/resource-factory.unmade.com-v2-orders-order_id-set_ex_factory_date-431ca688) 
+endpoint, this endpoint can be used to provide updated dates for individual jobs within an order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + job_id (string) - ID of the job in the form of a uuid
+
++ Request Set Order Ex-factory Date
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+          {
+              "ex_factory_date": "YYYY-MM-DD"
+          }
+
++ Response 201 (application/json)
+
+    + Body
+
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "ex_factory_date": "2024-08-19",
+              "arrive_by_date": "2024-08-29"
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 404 (application/json)
+
+    + Body
+
+          {
+              "code": "not_found",
+              "message": "Resource not found",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
