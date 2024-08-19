@@ -1380,6 +1380,15 @@ Unmade for details of when cancellation is possible for your specific case.
               "state": "cancelled"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as cancelled"
+          }
+
 ## List Orders [/v2/orders/{?state,page,created_before,created_after}]
 ## List Orders [GET]
 
@@ -1742,6 +1751,16 @@ jobs in this order.
               "state": "in_production"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as in_production"
+          }
+
+
 + Response 401 (application/json)
 
     + Body
@@ -1821,6 +1840,15 @@ jobs in this order.
               "state": "ready_to_ship"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as ready_to_ship"
+          }
+
 + Response 401 (application/json)
 
     + Body
@@ -1898,6 +1926,15 @@ jobs in this order.
           {
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
               "state": "shipped"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as shipped"
           }
 
 + Response 401 (application/json)
@@ -2339,6 +2376,16 @@ state of this job's order to `in_production`, but does not affect the state of t
               "state": "in_production"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Job cannot be set as in_production"
+          }
+
+
 ## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship]
 ## Set Ready to Ship[POST]
 
@@ -2364,6 +2411,16 @@ this endpoint. When all jobs in a given order are `ready_to_ship`, the order its
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
               "state": "ready_to_ship"
           }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Job cannot be set as ready_to_ship"
+          }
+
 
 ## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ex_factory_date]
 ## Set Job Ex-factory Date[POST]
