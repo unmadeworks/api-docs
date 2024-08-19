@@ -1069,6 +1069,9 @@ Unmade representative for more information about recommended integration testing
 
 After an order has been created, this endpoint can be used to retrieve order data for example to check the order state.
 
+Depending on the nature of your integration with Unmade, the contents of the `tracking_data` object may also update as 
+orders progress through the various production states.
+
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
 
@@ -1098,7 +1101,7 @@ After an order has been created, this endpoint can be used to retrieve order dat
               "slug": "factory-a"
             },
             "state": "submitted",
-            "tracking_number": "",
+            "tracking_data": {},
             "is_order_portal": false,
             "is_test_order": false,
             "ready_to_ship_at": null,
@@ -1414,7 +1417,7 @@ the listed orders by their creation date.
                   "slug": "factory-a"
                 },
                 "state": "submitted",
-                "tracking_number": "",
+                "tracking_data": {},
                 "is_order_portal": false,
                 "is_test_order": false,
                 "ready_to_ship_at": null,
@@ -1499,7 +1502,7 @@ the listed orders by their creation date.
                 },
                 "summary": "https://cdn.unmade.com/order/900243544001/attachments/summary.pdf",
                 "state": "in_production",
-                "tracking_number": "",
+                "tracking_data": {},
                 "country": "US",
                 "shipped_at": null,
                 "cancelled_at": null
@@ -1547,7 +1550,7 @@ query production states.
             },
             "summary": "https://cdn.unmade.com/order/900243544001/attachments/summary.pdf",
             "state": "in_production",
-            "tracking_number": "",
+            "tracking_data": {},
             "country": "US",
             "shipped_at": null,
             "cancelled_at": null
@@ -1969,7 +1972,9 @@ This endpoint can only be used if the given order is `ready_to_ship`.
 
           {
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
-              "tracking_number": "123456789"
+              "tracking_data": {
+                  "tracking_number": "123456789"
+              }
           }
 
 + Response 400 (application/json)
