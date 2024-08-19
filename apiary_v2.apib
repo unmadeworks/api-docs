@@ -887,7 +887,8 @@ Once an order has been placed on the ecommerce platform, the Unmade system shoul
 generating manufacturing files. To do this, pass a unique order reference, a shipping address and one or more order
 items to this endpoint via an HTTP POST request. Each item must reference an Unmade Design ID. The same Design ID can be
 used for multiple order items, if provided with different `size` values inside the `options` object. To order multiple
-identical garments in the same size, use the `quantity` value.
+identical garments in the same size, use the `quantity` value. Each item must also have a `unit_price` object with both 
+a `value` and `currency` specified.
 
 Optionally, arbitrary key-value pairs can be passed as a `partner_data` object at both the order and order item level. 
 This may be used by your system to provide your internal ID or similar reference for this order which may be relevant
@@ -915,7 +916,10 @@ outside of the editor.
                 "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                 "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                 "quantity": 2,
-                "unit_price": 99.99,
+                "unit_price": {
+                  "value": "99.99",
+                  "currency": "USD"
+                },
                 "currency": "USD",
                 "options": {
                   "size": "M"
@@ -953,8 +957,10 @@ outside of the editor.
                 "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                 "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                 "quantity": 2,
-                "unit_price": 99.99,
-                "currency": "USD",
+                "unit_price": {
+                  "value": "99.99",
+                  "currency": "USD"
+                },
                 "options": {
                   "size": "M"
                 },
@@ -966,8 +972,10 @@ outside of the editor.
                 "design": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
                 "reference": "YOUR ORDER-ITEM 2 REFERENCE",
                 "quantity": 7,
-                "unit_price": 120.00,
-                "currency": "USD",
+                "unit_price": {
+                  "value": "120.00",
+                  "currency": "USD"
+                },
                 "options": {
                   "size": "L"
                 },
