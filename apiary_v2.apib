@@ -883,12 +883,13 @@ follows:
 ## Create Orders [/v2/orders/]
 ## Create an Order [POST]
 
-Once an order has been placed on the ecommerce platform, the Unmade system should be notified to begin the process of 
-generating manufacturing files. To do this, pass a unique order reference, a shipping address and one or more order
-items to this endpoint via an HTTP POST request. Each item must reference an Unmade Design ID. The same Design ID can be
-used for multiple order items, if provided with different `size` values inside the `options` object. To order multiple
-identical garments in the same size, use the `quantity` value. Each item must also have a `unit_price` object with both 
-a `value` and `currency` specified.
+Once an order has been placed on the ecommerce platform, the Unmade system should be notified to begin the process of
+generating manufacturing files. To do this, pass a unique order reference, and one or more order items to this endpoint
+via an HTTP POST request. Each item must reference an Unmade Design ID. The same Design ID can be used for multiple
+order items, if provided with different `size` values inside the `options` object. To order multiple identical garments
+in the same size, use the `quantity` value. Each item must also have a `unit_price` object with both a `value` and
+`currency` specified. Depending on the nature of your integration with Unmade, a `shipping_address` may also be required
+for order creation.
 
 Optionally, arbitrary key-value pairs can be passed as a `partner_data` object at both the order and order item level. 
 This may be used by your system to provide your internal ID or similar reference for this order which may be relevant
