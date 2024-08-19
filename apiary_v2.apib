@@ -893,15 +893,8 @@ for order creation.
 
 Optionally, arbitrary key-value pairs can be passed as a `partner_data` object at both the order and order item level. 
 This may be used by your system to provide your internal ID or similar reference for this order which may be relevant
-for integration with your vendor.
-
-Two order-item level `partner_data` keys will be automatically added to all items:
-
-  - `UNMADE_SOURCE_DESIGN_ID`: The Design ID originally saved by the user in the editor
-  - `UNMADE_ORDER_ITEM_DESIGN_ID`: The Design ID that was originally passed to create this item
-
-Note these two Design IDs may be different, for example when the Roster API has been used to generate member designs
-outside of the editor.
+for integration with your vendor. These key-value pairs will also be present on the manufacturing order and jobs 
+associated with this ecommerce order.
 
 You may optionally provide a boolean value for the `is_test_order` field to indicate a given order is not a real
 production order. If this value is set to `true`, the order will be omitted from Unmade billing processes. Speak to your
@@ -1256,6 +1249,21 @@ in which the items were sent in the original order creation payload. The `id` of
 by Unmade when the order is created. You may choose to store this ID in your systems in order to reference each item
 directly in future.
 
+Each order item has three associated Design IDs which have different relationships depending on how the relevant 
+designs were created, as well as the type of order. In the simplest case these Design IDs may be identical, but will 
+usually be different, depending on a variety of factors.
+
+ - `order_item_design_id`: The Design ID which you originally sent in the Order creation payload to create this item
+ - `design_id`: The ID of the design which is being used as the source of all manufacturing data for this item. This 
+    will be different to the `order_item_design_id` if you specified a different size to that of the order item design:
+    in this case Unmade will generate a new design in the specified size
+ - `source_design_id`: The ID of the Design which was originally saved by the user in the editor. If the Roster API has 
+    been used to create the member design for this item, this ID will be the ID of the original roster **template** 
+    design.
+
+These Design IDs can be used in the Design API to view personalisation data or fetch previews relevant to this order 
+item. In most cases you'll want to use the `design_id` value for this purpose.
+
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
     + page (optional, number) - Page number
@@ -1277,12 +1285,11 @@ directly in future.
             "results": [
               {
                 "id": 12345,
-                "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "order_item_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "source_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
                 "quantity": 1,
-                "partner_data": {
-                  "UNMADE_SOURCE_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753",
-                  "UNMADE_ORDER_ITEM_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753"
-                },
+                "partner_data": {},
                 "options": {
                   "size": "L"
                 },
@@ -1307,7 +1314,8 @@ directly in future.
 ## Retrieve Order Item [/v2/orders/{order_id}/items/{item_id}]
 ## Retrieve Order Item [GET]
 
-This endpoint can be used to retrieve data for a specific item in a given order.
+This endpoint can be used to retrieve data for a specific item in a given order. See the list representation for a more
+detailed description of this data.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1325,12 +1333,11 @@ This endpoint can be used to retrieve data for a specific item in a given order.
 
           {
             "id": 12345,
-            "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "order_item_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "source_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
             "quantity": 1,
-            "partner_data": {
-              "UNMADE_SOURCE_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753",
-              "UNMADE_ORDER_ITEM_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753"
-            },
+            "partner_data": {},
             "options": {
               "size": "L"
             },
@@ -2196,9 +2203,7 @@ order.
                   }
                 ],
                 "partner_data": {
-                  "internal_ref": "15572690633029",
-                  "UNMADE_SOURCE_DESIGN_ID": "5352d0db-bc5c-4f1b-8912-8f14c91d1733",
-                  "UNMADE_ORDER_ITEM_DESIGN_ID": "e43cc9e8-284a-4094-b8ff-52a9650dba67"
+                  "internal_ref": "15572690633029"
                 },
                 "previews": [
                   {
@@ -2286,9 +2291,7 @@ endpoint provides:
               }
             ],
             "partner_data": {
-              "internal_ref": "15572690633029",
-              "UNMADE_SOURCE_DESIGN_ID": "5352d0db-bc5c-4f1b-8912-8f14c91d1733",
-              "UNMADE_ORDER_ITEM_DESIGN_ID": "e43cc9e8-284a-4094-b8ff-52a9650dba67"
+              "internal_ref": "15572690633029"
             },
             "previews": [
               {
