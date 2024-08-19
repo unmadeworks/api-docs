@@ -903,6 +903,10 @@ Two order-item level `partner_data` keys will be automatically added to all item
 Note these two Design IDs may be different, for example when the Roster API has been used to generate member designs
 outside of the editor.
 
+You may optionally provide a boolean value for the `is_test_order` field to indicate a given order is not a real
+production order. If this value is set to `true`, the order will be omitted from Unmade billing processes. Speak to your
+Unmade representative for more information about recommended integration testing procedures.
+
 + Request Create Order
     + Headers
 
