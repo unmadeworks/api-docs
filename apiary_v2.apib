@@ -1251,7 +1251,8 @@ message.
 ## List Order Items [/v2/orders/{order_id}/items{?page}]
 ## List Order Items [GET]
 
-This endpoint can be used to retrieve a paginated list of the individual items in a given order. 
+This endpoint can be used to retrieve a paginated list of the individual items in a given order. We preserve the order
+in which the items were sent in the original order creation payload.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
