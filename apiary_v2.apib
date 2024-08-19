@@ -1252,7 +1252,9 @@ message.
 ## List Order Items [GET]
 
 This endpoint can be used to retrieve a paginated list of the individual items in a given order. We preserve the order
-in which the items were sent in the original order creation payload.
+in which the items were sent in the original order creation payload. The `id` of each item is generated automatically
+by Unmade when the order is created. You may choose to store this ID in your systems in order to reference each item
+directly in future.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1274,6 +1276,7 @@ in which the items were sent in the original order creation payload.
             "previous": null,
             "results": [
               {
+                "id": 12345,
                 "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
                 "quantity": 1,
                 "partner_data": {
@@ -1321,6 +1324,7 @@ This endpoint can be used to retrieve data for a specific item in a given order.
     + Body
 
           {
+            "id": 12345,
             "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
             "quantity": 1,
             "partner_data": {
