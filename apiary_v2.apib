@@ -1470,7 +1470,7 @@ During production, orders progress through the following states:
  - `shipped`: The order has left the factory
  - `cancelled`: The order has been cancelled
 
-## List Orders [/factory.unmade.com/v2/orders/{?state,page,created_before,created_after}]
+## List Orders [/factory.unmade.com/v2/orders/{?state,page,created_before,created_after,submitted_before,submitted_after}]
 ## List Orders [GET]
 
 This endpoint can be used to retrieve the complete list of all orders that have been created to date.
@@ -1486,6 +1486,8 @@ the listed orders by their creation date.
     + page (optional, number) - Page number
     + created_before (optional, string) - Show orders created before this date (`YYYY-MM-DD`)
     + created_after (optional, string) - Show orders created after this date (`YYYY-MM-DD`)
+    + submitted_before (optional, string) - Show orders submitted for manufacturing before this date (`YYYY-MM-DD`)
+    + submitted_after (optional, string) - Show orders submitted for manufacturing after this date (`YYYY-MM-DD`)
 
 + Request List Orders
 
@@ -1505,6 +1507,7 @@ the listed orders by their creation date.
               {
                 "id": "a38c331d-cc6d-4e03-b514-91e27ae8b02e",
                 "created": "2017-07-31T16:52:50.905026Z",
+                "submitted": "2017-07-31T17:44:50.905026Z",
                 "reference": "mc_testorder6",
                 "num_jobs": 4,
                 "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
@@ -1553,6 +1556,7 @@ query production states.
           {
             "id": "a38c331d-cc6d-4e03-b514-91e27ae8b02e",
             "created": "2017-07-31T16:52:50.905026Z",
+            "submitted": "2017-07-31T17:44:50.905026Z",
             "reference": "mc_testorder6",
             "num_jobs": 4,
             "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
