@@ -26,11 +26,11 @@ jobs:
         run: mkdir docs
       - name: Build V1 page
         run: |
-          docker-compose up render
+          docker compose up render
           mv index.html docs
       - name: Build V2 page
         run: |
-          docker-compose up render-v2
+          docker compose up render-v2
           mv v2.html docs
       - name: Setup Pages
         uses: actions/configure-pages@v3
