@@ -883,23 +883,22 @@ follows:
 ## Create Orders [/v2/orders/]
 ## Create an Order [POST]
 
-Once an order has been placed on the ecommerce platform, the Unmade system should be notified to begin the process of 
-generating manufacturing files. To do this, pass a unique order reference, a shipping address and one or more order
-items to this endpoint via an HTTP POST request. Each item must reference an Unmade Design ID. The same Design ID can be
-used for multiple order items, if provided with different `size` values inside the `options` object. To order multiple
-identical garments in the same size, use the `quantity` value.
+Once an order has been placed on the ecommerce platform, the Unmade system should be notified to begin the process of
+generating manufacturing files. To do this, pass a unique order reference, and one or more order items to this endpoint
+via an HTTP POST request. Each item must reference an Unmade Design ID. The same Design ID can be used for multiple
+order items, if provided with different `size` values inside the `options` object. To order multiple identical garments
+in the same size, use the `quantity` value. Each item must also have a `unit_price` object with both a `value` and
+`currency` specified. Depending on the nature of your integration with Unmade, a `shipping_address` may also be required
+for order creation.
 
 Optionally, arbitrary key-value pairs can be passed as a `partner_data` object at both the order and order item level. 
 This may be used by your system to provide your internal ID or similar reference for this order which may be relevant
-for integration with your vendor.
+for integration with your vendor. These key-value pairs will also be present on the manufacturing order and jobs 
+associated with this ecommerce order.
 
-Two order-item level `partner_data` keys will be automatically added to all items:
-
-  - `UNMADE_SOURCE_DESIGN_ID`: The Design ID originally saved by the user in the editor
-  - `UNMADE_ORDER_ITEM_DESIGN_ID`: The Design ID that was originally passed to create this item
-
-Note these two Design IDs may be different, for example when the Roster API has been used to generate member designs
-outside of the editor.
+You may optionally provide a boolean value for the `is_test_order` field to indicate a given order is not a real
+production order. If this value is set to `true`, the order will be omitted from Unmade billing processes. Speak to your
+Unmade representative for more information about recommended integration testing procedures.
 
 + Request Create Order
     + Headers
@@ -915,7 +914,10 @@ outside of the editor.
                 "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                 "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                 "quantity": 2,
-                "unit_price": 99.99,
+                "unit_price": {
+                  "value": "99.99",
+                  "currency": "USD"
+                },
                 "currency": "USD",
                 "options": {
                   "size": "M"
@@ -953,8 +955,10 @@ outside of the editor.
                 "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
                 "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                 "quantity": 2,
-                "unit_price": 99.99,
-                "currency": "USD",
+                "unit_price": {
+                  "value": "99.99",
+                  "currency": "USD"
+                },
                 "options": {
                   "size": "M"
                 },
@@ -966,8 +970,10 @@ outside of the editor.
                 "design": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
                 "reference": "YOUR ORDER-ITEM 2 REFERENCE",
                 "quantity": 7,
-                "unit_price": 120.00,
-                "currency": "USD",
+                "unit_price": {
+                  "value": "120.00",
+                  "currency": "USD"
+                },
                 "options": {
                   "size": "L"
                 },
@@ -1056,6 +1062,9 @@ outside of the editor.
 
 After an order has been created, this endpoint can be used to retrieve order data for example to check the order state.
 
+Depending on the nature of your integration with Unmade, the contents of the `tracking_data` object may also update as 
+orders progress through the various production states.
+
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
 
@@ -1080,12 +1089,12 @@ After an order has been created, this endpoint can be used to retrieve order dat
             "partner_data": {
               "my_partner_data_key": "foo"
             },
-            "supplier": {
+            "factory": {
               "name": "Factory A",
               "slug": "factory-a"
             },
             "state": "submitted",
-            "tracking_number": "",
+            "tracking_data": {},
             "is_order_portal": false,
             "is_test_order": false,
             "ready_to_ship_at": null,
@@ -1235,7 +1244,25 @@ message.
 ## List Order Items [/v2/orders/{order_id}/items{?page}]
 ## List Order Items [GET]
 
-This endpoint can be used to retrieve a paginated list of the individual items in a given order. 
+This endpoint can be used to retrieve a paginated list of the individual items in a given order. We preserve the order
+in which the items were sent in the original order creation payload. The `id` of each item is generated automatically
+by Unmade when the order is created. You may choose to store this ID in your systems in order to reference each item
+directly in future.
+
+Each order item has three associated Design IDs which have different relationships depending on how the relevant 
+designs were created, as well as the type of order. In the simplest case these Design IDs may be identical, but will 
+usually be different, depending on a variety of factors.
+
+ - `order_item_design_id`: The Design ID which you originally sent in the Order creation payload to create this item
+ - `design_id`: The ID of the design which is being used as the source of all manufacturing data for this item. This 
+    will be different to the `order_item_design_id` if you specified a different size to that of the order item design:
+    in this case Unmade will generate a new design in the specified size
+ - `source_design_id`: The ID of the Design which was originally saved by the user in the editor. If the Roster API has 
+    been used to create the member design for this item, this ID will be the ID of the original roster **template** 
+    design.
+
+These Design IDs can be used in the Design API to view personalisation data or fetch previews relevant to this order 
+item. In most cases you'll want to use the `design_id` value for this purpose.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1257,12 +1284,12 @@ This endpoint can be used to retrieve a paginated list of the individual items i
             "previous": null,
             "results": [
               {
-                "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "id": 12345,
+                "design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "order_item_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "source_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
                 "quantity": 1,
-                "partner_data": {
-                  "UNMADE_SOURCE_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753",
-                  "UNMADE_ORDER_ITEM_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753"
-                },
+                "partner_data": {},
                 "options": {
                   "size": "L"
                 },
@@ -1271,7 +1298,7 @@ This endpoint can be used to retrieve a paginated list of the individual items i
                   "currency": "USD"
                 },
                 "reference": "D60033C14A",
-                "supplier": {
+                "factory": {
                   "name": "Factory A",
                   "slug": "factory-a"
                 },
@@ -1287,7 +1314,8 @@ This endpoint can be used to retrieve a paginated list of the individual items i
 ## Retrieve Order Item [/v2/orders/{order_id}/items/{item_id}]
 ## Retrieve Order Item [GET]
 
-This endpoint can be used to retrieve data for a specific item in a given order.
+This endpoint can be used to retrieve data for a specific item in a given order. See the list representation for a more
+detailed description of this data.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1304,12 +1332,12 @@ This endpoint can be used to retrieve data for a specific item in a given order.
     + Body
 
           {
-            "design": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "id": 12345,
+            "design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "order_item_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "source_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
             "quantity": 1,
-            "partner_data": {
-              "UNMADE_SOURCE_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753",
-              "UNMADE_ORDER_ITEM_DESIGN_ID": "fd792895-1e32-41b1-90af-683f0cf9f753"
-            },
+            "partner_data": {},
             "options": {
               "size": "L"
             },
@@ -1318,7 +1346,7 @@ This endpoint can be used to retrieve data for a specific item in a given order.
               "currency": "USD"
             },
             "reference": "D60033C14A",
-            "supplier": {
+            "factory": {
               "name": "Factory A",
               "slug": "factory-a"
             },
@@ -1350,6 +1378,15 @@ Unmade for details of when cancellation is possible for your specific case.
           {
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
               "state": "cancelled"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as cancelled"
           }
 
 ## List Orders [/v2/orders/{?state,page,created_before,created_after}]
@@ -1396,12 +1433,12 @@ the listed orders by their creation date.
                 "partner_data": {
                   "my_partner_data_key": "foo"
                 },
-                "supplier": {
+                "factory": {
                   "name": "Factory A",
                   "slug": "factory-a"
                 },
                 "state": "submitted",
-                "tracking_number": "",
+                "tracking_data": {},
                 "is_order_portal": false,
                 "is_test_order": false,
                 "ready_to_ship_at": null,
@@ -1433,7 +1470,7 @@ During production, orders progress through the following states:
  - `shipped`: The order has left the factory
  - `cancelled`: The order has been cancelled
 
-## List Orders [/factory.unmade.com/v2/orders/{?state,page,created_before,created_after}]
+## List Orders [/factory.unmade.com/v2/orders/{?state,page,created_before,created_after,submitted_before,submitted_after}]
 ## List Orders [GET]
 
 This endpoint can be used to retrieve the complete list of all orders that have been created to date.
@@ -1449,6 +1486,8 @@ the listed orders by their creation date.
     + page (optional, number) - Page number
     + created_before (optional, string) - Show orders created before this date (`YYYY-MM-DD`)
     + created_after (optional, string) - Show orders created after this date (`YYYY-MM-DD`)
+    + submitted_before (optional, string) - Show orders submitted for manufacturing before this date (`YYYY-MM-DD`)
+    + submitted_after (optional, string) - Show orders submitted for manufacturing after this date (`YYYY-MM-DD`)
 
 + Request List Orders
 
@@ -1468,12 +1507,13 @@ the listed orders by their creation date.
               {
                 "id": "a38c331d-cc6d-4e03-b514-91e27ae8b02e",
                 "created": "2017-07-31T16:52:50.905026Z",
+                "submitted": "2017-07-31T17:44:50.905026Z",
                 "reference": "mc_testorder6",
                 "num_jobs": 4,
                 "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
                 "shipping_address": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/shipping_address/",
                 "ecommerce_order": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4",
-                "supplier": {
+                "factory": {
                   "name": "Factory A",
                   "slug": "factory-a"
                 },
@@ -1486,8 +1526,8 @@ the listed orders by their creation date.
                 },
                 "summary": "https://cdn.unmade.com/order/900243544001/attachments/summary.pdf",
                 "state": "in_production",
-                "tracking_number": "",
-                "country": "US",
+                "tracking_data": {},
+                "destination_country": "US",
                 "shipped_at": null,
                 "cancelled_at": null
               },
@@ -1516,12 +1556,13 @@ query production states.
           {
             "id": "a38c331d-cc6d-4e03-b514-91e27ae8b02e",
             "created": "2017-07-31T16:52:50.905026Z",
+            "submitted": "2017-07-31T17:44:50.905026Z",
             "reference": "mc_testorder6",
             "num_jobs": 4,
             "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
             "shipping_address": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/shipping_address/",
             "ecommerce_order": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4",
-            "supplier": {
+            "factory": {
               "name": "Factory A",
               "slug": "factory-a"
             },
@@ -1534,8 +1575,8 @@ query production states.
             },
             "summary": "https://cdn.unmade.com/order/900243544001/attachments/summary.pdf",
             "state": "in_production",
-            "tracking_number": "",
-            "country": "US",
+            "tracking_data": {},
+            "destination_country": "US",
             "shipped_at": null,
             "cancelled_at": null
           }          
@@ -1714,6 +1755,16 @@ jobs in this order.
               "state": "in_production"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as in_production"
+          }
+
+
 + Response 401 (application/json)
 
     + Body
@@ -1793,6 +1844,15 @@ jobs in this order.
               "state": "ready_to_ship"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as ready_to_ship"
+          }
+
 + Response 401 (application/json)
 
     + Body
@@ -1870,6 +1930,15 @@ jobs in this order.
           {
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
               "state": "shipped"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order cannot be set as shipped"
           }
 
 + Response 401 (application/json)
@@ -1956,7 +2025,9 @@ This endpoint can only be used if the given order is `ready_to_ship`.
 
           {
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
-              "tracking_number": "123456789"
+              "tracking_data": {
+                  "tracking_number": "123456789"
+              }
           }
 
 + Response 400 (application/json)
@@ -2149,20 +2220,9 @@ order.
                 "manufacturing_order": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/",
                 "manufacturing_files_zip": "https://factory.unmade.com/v2/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/manufacturing_files_zip/",
                 "ticket": "https://factory.unmade.com/v22/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/ticket_pdf/",
-                "design_source_id": "6489daff-b713-452c-b103-c724d307cb35",
-                "supplier": {
+                "factory": {
                   "name": "Factory A",
                   "slug": "factory-a"
-                },
-                "artwork_dimensions": {
-                  "UX3BI5PP5FP3PNZ7NWKHEYNV_chest-center": {
-                    "artwork_width": 279.4,
-                    "artwork_height": 117.39,
-                    "units": "mm"
-                  }
-                },
-                "artwork_ids": {
-                  "chest-center": "UX3BI5PP5FP3PNZ7NWKHEYNV"
                 },
                 "components": [
                   {
@@ -2173,9 +2233,7 @@ order.
                   }
                 ],
                 "partner_data": {
-                  "internal_ref": "15572690633029",
-                  "UNMADE_SOURCE_DESIGN_ID": "5352d0db-bc5c-4f1b-8912-8f14c91d1733",
-                  "UNMADE_ORDER_ITEM_DESIGN_ID": "e43cc9e8-284a-4094-b8ff-52a9650dba67"
+                  "internal_ref": "15572690633029"
                 },
                 "previews": [
                   {
@@ -2193,6 +2251,49 @@ order.
                   {
                     "preview": "https://cdn.unmade.com/E3DC59C3_NFVDTF54.png",
                     "name": "Right"
+                  }
+                ],
+                "personalisation": [
+                  {
+                    "placement_name": "chest-center",
+                    "placement_display_name": "Front Chest",
+                    "option_name": "Custom Text",
+                    "manufacturing_method": "Embroidery",
+                    "text": "SMITH",
+                    "font": "arial2023",
+                    "rotation": "0",
+                    "artwork_id": "UX3BI5PP5FP3PNZ7NWKHEYNV",
+                    "artwork_width": 279.4,
+                    "artwork_height": 117.39,
+                    "units": "mm"
+                  }
+                ],
+                "design_element_colours": [
+                  {
+                    "cmyk": [
+                      0.7,
+                      0.7,
+                      0.7,
+                      1.0
+                    ],
+                    "colour_name": "Noir",
+                    "display_colour": "#000000",
+                    "is_spot_colour": false,
+                    "brand_reference": "Noir",
+                    "factory_reference": "blk-13"
+                  },
+                  {
+                    "cmyk": [
+                      1.0,
+                      0.0,
+                      0.9,
+                      0.2
+                    ],
+                    "colour_name": "Lime Green",
+                    "display_colour": "#00cc14",
+                    "is_spot_colour": false,
+                    "brand_reference": "Lime Green",
+                    "factory_reference": "grn-344"
                   }
                 ]
               },
@@ -2239,20 +2340,9 @@ endpoint provides:
             "manufacturing_order": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/",
             "manufacturing_files_zip": "https://factory.unmade.com/v2/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/manufacturing_files_zip/",
             "ticket": "https://factory.unmade.com/v22/jobs/e3dc59c3-d4ed-42bc-8d73-23dd0e5c4301/ticket_pdf/",
-            "design_source_id": "6489daff-b713-452c-b103-c724d307cb35",
-            "supplier": {
+            "factory": {
               "name": "Factory A",
               "slug": "factory-a"
-            },
-            "artwork_dimensions": {
-              "UX3BI5PP5FP3PNZ7NWKHEYNV_chest-center": {
-                "artwork_width": 279.4,
-                "artwork_height": 117.39,
-                "units": "mm"
-              }
-            },
-            "artwork_ids": {
-              "chest-center": "UX3BI5PP5FP3PNZ7NWKHEYNV"
             },
             "components": [
               {
@@ -2263,9 +2353,7 @@ endpoint provides:
               }
             ],
             "partner_data": {
-              "internal_ref": "15572690633029",
-              "UNMADE_SOURCE_DESIGN_ID": "5352d0db-bc5c-4f1b-8912-8f14c91d1733",
-              "UNMADE_ORDER_ITEM_DESIGN_ID": "e43cc9e8-284a-4094-b8ff-52a9650dba67"
+              "internal_ref": "15572690633029"
             },
             "previews": [
               {
@@ -2283,6 +2371,49 @@ endpoint provides:
               {
                 "preview": "https://cdn.unmade.com/E3DC59C3_NFVDTF54.png",
                 "name": "Right"
+              }
+            ],
+            "personalisation": [
+              {
+                "placement_name": "chest-center",
+                "placement_display_name": "Front Chest",
+                "option_name": "Custom Text",
+                "manufacturing_method": "Embroidery",
+                "text": "SMITH",
+                "font": "arial2023",
+                "rotation": "0",
+                "artwork_id": "UX3BI5PP5FP3PNZ7NWKHEYNV",
+                "artwork_width": 279.4,
+                "artwork_height": 117.39,
+                "units": "mm"
+              }
+            ],
+            "design_element_colours": [
+              {
+                "cmyk": [
+                  0.7,
+                  0.7,
+                  0.7,
+                  1.0
+                ],
+                "colour_name": "Noir",
+                "display_colour": "#000000",
+                "is_spot_colour": false,
+                "brand_reference": "Noir",
+                "factory_reference": "blk-13"
+              },
+              {
+                "cmyk": [
+                  1.0,
+                  0.0,
+                  0.9,
+                  0.2
+                ],
+                "colour_name": "Lime Green",
+                "display_colour": "#00cc14",
+                "is_spot_colour": false,
+                "brand_reference": "Lime Green",
+                "factory_reference": "grn-344"
               }
             ]
           }
@@ -2313,6 +2444,16 @@ state of this job's order to `in_production`, but does not affect the state of t
               "state": "in_production"
           }
 
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Job cannot be set as in_production"
+          }
+
+
 ## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship]
 ## Set Ready to Ship[POST]
 
@@ -2338,6 +2479,16 @@ this endpoint. When all jobs in a given order are `ready_to_ship`, the order its
               "id": "f00f9780-e026-42f5-9876-41abb3619334",
               "state": "ready_to_ship"
           }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Job cannot be set as ready_to_ship"
+          }
+
 
 ## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ex_factory_date]
 ## Set Job Ex-factory Date[POST]
