@@ -1081,7 +1081,7 @@ orders progress through the various production states.
             "id": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
             "reference": "UMD12345",
             "created": "2024-07-28T18:05:36.806548Z",
-            "submitted_at": "2024-07-28T18:05:53.714553Z",
+            "submitted": "2024-07-28T18:05:53.714553Z",
             "num_items": 12,
             "order_items": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/items/",
             "shipping_address": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/shipping_address/",
@@ -1097,8 +1097,8 @@ orders progress through the various production states.
             "tracking_data": {},
             "is_order_portal": false,
             "is_test_order": false,
-            "ready_to_ship_at": null,
-            "shipped_at": null
+            "ready_to_ship": null,
+            "shipped": null
           }
 
 + Response 401 (application/json)
@@ -1425,7 +1425,7 @@ the listed orders by their creation date.
                 "id": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
                 "reference": "UMD12345",
                 "created": "2024-07-28T18:05:36.806548Z",
-                "submitted_at": "2024-07-28T18:05:53.714553Z",
+                "submitted": "2024-07-28T18:05:53.714553Z",
                 "num_items": 12,
                 "order_items": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/items/",
                 "shipping_address": "https://partner.embed.unmade.com/v2/orders/2c9c3662-d679-4e13-bfdb-7c2580c80b46/shipping_address/",
@@ -1441,8 +1441,8 @@ the listed orders by their creation date.
                 "tracking_data": {},
                 "is_order_portal": false,
                 "is_test_order": false,
-                "ready_to_ship_at": null,
-                "shipped_at": null
+                "ready_to_ship": null,
+                "shipped": null
               },
               // ...remaining orders here
             ]
@@ -1528,8 +1528,8 @@ the listed orders by their creation date.
                 "state": "in_production",
                 "tracking_data": {},
                 "destination_country": "US",
-                "shipped_at": null,
-                "cancelled_at": null
+                "shipped": null,
+                "cancelled": null
               },
               // ... remaining orders
             ]
@@ -1577,8 +1577,8 @@ query production states.
             "state": "in_production",
             "tracking_data": {},
             "destination_country": "US",
-            "shipped_at": null,
-            "cancelled_at": null
+            "shipped": null,
+            "cancelled": null
           }          
 
 + Response 400 (application/json)
