@@ -1073,7 +1073,7 @@ orders progress through the various production states.
 
             Authorization: Token ABCDEF
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
 
@@ -1149,9 +1149,9 @@ orders progress through the various production states.
 ## Retrieve Shipping Address [/v2/orders/{order_id}/shipping_address]
 ## Retrieve shipping address for existing order[GET]
 
-When an order has progressed to the `ready_to_ship` state, this endpoint can be used to retrieve the shipping address 
-for the order. For orders not in this state, this endpoint will respond with an HTTP 400 with an appropriate error
-message.
+When an order has progressed to the `in_production` or `ready_to_ship` states, this endpoint can be used to retrieve the
+shipping address  for the order. For orders not in this state, this endpoint will respond with an HTTP 400 with an
+appropriate error message.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1161,7 +1161,7 @@ message.
 
             Authorization: Token ABCDEF
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
 
@@ -1371,7 +1371,7 @@ Unmade for details of when cancellation is possible for your specific case.
 
             Authorization: Token ABCDEF
 
-+ Response 200 (application/json)
++ Response 201 (application/json)
 
     + Body
 
@@ -1549,7 +1549,7 @@ query production states.
 
             Authorization: Token ABCDEF
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
 
@@ -1638,9 +1638,9 @@ query production states.
 ## Retrieve Order Shipping Address [/factory.unmade.com/v2/orders/{order_id}/shipping_address]
 ## Retrieve Shipping Address[GET]
 
-When an order has progressed to the `ready_to_ship` state, this endpoint can be used to retrieve the shipping address 
-for the order. For orders not in this state, this endpoint will respond with an HTTP 400 with an appropriate error
-message.
+When an order has progressed to the `in_production` or `ready_to_ship` states, this endpoint can be used to retrieve the 
+shipping address for the order. For orders not in this state, this endpoint will respond with an HTTP 400 with an 
+appropriate error message.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
@@ -1650,7 +1650,7 @@ message.
 
             Authorization: Token ABCDEF
 
-+ Response 201 (application/json)
++ Response 200 (application/json)
 
     + Body
 
