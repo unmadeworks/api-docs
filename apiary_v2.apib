@@ -1252,10 +1252,10 @@ Each order item has three associated Design IDs which have different relationshi
 designs were created, as well as the type of order. In the simplest case these Design IDs may be identical, but will 
 usually be different, depending on a variety of factors.
 
- - `order_item_design_id`: The Design ID which you originally sent in the Order creation payload to create this item
- - `design_id`: The ID of the design which is being used as the source of all manufacturing data for this item. This 
-    will be different to the `order_item_design_id` if you specified a different size to that of the order item design:
-    in this case Unmade will generate a new design in the specified size
+ - `input_design_id`: The Design ID which you originally sent in the Order creation payload to create this item
+ - `manufacturing_design_id`: The ID of the design which is being used as the source of all manufacturing data for this 
+    item. This will be different to the `input_design_id` if you specified a different size to that of the order 
+    item design: in this case Unmade will generate a new design in the specified size
  - `source_design_id`: The ID of the Design which was originally saved by the user in the editor. If the Roster API has 
     been used to create the member design for this item, this ID will be the ID of the original roster **template** 
     design.
@@ -1284,8 +1284,8 @@ item. In most cases you'll want to use the `design_id` value for this purpose.
             "results": [
               {
                 "id": 12345,
-                "design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
-                "order_item_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "manufacturing_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+                "input_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
                 "source_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
                 "quantity": 1,
                 "partner_data": {},
@@ -1332,8 +1332,8 @@ detailed description of this data.
 
           {
             "id": 12345,
-            "design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
-            "order_item_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "manufacturing_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
+            "input_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
             "source_design_id": "fd792895-1e32-41b1-90af-683f0cf9f753",
             "quantity": 1,
             "partner_data": {},
