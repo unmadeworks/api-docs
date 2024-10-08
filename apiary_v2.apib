@@ -449,7 +449,10 @@ This lets you:
                 "id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4",
                 "source_design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922",
                 "product": "<Unmade Editor URL>",
-                "description": "<Description of the product and design>",
+                "size": "<Size selected>",
+                "gender": "<Gender selected>",
+                "primary_code": "<Product code selected>",
+                "secondary_code": "<Design secondary code selected>",
                 "previews": [
                     {
                         "name": "front",
@@ -460,109 +463,207 @@ This lets you:
                         "image": "https://PREVIEW_URL"
                     }
                 ],
-                "size": "<Size selected>",
-                "gender": "<Gender selected>",
-                "stylecode": "<Stylecode selected>",
-                "components": [
-                    {
-                        "component_name": "Buttons_ABC123",
-                        "component_displayname": "Buttons",
-                        "option_name": "Button_ABC123_001",
-                        "option_displayname": "Red Buttons"
-                    }
-                ],
-                "placements": [
-                    {
-                        "placement_name": "front-chest-logo",
-                        "placement_displayname": "Front Chest",
-                        "option_name": "white-logo",
-                        "option_displayname": "White Fancy Logo",
-                        "manufacturing_method": "embroidery",
-                        "rotation": 0,
-                        "is_placeholder": false,
-                    },
-                    {
-                        "placement_name": "back-center-logo",
-                        "placement_displayname": "Center Back",
-                        "option_name": "user-uploaded",
-                        "option_displayname": "User Uploaded",
-                        "manufacturing_method": "heat-transfer",
-                        "rotation": 0,
-                        "is_placeholder": true,
-                        "original_logo_url": "https://URL_TO_UPLOADED_LOGO"
-                    },
-                    {
-                        "placement_name": "right-sleeve-monogram",
-                        "placement_displayname": "Right Sleeve Monogram",
-                        "option_name": "large-monogram",
-                        "option_displayname": "Large Monogram",
-                        "manufacturing_method": "heat-transfer",
-                        "is_placeholder": false,
-                        "text": "John Smith",
-                        "font": "Helvetica",
-                        "rotation": 0,
-                        "colours": [
-                            "Black",
-                            "Gray"
-                        ]
-                        "`origin_roster_field_key": null
-                    }
-                ],
                 "variant": {
                     "name": "Striped 1",
-                    "display_name": "Striped 1"
+                    "display_name": "Striped 1",
+                    "is_locked": false,
                 },
+                "components": [
+                    {
+                        "component": {
+                            "name": "Buttons_ABC123",
+                            "display_name": "Buttons",
+                        },
+                        "option": {
+                            "name": "Button_ABC123_001",
+                            "display_name": "Red Buttons",
+                            "reference": "ABCDEFGH"
+                        },
+                        "is_locked": true
+                    }
+                ],
+                "materials": [
+                    {
+                        "panel": {
+                            "name": "front",
+                            "display_name": "Body",
+                        },
+                        "material_type": {
+                            "name": "poly",
+                            "display_name": "Polyester",
+                        },
+                        "material": {
+                            "name": "grey-polyester",
+                            "display_name": "Neutral Grey",
+                        }
+                    },
+                    {
+                        "panel": {
+                            "name": "back",
+                            "display_name": "Back",
+                        },
+                        "material_type": {
+                            "name": "poly",
+                            "display_name": "Polyester",
+                        },
+                        "material": {
+                            "name": "grey-polyester",
+                            "display_name": "Neutral Grey",
+                        }
+                    }
+                ],
                 "design_elements":[
                     {
-                        "design_element_name": "Background_1",
-                        "design_element_displayname": "Area 1",
+                        "name": "Background_1",
+                        "display_name": "Area 1",
                         "pattern_used": "Dots 1",
-                        "colours_used": [
-                            {
-                                "id": 3,
-                                "colour_name": "Red"
-                            },
-                            {
-                                "id": 4,
-                                "colour_name": "Black"
-                            }
-                        ]
+                        "is_locked": false
                     },
                     {
                         "design_element_name": "Background_2",
                         "design_element_displayname": "Area 2",
                         "pattern_used": null,
-                        "colours_used": [
-                            {
-                                "id": 1,
-                                "colour_name": "White"
-                            }
-                        ]
+                        "is_locked": true
                     }
                 ],
-                "colours_used": [
+                "placements": [
                     {
-                        "id": 4
-                        "colour_name": "Black"
+                        "name": "front-chest-logo",
+                        "display_name": "Front Chest",
+                        "dimensions": "not-available",
+                        "option": {
+                            "name": "white-logo",
+                            "display_name": "White Fancy Logo"
+                        },
+                        "is_locked": true,
+                        "manufacturing_method": "sublimation",
+                        "origin_roster_field_key": null,
+                        "rotation": 0,
+                        "content_size_preset": null,
+                        "artwork_dimensions": null
                     },
                     {
-                        "id": 3
-                        "colour_name": "Red"
+                        "name": "back-center-logo",
+                        "display_name": "Center Back",
+                        "dimensions": {
+                            "width": "60.00",
+                            "height": "60.00",
+                            "units": "mm"
+                        },
+                        "option": {
+                            "name": "user-uploaded",
+                            "display_name": "User Uploaded",
+                        },
+                        is_locked: false,
+                        "manufacturing_method": "heat-transfer",
+                        "origin_roster_field_key": null,
+                        "rotation": 0,
+                        "user_logo_upload": {
+                            "asset_url": "https://URL_TO_UPLOADED_LOGO",
+                            "is_vector": true,
+                            "version": 1,
+                            "dpi": null
+                        },
+                        "content_size_preset": {
+                            "name": "big",
+                            "size": "60",
+                            "units": "mm"
+                        },
+                        "artwork_dimensions": null
                     },
                     {
-                        "id": 1
-                        "colour_name": "White"
+                        "name": "back-lower-logo",
+                        "display_name": "Lower Back",
+                        "dimensions": {
+                            "width": "60.00",
+                            "height": "60.00",
+                            "units": "mm"
+                        },
+                        "option": {
+                            "name": "user-uploaded",
+                            "display_name": "User Uploaded",
+                        },
+                        is_locked: false,
+                        "manufacturing_method": "embroidery",
+                        "origin_roster_field_key": null,
+                        "rotation": 0,
+                        "user_logo_upload": {
+                            "asset_url": "https://URL_TO_UPLOADED_LOGO",
+                            "is_vector": false,
+                            "version": 1,
+                            "dpi": null
+                        }
+                        "content_size_preset": null,
+                        "artwork_dimensions": {
+                            "width": "10",
+                            "height": "10",
+                            "units": "mm"
+                        }
+                    },
+                    {
+                        "name": "right-sleeve",
+                        "display_name": "Right Sleeve",
+                        "dimensions": {
+                            "width": "15.00",
+                            "height": "15.00",
+                            "units": "mm"
+                        },
+                        "option": {
+                            "name": "text",
+                            "display_name": "User Text",
+                        },
+                        is_locked: false,
+                        "manufacturing_method": "heat-transfer",
+                        "origin_roster_field_key": "number",
+                        "rotation": 0,
+                        "text": 6,
+                        "font": "Arial",
+                        "content_size_preset": null,
+                        "artwork_dimensions": {
+                            "width": "10",
+                            "height": "10",
+                            "units": "mm",
+                            "cap_height": "5"
+                        }
                     }
                 ],
                 "upcharges": [
                     {
-                        "applied_to": "LeftChest",
-                        "currency": "USD",
-                        "customisation_element_id": "embroidery",
+                        "charge": {
+                            "value": "10.00",
+                            "currency": "USD"
+                        }
                         "upcharge_type": "manufacturing-method",
-                        "value": "10.00"
+                        "customisation_element_id": "embroidery",
+                        "customisation_element_display_name": "Embroidery",
+                        "applied_to": "back-lower-logo",
                     }
-                ]
+                ],
+                "roster": null,
+                "colours_used": [
+                    {
+                        "name": "Black"
+                        "in": [
+                            {
+                                "name": "front-chest-logo",
+                                "type": "placement"
+                            },
+                            {
+                                "name": "Background_1",
+                                "type": "design-element"
+                            }
+                        ],
+                    },
+                    {
+                        "name": "Red"
+                        "in": [
+                            {
+                                "name": "right-sleeve",
+                                "type": "placement"
+                            }
+                        ],
+                    }
+                ],
             }
 
 + Response 400 (application/json)
