@@ -433,8 +433,11 @@ This lets you:
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
 - get structured data about some of the customisation choices made, this currently covers selected size, gender, components, placements and colours and patterns used on design elements (printed areas)
 - fetch the applied logo for a placement that the user has uploaded, per placement the `user_logo_upload` key will contain information about the asset including `asset_url` where the asset can be retrieved
-- identify if on any of the placements has been applied a placeholder logo within the `user_logo_upload` key there will be a `is_placeholder` key that if the value is `true` will indicate the asset is a placeholder
+- identify if on any of the placements has been applied a non vector logo within the `user_logo_upload` key there will be a `is_vector` key that if the value is `false` will indicate the asset is not SVG
 - identify the source design id for grouping purposes, the source design id will be the design created originally on the editor and not via any other APIs
+- identify the roster placeholders that have been applied to placements with enough information to create the roster members.
+- identify the colours used through the design and where are they used.
+
 
 ### Retrieve a design [GET]
 
