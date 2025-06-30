@@ -22,7 +22,7 @@ The Unmade Editor is embedded to the product detail page of customisable product
 When users have finished customising, your e-commerce site needs to store a unique Design ID throughout your native checkout process.
 
 4. **Order creation**
-Once the purchase has happend through your existing systems, the Design ID needs to be used to trigger the order creation within Unmade.
+Once the purchase has happened through your existing systems, the Design ID needs to be used to trigger the order creation within Unmade.
 
 Further to these core steps, we provide additional APIs that allow you to build more advanced customer journeys and integration:
 - **Order API** In addition to order generation, you can retrieve order data using this API to get production state and tracking number.
@@ -57,7 +57,7 @@ We do not recommend writing any logic that depends on the exact text of the mess
 These messages are more likely to be subject to change, whereas response status and code are less likely to change.
 
 Where possible, we also include a `detail` field. This field contains specific details of the error that was encountered.
-This data is designed to aid with debugging and facillitate integration with Unmade APIs.
+This data is designed to aid with debugging and facilitate integration with Unmade APIs.
 
 ## Advanced setup
 
@@ -75,7 +75,7 @@ Unmade will generate a shared key and provide this key to you. This shared key m
 
 The payload that your e-commerce site will need to generate will contain an unique identifier for that authenticated user. This unique identifier must not be an email address or any other personally identifiable information. We suggest you create a new field that is a UUID (Universally Unique Identifier).
 
-The payload with the unique identifier will be encrypted by your e-commcerce site using the shared key and a JWT library to generate a JWT token and will allow Unmade to decrypt it, using the shared key.
+The payload with the unique identifier will be encrypted by your e-commerce site using the shared key and a JWT library to generate a JWT token and will allow Unmade to decrypt it, using the shared key.
 
 
 ## Initialising an Unmade Editor with unique identifier for an authenticated user
@@ -129,11 +129,11 @@ to the parent window. See [the postMessages section](https://engineering.unmade.
 of this document for more details on the structure of this message.
 
 
-3. Upon reciept of this postMessage, your site should authenticate the user using your site's login mechanism.
+3. Upon receipt of this postMessage, your site should authenticate the user using your site's login mechanism.
 Then re-initialise the Unmade Editor with a unique identifier for the authenticated user and the saved Design ID:
 
     ```
-    https://{your-partner-subdomaini}.embed.unmade.com/v2/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg&design_id=7fad56a8def33980cc3f90
+    https://{your-partner-subdomain}.embed.unmade.com/v2/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg&design_id=7fad56a8def33980cc3f90
     ```
 
 4. The Unmade Editor will then enable the authenticated user to upload assets and continue editing their design.
@@ -851,7 +851,7 @@ placements which originated from roster fields.
 
 Many member designs can be created from a single roster design.
 
-To create a member design, the `/roster/` endpoint must recieve valid values for **all** roster fields specified for a 
+To create a member design, the `/roster/` endpoint must receive valid values for **all** roster fields specified for a
 given roster design. You can send empty values (e.g. `""` or `null`), for example to generate a design without a name or
 number.
 
@@ -912,7 +912,7 @@ template roster design is provided:
                     "number": [
                         {
                             "error": "illegal_characters",
-                            "details": {"amended_text": "text with no ilegal chars"}
+                            "details": {"amended_text": "text with no illegal chars"}
                         }
                     ]
                 }
