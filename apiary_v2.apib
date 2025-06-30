@@ -97,7 +97,7 @@ The payload with the unique identifier will be encrypted by your e-commcerce sit
 2. Append this token to your Unmade Editor URL, for example:
 
     ```
-    https://{your-partner-subdomain}.embed.unmade.com/v1/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg
+    https://{your-partner-subdomain}.embed.unmade.com/v2/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg
     ```
 
 3. The Unmade will decode this token and
@@ -120,7 +120,7 @@ If you initialise the Unmade Editor without an authenticated user then the user 
 1. For an unauthenticated user, the Unmade Editor should be initialised without a JWT payload.
 
     ```
-    https://{your-partner-subdomain}.embed.unmade.com/v1/products/{your-product}/
+    https://{your-partner-subdomain}.embed.unmade.com/v2/products/{your-product}/
     ```
 
 2. If and when the unauthenticated user clicks to upload an asset, the Unmade Editor iFrame will first save the design.
@@ -133,7 +133,7 @@ of this document for more details on the structure of this message.
 Then re-initialise the Unmade Editor with a unique identifier for the authenticated user and the saved Design ID:
 
     ```
-    https://{your-partner-subdomaini}.embed.unmade.com/v1/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg&design_id=7fad56a8def33980cc3f90
+    https://{your-partner-subdomaini}.embed.unmade.com/v2/products/{your-product}/?init=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxNTE2MjM5MDIyfQ.66pC0Ncp6ZiUGljv5dlF8uKO1jQQ04Fvkj7z56VfBjg&design_id=7fad56a8def33980cc3f90
     ```
 
 4. The Unmade Editor will then enable the authenticated user to upload assets and continue editing their design.
