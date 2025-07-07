@@ -318,33 +318,6 @@ Example postMessage:
   },
   payload: {
     id: "0c9e9b2b-ee60-439a-9172-819df97d7987",     // Design ID
-    product: "https://URL/ABCDEFGH/",               // URL of the Unmade editor
-    preview: "https://URL/preview.png",             // Preview image
-    description: “Custom Crewneck in Navy, Grey & Orange",
-    size: "L",
-    gender: "Mens",
-    stylecode: "ABC1234",
-    secondary_previews: [                 // Array listing more previews
-      {
-        "name": "right",                 // Pre-agreed preview name
-        "image": "https://PREVIEW_URL"   // URL for preview
-      }
-    ],
-    components: [
-        // Details of components selected by user
-    ],
-    placements: [
-        // Details of placements customised by user
-    ],
-    design_elements: [
-        // Details (colours and patterns ) of the design elements (printed areas) customised by user
-    ],
-    colours_used : [
-        // List of all the colours used by the user
-    ],
-    upcharges: [
-        // Details of any upcharges in this design
-    ]
   }
 }
 ```
@@ -361,23 +334,6 @@ The triggeredBy attribute contains information about why the design was saved, a
     + `share`
         + **Triggered:** When the user clicks 'share' inside the Editor iframe, the process is the same as when the user clicks the 'add to bag' button.
         + **Next step:** Generate a URL that directs users to the design ID and show the user a share dialog.
-
-### A note about the size of initial preview images
-
-The preview image (PNG format) in the postMessage ```type: "UNMADE_design_saved"```  is the image uploaded to our 
-servers by the user's browser when they save their design. Using this image enables us to make this preview available 
-to you immediately.
-
-However, this means that the larger this image is the slower and less reliable it will make saving a design, 
-particularly for users on a flaky internet connection. For this reason we default to this image being lower resolution
-(height of 522px).
-
-You can ask your account manager to change the size of the initial preview image returned in this postMessage, but we 
-recommend keeping these images sizes (PNG format) below 200Kb.
-
-Within a minute or two of the design being saved, we will have generated full size versions of images for all the 
-scenes you have set up, including this preview, on our servers. Later calls to the [retrieve a_design API](#reference/design-api/retrieve-designs/retrieve-a-design) will 
-return the URLs for these full size images.
 
 ### User interaction
 ```type: "UNMADE_interaction"``` *optional*
@@ -416,18 +372,10 @@ Example postMessage:
 
 Please note that to direct the user to help content about logo uploading, we also support an HTML hyperlink instead of the postMessage functionality.
 
-### Asset upload handling
-```type: UNMADE_upload_svg```  *optional*
-```type: UNMADE_upload_file```  *optional*
-
-The Unmade Editor handles any the upload of logos for the users, however if configured those can be handled externally. And then the files can be received through postmessage.
-
-There are 2 types of messages that can be sent ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
-
 ## Group Design API
 ### Retrieve designs [/v2/designs/{design_id}/]
 
-Once a user has created a design using and Unmade Editor and you have saved the Design ID, you can use the Design API to request further images and information on that saved design.
+Once a user has created a design using and Unmade Editor and you have saved the Design ID, you can use the Design API to request images and information on that saved design.
 This lets you:
 - download multiple high resolution renders of the design to show in your customer journey, use in retargeting or a "my account" section of your website
 - identify the URL of the Unmade Editor used to create this design, so that you can construct a URL to load the Editor with this Design ID as a starting point
