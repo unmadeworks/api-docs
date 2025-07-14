@@ -1589,6 +1589,7 @@ the listed orders by their creation date.
 
 + Parameters
     + state (optional, string) - Show orders with this state (see Order States section above for allowed values)
+    + ecommerce_origin (optional, string) - Show orders with this `ecommerce_origin`
     + page (optional, number) - Page number
     + created_before (optional, string) - Show orders created before this date (`YYYY-MM-DD`)
     + created_after (optional, string) - Show orders created after this date (`YYYY-MM-DD`)
@@ -1619,6 +1620,7 @@ the listed orders by their creation date.
                 "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
                 "shipping_address": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/shipping_address/",
                 "ecommerce_order": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4",
+                "ecommerce_origin": "partner",
                 "factory": {
                   "name": "Factory A",
                   "slug": "factory-a"
@@ -1668,6 +1670,7 @@ query production states.
             "jobs": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/jobs/",
             "shipping_address": "https://factory.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4/shipping_address/",
             "ecommerce_order": "https://partner.embed.unmade.com/v2/orders/a882ac66-9374-4910-8c93-9ea45a470bd4",
+            "ecommerce_origin": "partner",
             "factory": {
               "name": "Factory A",
               "slug": "factory-a"
@@ -2330,6 +2333,7 @@ order.
                   "name": "Basketball Technical Tee",
                   "code": "TT5251XX"
                 },
+                "ecommerce_origin": "partner",
                 "shipping_information": {
                   "hs_code": "XYZ.1234.QWERTY",
                   "composition": "100% Cotton",
@@ -2436,6 +2440,7 @@ endpoint provides:
               "name": "Basketball Technical Tee",
               "code": "TT5251XX"
             },
+            "ecommerce_origin": "partner",
             "shipping_information": {
               "hs_code": "XYZ.1234.QWERTY",
               "composition": "100% Cotton",
