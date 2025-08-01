@@ -2322,18 +2322,25 @@ order.
                 ],
                 "personalisation": [
                   {
-                    "placement_name": "chest-center",
-                    "placement_display_name": "Front Chest",
+                    "placement": {
+                      "name": "chest-center",
+                      "display_name": "Front Chest"
+                    },
                     "option_name": "Custom Text",
                     "manufacturing_method": "Embroidery",
                     "text": "SMITH",
                     "font": "arial2023",
-                    "rotation": "0",
-                    "artwork_id": "UX3BI5PP5FP3PNZ7NWKHEYNV",
-                    "artwork_width": "279.40",
-                    "artwork_height": "117.39",
-                    "units": "mm",
+                    "asset": "https://example.com/asset.svg",
                     "origin_roster_field_key": null
+                    "rotation": "0",
+                    "artwork": {
+                      "id": "UX3BI5PP5FP3PNZ7NWKHEYNV",
+                      "dimensions": {
+                        "width": "279.40",
+                        "height": "117.39",
+                        "units": "mm",
+                      }
+                    }
                   }
                 ]
               },
