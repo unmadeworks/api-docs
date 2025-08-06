@@ -948,6 +948,9 @@ This may be used by your system to provide your internal ID or similar reference
 for integration with your vendor. These key-value pairs will also be present on the manufacturing order and jobs 
 associated with this ecommerce order.
 
+If you want to create the order and keep it on hold for subsequent updates to the `partner_data` you might do it by
+sending the boolean value for `set_order_on_hold` as `true`.
+
 You may optionally provide a boolean value for the `is_test_order` field to indicate a given order is not a real
 production order. If this value is set to `true`, the order will be omitted from Unmade billing processes. Speak to your
 Unmade representative for more information about recommended integration testing procedures.
@@ -1153,6 +1156,232 @@ orders progress through the various production states.
             },
             "is_order_portal": false,
             "is_test_order": false
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Retrieve Order Partner Data [/v2/orders/{order_id}/partner_data/]
+## Retrieve an existing order Partner Data [GET]
+
+After an order has been created, this endpoint can be used to retrieve the contents of partner data of the order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Retrieve Order
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+            "my_partner_data_key": "foo",
+            "another-key": "bar"
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Add key/values to Partner Data [/v2/orders/{order_id}/partner_data/]
+## Add key/values to Partner Data for existing order[PATCH]
+When an order is in  `hold` state, this endpoint can be used to add further key/values to the existing ones for the order.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Add key/values to Partner Data
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+          {
+            "key1": "value_x",
+            "key2": "value_y"
+          }
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+            "previous_key": "value_a",
+            "key1": "value_x",
+            "key2": "value_y"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Partner data is not available for updates in order state"
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Update Partner Data [/v2/orders/{order_id}/partner_data/]
+## Update Partner Data for existing order[PUT]
+When an order is in  `hold` state, this endpoint can be used to update the whole partner data key/values of the order,
+removing any pre-existing key/values.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Update key/values to Partner Data
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+            "key1": "value_x",
+            "key2": "value_y"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Partner data is not available for updates in order state"
           }
 
 + Response 401 (application/json)
@@ -1407,6 +1636,276 @@ detailed description of this data.
             "manufacturing_job": "https://factory.unmade.com/v2/orders/123456/jobs/876543/"
             "arrive_by_date": "2024-08-11",
             "ex_factory_date": "2024-07-28"
+          }
+
+
+## Retrieve Order Item Partner Data [/v2/orders/{order_id}/items/{item_id}/partner_data/]
+## Retrieve an existing order item Partner Data [GET]
+
+After an order has been created, this endpoint can be used to retrieve the contents of partner data for an order item.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + item_id (string) - ID of the item
+
++ Request Retrieve Order
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+            "my_partner_data_key": "foo",
+            "another-key": "bar"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Partner data is not available for updates in order state"
+          }
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Add key/values to Order Item Partner Data [/v2/orders/{order_id}/items/{item_id}/partner_data/]
+## Add key/values for existing order item[PATCH]
+When an order is in  `hold` state, this endpoint can be used to add further key/values to the existing ones for the order item.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + item_id (string) - ID of the item
+
++ Request Add key/values to Partner Data
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+          {
+            "key1": "value_x",
+            "key2": "value_y"
+          }
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+            "previous_key": "value_a",
+            "key1": "value_x",
+            "key2": "value_y"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Partner data is not available for updates in order state"
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Update Partner Data [/v2/orders/{order_id}/items/{item_id}/partner_data/]
+## Update Partner Data for existing order item[PUT]
+When an order is in  `hold` state, this endpoint can be used to update the whole partner data key/values of the order item,
+removing any pre-existing key/values.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+    + item_id (string) - ID of the item
+
++ Request Update key/values to Partner Data
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+            "key1": "value_x",
+            "key2": "value_y"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Partner data is not available for updates in order state"
+          }
+
++ Response 401 (application/json)
+
+    + Body
+
+          {
+              "code": "authentication_failed",
+              "message": "Incorrect authentication credentials.",
+          }
+
++ Response 403 (application/json)
+
+    + Body
+
+          {
+              "code": "permission_denied",
+              "message": "You do not have permission to perform this action.",
+          }
+
++ Response 405 (application/json)
+
+    + Body
+
+          {
+              "code": "method_not_allowed",
+              "message": "Method used is not allowed",
+          }
+
++ Response 406 (application/json)
+
+    + Body
+
+          {
+              "code": "not_acceptable",
+              "message": "Could not satisfy the request Accept header.",
+          }
+
++ Response 415 (application/json)
+
+    + Body
+
+          {
+              "code": "unsupported_media_type",
+              "message": "Unsupported media type in request.",
+          }
+
+## Release Order [/v2/orders/{order_id}/release_hold/]
+## Release Order [POST]
+
+This endpoint can be used to release an order to production if their state is `hold`.
+
++ Parameters
+    + order_id (string) - ID of the Order in the form of a uuid
+
++ Request Cancel Order
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+          {
+              "id": "f00f9780-e026-42f5-9876-41abb3619334",
+              "state": "hold"
+          }
+
++ Response 400 (application/json)
+
+    + Body
+
+          {
+              "code": "bad_request",
+              "message": "Order's hold cannot be released"
           }
 
 ## Cancel Order [/v2/orders/{order_id}/set_cancelled]
