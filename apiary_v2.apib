@@ -963,15 +963,15 @@ Unmade representative for more information about recommended integration testing
     + Body
 
           {
-            "reference": "YOUR ORDER REFERENCE",
+            "reference": "YOUR UNIQUE ORDER REFERENCE",       // Max chars: 256
             "order_items": [
               {
-                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
-                "reference": "YOUR ORDER-ITEM 1 REFERENCE",
+                "design": "UNMADE-DESIGN-ID",
+                "reference": "YOUR ORDER-ITEM 1 REFERENCE",   // Max chars: 256
                 "quantity": 2,
                 "unit_price": {
                   "value": "99.99",
-                  "currency": "USD"
+                  "currency": "USD"                           // ISO 4217 Currency Code
                 },
                 "options": {
                   "size": "M"
@@ -979,14 +979,16 @@ Unmade representative for more information about recommended integration testing
               }
             ],
             "shipping_address": {
-              "name": "John Smith",
-              "company_name": "unmade",
-              "address_1": "152 Strand",
-              "address_2": "Somerset House",
-              "city": "London",
-              "postal_code": "WC2R 1LA",
-              "country": "GB",
-              "phone": "0123456789"
+              "name": "John Smith",                           // Max chars: 256
+              "company_name": "unmade",                       // Max chars: 256   (Optional)
+              "address_1": "152 Strand",                      // Max chars: 256
+              "address_2": "Somerset House",                  // Max chars: 256   (Optional)
+              "city": "London",                               // Max chars: 256
+              "postal_code": "WC2R 1LA",                      // Max chars: 20
+              "country": "GB",                                // ISO 3166-1 A2 Country Code
+              "country_area": "London",                       // Max chars: 128
+              "phone": "0123456789"                           // Max chars: 30    (Optional)
+              "email": "john@smith.com"                       // Max chars: 256   (Optional)
             }
           }
 
@@ -998,53 +1000,55 @@ Unmade representative for more information about recommended integration testing
     + Body
 
           {
-            "reference": "YOUR ORDER REFERENCE",
-            "partner_data": {
-              "example_po_number": "example_number",
-              "example_po_type": "example_value",
-              "example_shipping_method": "example_shipping_service"
+            "reference": "YOUR UNIQUE ORDER REFERENCE",       // Max chars: 256
+            "partner_data": {                                 // (Optional)
+              "example_po_number": "example_number",          // ┐
+              "example_po_type": "example_value",             // │ Arbitrary key-value pairs
+              "example_shipping_method": "superfast"          // ┘
             },
             "order_items": [
               {
-                "design": "3cd42fe8-7491-11e8-adc0-fa7ae01bbebc",
+                "design": "UNMADE-DESIGN-ID-1",
                 "reference": "YOUR ORDER-ITEM 1 REFERENCE",
                 "quantity": 2,
                 "unit_price": {
                   "value": "99.99",
-                  "currency": "USD"
+                  "currency": "USD"                           // ISO 4217 Currency Code
                 },
                 "options": {
                   "size": "M"
                 },
-                "partner_data": {
-                  "barcode": "98323928238372"
+                "partner_data": {                             // (Optional)
+                  "barcode": "98323928238372"                 // Arbitrary key-value pairs
                 }
               },
               {
-                "design": "2c9c3662-d679-4e13-bfdb-7c2580c80b46",
+                "design": "UNMADE-DESIGN-ID-2",
                 "reference": "YOUR ORDER-ITEM 2 REFERENCE",
                 "quantity": 7,
                 "unit_price": {
                   "value": "120.00",
-                  "currency": "USD"
+                  "currency": "USD"                           // ISO 4217 Currency Code
                 },
                 "options": {
                   "size": "L"
                 },
-                "partner_data": {
-                  "barcode": "121345353"
+                "partner_data": {                             // (Optional)
+                  "barcode": "121345353"                      // Arbitrary key-value pairs
                 }
               }
             ],
             "shipping_address": {
-              "name": "John Smith",
-              "company_name": "unmade",
-              "address_1": "152 Strand",
-              "address_2": "Somerset House",
-              "city": "London",
-              "postal_code": "WC2R 1LA",
-              "country": "GB",
-              "phone": "0123456789"
+              "name": "John Smith",                           // Max chars: 256
+              "company_name": "unmade",                       // Max chars: 256   (Optional)
+              "address_1": "152 Strand",                      // Max chars: 256
+              "address_2": "Somerset House",                  // Max chars: 256   (Optional)
+              "city": "London",                               // Max chars: 256
+              "postal_code": "WC2R 1LA",                      // Max chars: 20
+              "country": "GB",                                // ISO 3166-1 A2 Country Code
+              "country_area": "London",                       // Max chars: 128
+              "phone": "0123456789"                           // Max chars: 30    (Optional)
+              "email": "john@smith.com"                       // Max chars: 256   (Optional)
             }
           } 
 
