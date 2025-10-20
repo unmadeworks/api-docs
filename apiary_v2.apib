@@ -1433,7 +1433,7 @@ removing any pre-existing key/values.
               "message": "Unsupported media type in request.",
           }
 
-## Retrieve Shipping Address [/v2/orders/{order_id}/shipping_address]
+## Retrieve Shipping Address [/v2/orders/{order_id}/shipping_address/]
 ## Retrieve shipping address for existing order[GET]
 
 When an order has progressed to the `in_production` or `ready_to_ship` states, this endpoint can be used to retrieve the
@@ -1598,7 +1598,7 @@ item. In most cases you'll want to use the `design_id` value for this purpose.
           }
           
 
-## Retrieve Order Item [/v2/orders/{order_id}/items/{item_id}]
+## Retrieve Order Item [/v2/orders/{order_id}/items/{item_id}/]
 ## Retrieve Order Item [GET]
 
 This endpoint can be used to retrieve data for a specific item in a given order. See the list representation for a more
@@ -1912,7 +1912,7 @@ This endpoint can be used to release an order to production if their state is `h
               "message": "Order's hold cannot be released"
           }
 
-## Cancel Order [/v2/orders/{order_id}/set_cancelled]
+## Cancel Order [/v2/orders/{order_id}/set_cancelled/]
 ## Cancel Order [POST]
 
 This endpoint can be used to cancel an order after creation. Depending on production and billing arrangements between
@@ -2192,7 +2192,7 @@ query production states.
               "message": "Unsupported media type in request.",
           }
 
-## Retrieve Order Shipping Address [/factory.unmade.com/v2/orders/{order_id}/shipping_address]
+## Retrieve Order Shipping Address [/factory.unmade.com/v2/orders/{order_id}/shipping_address/]
 ## Retrieve Shipping Address[GET]
 
 When an order has progressed to the `in_production` or `ready_to_ship` states, this endpoint can be used to retrieve the 
@@ -2287,7 +2287,7 @@ appropriate error message.
               "message": "Unsupported media type in request.",
           }
 
-## Set Order In Production [/factory.unmade.com/v2/orders/{order_id}/set_in_production]
+## Set Order In Production [/factory.unmade.com/v2/orders/{order_id}/set_in_production/]
 ## Set In Production[POST]
 
 Once an order has been ingested into your systems and has entered production with your vendor, this endpoint is used to
@@ -2376,7 +2376,7 @@ jobs in this order.
               "message": "Unsupported media type in request.",
           }
 
-## Set Order Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/set_ready_to_ship]
+## Set Order Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/set_ready_to_ship/]
 ## Set Ready to Ship[POST]
 
 Once an order has completed production and is ready to ship from your vendor, this endpoint is used to inform Unmade 
@@ -2464,7 +2464,7 @@ jobs in this order.
               "message": "Unsupported media type in request.",
           }
 
-## Set Order Shipped [/factory.unmade.com/v2/orders/{order_id}/set_shipped]
+## Set Order Shipped [/factory.unmade.com/v2/orders/{order_id}/set_shipped/]
 ## Set Shipped[POST]
 
 Once an order has finally been shipped from your vendor, this endpoint is used to inform Unmade that the order is on the
@@ -2552,7 +2552,7 @@ jobs in this order.
               "message": "Unsupported media type in request.",
           }
 
-## Set Order Tracking Number [/factory.unmade.com/v2/orders/{order_id}/set_tracking_number]
+## Set Order Tracking Number [/factory.unmade.com/v2/orders/{order_id}/set_tracking_number/]
 ## Set Tracking Number[POST]
 
 If relevant for the shipping configuration for your integration, this endpoint can be used to provide a tracking number
@@ -2650,7 +2650,7 @@ This endpoint can only be used if the given order is `ready_to_ship`.
               "message": "Unsupported media type in request.",
           }
 
-## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/set_ex_factory_date]
+## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/set_ex_factory_date/]
 ## Set Order Ex-factory Date[POST]
 
 On creation, Unmade assigns all production jobs an Ex-factory date based on a lead time estimate which has been 
@@ -2960,7 +2960,7 @@ endpoint provides:
             ]
           }
 
-## Set Job In Production [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_in_production]
+## Set Job In Production [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_in_production/]
 ## Set In Production[POST]
 
 If a given order consists of a large number of jobs, production for these jobs may begin at different times. In such a 
@@ -2996,7 +2996,7 @@ state of this job's order to `in_production`, but does not affect the state of t
           }
 
 
-## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship]
+## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship/]
 ## Set Ready to Ship[POST]
 
 If a given order consists of a large number of jobs, production for these jobs may be completed at different times. In 
@@ -3032,7 +3032,7 @@ this endpoint. When all jobs in a given order are `ready_to_ship`, the order its
           }
 
 
-## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ex_factory_date]
+## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ex_factory_date/]
 ## Set Job Ex-factory Date[POST]
 
 Just as an updated Ex-factory date can be provided for an entire order using the [Set Order Ex-Factory Date](#/group-factory-api/resource-factory.unmade.com-v2-orders-order_id-set_ex_factory_date-431ca688) 
