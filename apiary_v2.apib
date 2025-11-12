@@ -2869,6 +2869,16 @@ endpoint provides:
   - The URL for a zip file containing all manufacturing files for this job
   - The URL to this job's ticket PDF
 
+
+### Note on Manufacturing Files
+
+When an order is first submitted to Unmade, it takes a short time for manufacturing files to be generated. As such, for
+very new jobs, the `manufacturing_files_zip` field may be `null` if no files are ready yet. Sometimes the zip file may
+be present, but only contain an incomplete set of the manufacturing files for the given job.
+
+Unmade currently recommends not fetching the `manufacturing_files_zip` file until 1 hour has elapsed since the order's 
+`submitted` time. After this time, the zip file will contain the full set of files for each job in a given order.
+
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
     + job_id (string) - ID of the job in the form of a uuid
