@@ -670,6 +670,64 @@ This lets you:
                 "message": "Unsupported media type in request."
             }
 
+### Design 3D View [/v2/designs/{design_id}/3d/{?scene,autosize,interactive,autorotate}]
+
+If the given product has been set up using Unmade 3D visualisation functionality, 
+this endpoint allows you to view your design on a 3D model just like in the Unmade Editor.
+
+Will return a 404 if the product has not been set up for 3D visualisation.
+
+The endpoint accepts a number of query parameters which can be used to control the behaviour
+of the model viewer when it loads.
+
+
+### 3D View [GET]
+
++ Parameters
+    + design_id (uuid) - ID of the Design in the form of a uuid
+    + scene (string, optional) - The name of the camera position to load. If not provided, load the default camera position of the model.
+    + autosize (boolean, optional) - If true, the canvas will be resized to fit the browser viewport and will resize if changed. If not provided, the canvas will remain at a fixed default size.
+    + interactive (boolean, optional) - If true, the model will have some limited mouse interactivity. Defaults to false.
+    + autorotate (number, optional) - If provided, the model will automatically rotate at a rate of 360 degrees in N seconds.
+
++ Response 200 (text/html)
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
+
++ Response 405 (application/json)
+
+    + Body
+
+            {
+                "code": "method_not_allowed",
+                "message": "Method used is not allowed"
+            }
+
++ Response 406 (application/json)
+
+    + Body
+
+            {
+                "code": "not_acceptable",
+                "message": "Could not satisfy the request Accept header."
+            }
+
++ Response 415 (application/json)
+
+    + Body
+
+            {
+                "code": "unsupported_media_type",
+                "message": "Unsupported media type in request."
+            }
+
 # Group Transfer Preview API
 
 The Transfer Previews allows you to generate preview images which show how a given Design would appear when applied to 
