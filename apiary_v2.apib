@@ -2933,15 +2933,15 @@ endpoint provides:
   - The URL for a zip file containing all manufacturing files for this job
   - The URL to this job's ticket PDF
 
+### Job States
 
-### Note on Manufacturing Files
+Jobs flow through the same states as [orders](#/group-factory-api#header-order-states), but jobs within an order may each have different states.
 
-When an order is first submitted to Unmade, it takes a short time for manufacturing files to be generated. As such, for
-very new jobs, the `manufacturing_files_zip` field may be `null` if no files are ready yet. Sometimes the zip file may
-be present, but only contain an incomplete set of the manufacturing files for the given job.
+Jobs also have an additional state: `not_ready` which is used when a given job has been very recently created. This state indicates that manufacturing files are still being generated and are not yet available for download.  You will notice that the `manufacturing_files_zip` field will be `null` for jobs which are still in the `not_ready` state.
 
-Unmade currently recommends not fetching the `manufacturing_files_zip` file until 1 hour has elapsed since the order's 
-`submitted` time. After this time, the zip file will contain the full set of files for each job in a given order.
+When a job progresses from state `not_ready` to `new`, the `manufacturing_files_zip` URL will become available. This means that all manufacturing files are ready, and the URL can then be used to download all manufacturing files for a given job.
+
+The URLs provided by the `manufacturing_files_zip` and `ticket` fields do not require authentication, so can be safely stored and passed to any other systems that may be part of your order management workflow.
 
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
