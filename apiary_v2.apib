@@ -2922,7 +2922,7 @@ order.
             ]
           } 
 
-## Retrieve Job [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}]
+## Retrieve Job [/factory.unmade.com/v2/orders/{order_id}/jobs/{job_id}]
 ## Retrieve Job[GET]
 
 This endpoint can be used to retrieve data for a specific job in a given order. In addition to basic metadata, this 
@@ -3038,7 +3038,7 @@ The URLs provided by the `manufacturing_files_zip` and `ticket` fields do not re
             ]
           }
 
-## Set Job In Production [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_in_production/]
+## Set Job In Production [/factory.unmade.com/v2/orders/{order_id}/jobs/{job_id}/set_in_production/]
 ## Set In Production[POST]
 
 If a given order consists of a large number of jobs, production for these jobs may begin at different times. In such a 
@@ -3074,7 +3074,7 @@ state of this job's order to `in_production`, but does not affect the state of t
           }
 
 
-## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ready_to_ship/]
+## Set Job Ready to Ship [/factory.unmade.com/v2/orders/{order_id}/jobs/{job_id}/set_ready_to_ship/]
 ## Set Ready to Ship[POST]
 
 If a given order consists of a large number of jobs, production for these jobs may be completed at different times. In 
@@ -3110,7 +3110,7 @@ this endpoint. When all jobs in a given order are `ready_to_ship`, the order its
           }
 
 
-## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/job/{job_id}/set_ex_factory_date/]
+## Set Ex-factory Date [/factory.unmade.com/v2/orders/{order_id}/jobs/{job_id}/set_ex_factory_date/]
 ## Set Job Ex-factory Date[POST]
 
 Just as an updated Ex-factory date can be provided for an entire order using the [Set Order Ex-Factory Date](#/group-factory-api/resource-factory.unmade.com-v2-orders-order_id-set_ex_factory_date-431ca688) 
