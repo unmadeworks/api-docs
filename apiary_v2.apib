@@ -125,7 +125,7 @@ If you initialise the Unmade Editor without an authenticated user then the user 
 
 2. If and when the unauthenticated user clicks to upload an asset, the Unmade Editor iFrame will first save the design.
 We then inform your e-commerce site that the user needs to be authenticated in order to continue via a JavaScript postMessage
-to the parent window. See [the postMessages section](https://engineering.unmade.com/api-docs/#/group-js-post-messaging-interactions)
+to the parent window. See [the postMessages section](#/group-js-post-messaging-interactions)
 of this document for more details on the structure of this message.
 
 
@@ -209,7 +209,7 @@ An example of how you may want to embed the iframe is below:
     + locale (optional) - The IETF language tag to set localisation of the user interface
         + Default: `en-GB`
     + design_id (optional) - An Unmade Design ID that is compatible with this editor to be used as starting point
-    + init (optional) - An JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](https://engineering.unmade.com/api-docs/#/group-api-setup#header-advanced-setup) for more information.
+    + init (optional) - An JWT payload encrypted with your shared key which includes a unique identifier for your customer. See [advanced setup](#/group-api-setup#header-advanced-setup) for more information.
     + mode (optional) - Specifying `mode=admin` will enable additional UI controls, including the ability to lock elements of the design.
 
 ## Iframe endpoint [GET]
@@ -306,7 +306,7 @@ In addition to the `DesignID`, this postMessage also includes the URL to a previ
 
 This postMessage also includes a `meta` key, containing additional information about the event that triggered the save and whether the user was logged in or not.
 
-Please note that the payload of this message is identical in structure as the response of the [Design API](#reference/design-api) described further below.
+Please note that the payload of this message is identical in structure as the response of the [Design API](#/group-design-api) described further below.
 
 Example postMessage:
 ```
@@ -818,7 +818,7 @@ Endpoint described above. If no 3D visualisation is available for the target pro
 If a given product has roster functionality enabled, an editor user will be provided with the option to select a roster 
 field for any enabled region. A design saved with one or more of these roster fields is known as a "roster design".
 
-A roster design can be identified by the presence of the `roster` key in its API representation. See [here](https://engineering.unmade.com/api-docs/#/group-design-api)
+A roster design can be identified by the presence of the `roster` key in its API representation. See [here](#/group-design-api)
 for full details of this representation.
 
 An example `roster` object is shown below:
@@ -865,7 +865,7 @@ To create member designs, the `/roster/` endpoint accepts POST requests with pay
 as well as the values of each field to be populated. Upon receipt of a valid payload, a new design is created, and its 
 ID is returned. This ID can then be used to place orders as required.
 
-Successfully created member design IDs can also be queried via the [Retrieve Design](https://engineering.unmade.com/api-docs/#/group-design-api/resource-v2-designs-design_id-10bff8d2)
+Successfully created member design IDs can also be queried via the [Retrieve Design](#/group-design-api/resource-v2-designs-design_id-75c5c1cd)
 endpoint as normal. The `placements` data for member designs will include the `origin_roster_field_key` for any 
 placements which originated from roster fields.
 
