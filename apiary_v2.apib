@@ -739,9 +739,13 @@ this functionality, see the [live demo](https://engineering.unmade.com/design-tr
 Passing a valid Product Slug and Design ID to this endpoint creates one Transfer Preview for each scene available for 
 the target product's default size.
 
-You can then use the provided image URLs to load the images in your site. These previews function in the same way to 
-normal `/v2/previews/` URLs and are generated on demand when first requested. The URLs are suitable for direct use in an
-`<img>` element, or could be saved to your backend for future use.
+You can then use the provided `image` or `thumbnail` URLs to load the images in your site. These previews function in 
+the same way to normal `/v2/previews/` URLs and are generated on demand when first requested. The URLs are suitable for 
+direct use in an `<img>` element, or could be saved to your backend for future use.
+
+If the target product has 3D visualisation enabled, you will also recieve a `3d` URL for each scene. This URL functions
+in the same way as the normal [Design 3D View](#/group-design-api/resource-v2-designs-design_id-3d-scene,autosize,interactive,autorotate-bdc929d)
+Endpoint described above. If no 3D visualisation is available for the target product, the `3d` value will be `null`.
 
 ## Create Transfer Previews [POST]
 
@@ -767,12 +771,14 @@ normal `/v2/previews/` URLs and are generated on demand when first requested. Th
                     {
                         "name": "front",
                         "image": "v2/transfer_previews/1/preview/",
-                        "thumbnail": "v2/transfer_previews/1/thumbnail/"
+                        "thumbnail": "v2/transfer_previews/1/thumbnail/",
+                        "3d": "v2/transfer_previews/1/3d/"
                     },
                     {
                         "name": "back",
                         "image": "v2/transfer_previews/2/preview/",
-                        "thumbnail": "v2/transfer_previews/2/thumbnail/"
+                        "thumbnail": "v2/transfer_previews/2/thumbnail/",
+                        "3d": "v2/transfer_previews/2/3d/",
                     }
                 ]
             }
