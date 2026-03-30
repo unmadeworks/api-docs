@@ -32,6 +32,8 @@ jobs:
         run: |
           docker compose up render-v2
           mv v2.html docs
+      - name: Copy raw specs and llms.txt
+        run: cp apiary.apib apiary_v2.apib llms.txt docs/
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
