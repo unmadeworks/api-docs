@@ -728,6 +728,42 @@ of the model viewer when it loads.
                 "message": "Unsupported media type in request."
             }
 
+### Clear User Uploaded Placements [/v2/designs/{design_id}/clear_user_uploaded_placements/]
+
+Creates a new design based on the given design with all user-uploaded content removed from placements. Useful when
+you want to offer the user a way to reset their logo uploads and start fresh without losing their other customisation choices.
+
+Returns a new design ID — the original design is not modified.
+
+Returns 400 if the design has no user-uploaded content to clear.
+
+### Clear User Uploaded Placements [POST]
+
++ Parameters
+    + design_id (uuid) - ID of the Design in the form of a uuid
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+            }
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "error": "Design has no user-uploaded content"
+            }
+
 # Group Transfer Preview API
 
 The Transfer Previews allows you to generate preview images which show how a given Design would appear when applied to 
