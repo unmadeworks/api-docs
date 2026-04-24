@@ -30,7 +30,13 @@ docker-compose up render-v2
 
 ## Deployment
 
-Pushing to `main` triggers a GitHub Actions workflow (`.github/workflows/deploy.yml`) that builds both V1 and V2 docs and deploys to GitHub Pages at https://engineering.unmade.com/api-docs/
+Pushing to `main` triggers a GitHub Actions workflow (`.github/workflows/deploy.yml`) that builds both V1 and V2 docs and deploys to GitHub Pages. Published assets at https://engineering.unmade.com/api-docs/:
+
+- `index.html` — rendered V1 docs
+- `v2.html` — rendered V2 docs
+- `apiary.apib` — raw V1 spec
+- `apiary_v2.apib` — raw V2 spec
+- `llms.txt` — LLM-friendly entry point
 
 ## Architecture
 
@@ -38,6 +44,7 @@ Pushing to `main` triggers a GitHub Actions workflow (`.github/workflows/deploy.
 
 - `apiary.apib` — V1 API specification
 - `apiary_v2.apib` — V2 API specification (superset of V1, all endpoints at `/v2/`)
+- `llms.txt` — LLM-friendly summary of both API versions; deployed to GitHub Pages alongside the rendered docs
 
 ### API Blueprint Format
 
@@ -68,9 +75,11 @@ Indentation in `.apib` files uses 4 spaces (enforced by `.editorconfig`).
 
 ### API Versions
 
+**Prefer V2 for all new work.** V1 is for historical context is deprecated.
+
 **V1** covers: Editor iframe integration, Design API, Transfer Preview API, Roster API, Orders API, Factory API.
 
-**V2** adds/changes: 3D design view (`/v2/designs/{id}/3d/`), partner data endpoints on orders, shipping address retrieval, order items pagination, enhanced job states, and materials data.
+**V2** adds/changes: 3D design view (`/v2/designs/{id}/3d/`), partner data endpoints on orders, shipping address retrieval, order items pagination, enhanced job states, materials data, and an Ecommerce Orders API (replaces V1 Orders API).
 
 ### Internal Links
 
