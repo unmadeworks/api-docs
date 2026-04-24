@@ -801,6 +801,47 @@ Returns 400 if the design has no user-uploaded content to clear.
                 "error": "Design has no user-uploaded content"
             }
 
+### Clone Design [/v2/designs/{design_id}/clone/]
+
+Creates a new design by cloning an existing design into a different size. Useful when a customer wants to
+change the size of their design without starting over — all other customisation choices are preserved.
+
+The `size` must be a valid size for the product the design belongs to. Returns a new design ID — the
+original design is not modified.
+
+### Clone Design [POST]
+
++ Parameters
+    + design_id (uuid) - ID of the Design in the form of a uuid
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+                "size": "M"
+            }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+            }
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "size": ["Size M does not exist on product my-product. Available sizes: S, L, XL"]
+            }
+
 # Group Transfer Preview API
 
 The Transfer Previews allows you to generate preview images which show how a given Design would appear when applied to 
