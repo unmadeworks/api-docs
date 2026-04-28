@@ -2172,6 +2172,11 @@ the listed orders by their creation date.
 After an order has been submitted to production, you can use this endpoint to pull order data into your own systems or
 query production states.
 
+The `attachments` object contains URLs to any paperwork or documentation associated with this order.
+
+**Note**: Any `attachments` containing sensitive information such as customer shipping addresses will only be present
+in the response if the order is state `in_production` or `ready_to_ship`.   
+
 + Parameters
     + order_id (string) - ID of the Order in the form of a uuid
 
