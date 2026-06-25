@@ -826,6 +826,9 @@ original design is not modified.
                 "size": "M"
             }
 
+    + Attributes
+        + size (string, required) - A valid size for the product this design belongs to (e.g. `S`, `M`, `L`).
+
 + Response 201 (application/json)
 
     + Body
@@ -928,6 +931,10 @@ Endpoint described above. If no 3D visualisation is available for the target pro
                 "product": "<product-slug>",
                 "design": "<design-id>"
             }
+
+    + Attributes
+        + product (string, required) - Slug of the target product to render the design against.
+        + design (string, required) - ID of the Design to use as the source.
 
 + Response 201 (application/json)
 
@@ -1481,7 +1488,7 @@ You may optionally provide a boolean value for the `is_test_order` field to indi
 production order. If this value is set to `true`, the order will be omitted from Unmade billing processes. Speak to your
 Unmade representative for more information about recommended integration testing procedures.
 
-+ Request Create Order
++ Request Create Order (application/json)
     + Headers
 
           Authorization: Token ABCDEF
@@ -1489,94 +1496,67 @@ Unmade representative for more information about recommended integration testing
     + Body
 
           {
-            "reference": "YOUR UNIQUE ORDER REFERENCE",       // Max chars: 256
+            "reference": "YOUR UNIQUE ORDER REFERENCE",
             "order_items": [
               {
                 "design": "UNMADE-DESIGN-ID",
-                "reference": "YOUR ORDER-ITEM 1 REFERENCE",   // Max chars: 256
+                "reference": "YOUR ORDER-ITEM REFERENCE",
                 "quantity": 2,
                 "unit_price": {
                   "value": "99.99",
-                  "currency": "USD"                           // ISO 4217 Currency Code
+                  "currency": "USD"
                 },
                 "options": {
                   "size": "M"
+                },
+                "partner_data": {
+                  "barcode": "98323928238372"
                 }
               }
             ],
+            "partner_data": {
+              "example_po_number": "example_number",
+              "example_po_type": "example_value"
+            },
             "shipping_address": {
-              "name": "John Smith",                           // Max chars: 256
-              "company_name": "unmade",                       // Max chars: 256   (Optional)
-              "address_1": "152 Strand",                      // Max chars: 256
-              "address_2": "Somerset House",                  // Max chars: 256   (Optional)
-              "city": "London",                               // Max chars: 256
-              "postal_code": "WC2R 1LA",                      // Max chars: 20
-              "country": "GB",                                // ISO 3166-1 A2 Country Code
-              "country_area": "London",                       // Max chars: 128
-              "phone": "0123456789"                           // Max chars: 30    (Optional)
-              "email": "john@smith.com"                       // Max chars: 256   (Optional)
+              "name": "John Smith",
+              "company_name": "unmade",
+              "address_1": "152 Strand",
+              "address_2": "Somerset House",
+              "city": "London",
+              "postal_code": "WC2R 1LA",
+              "country": "GB",
+              "country_area": "London",
+              "phone": "0123456789",
+              "email": "john@smith.com"
             }
           }
 
-+ Request With Partner Data
-    + Headers
-
-          Authorization: Token ABCDEF
-
-    + Body
-
-          {
-            "reference": "YOUR UNIQUE ORDER REFERENCE",       // Max chars: 256
-            "partner_data": {                                 // (Optional)
-              "example_po_number": "example_number",          // ┐
-              "example_po_type": "example_value",             // │ Arbitrary key-value pairs
-              "example_shipping_method": "superfast"          // ┘
-            },
-            "order_items": [
-              {
-                "design": "UNMADE-DESIGN-ID-1",
-                "reference": "YOUR ORDER-ITEM 1 REFERENCE",
-                "quantity": 2,
-                "unit_price": {
-                  "value": "99.99",
-                  "currency": "USD"                           // ISO 4217 Currency Code
-                },
-                "options": {
-                  "size": "M"
-                },
-                "partner_data": {                             // (Optional)
-                  "barcode": "98323928238372"                 // Arbitrary key-value pairs
-                }
-              },
-              {
-                "design": "UNMADE-DESIGN-ID-2",
-                "reference": "YOUR ORDER-ITEM 2 REFERENCE",
-                "quantity": 7,
-                "unit_price": {
-                  "value": "120.00",
-                  "currency": "USD"                           // ISO 4217 Currency Code
-                },
-                "options": {
-                  "size": "L"
-                },
-                "partner_data": {                             // (Optional)
-                  "barcode": "121345353"                      // Arbitrary key-value pairs
-                }
-              }
-            ],
-            "shipping_address": {
-              "name": "John Smith",                           // Max chars: 256
-              "company_name": "unmade",                       // Max chars: 256   (Optional)
-              "address_1": "152 Strand",                      // Max chars: 256
-              "address_2": "Somerset House",                  // Max chars: 256   (Optional)
-              "city": "London",                               // Max chars: 256
-              "postal_code": "WC2R 1LA",                      // Max chars: 20
-              "country": "GB",                                // ISO 3166-1 A2 Country Code
-              "country_area": "London",                       // Max chars: 128
-              "phone": "0123456789"                           // Max chars: 30    (Optional)
-              "email": "john@smith.com"                       // Max chars: 256   (Optional)
-            }
-          } 
+    + Attributes
+        + reference (string, required) - Your unique reference for this order. Max 256 characters.
+        + order_items (array, required) - One or more items to include in the order.
+            + (object)
+                + design (string, required) - The Unmade Design ID for this item.
+                + reference (string, required) - Your unique reference for this order item. Max 256 characters.
+                + quantity (number, required) - Number of units.
+                + unit_price (object, required) - Price per unit.
+                    + value (string, required) - Numeric price value as a string (e.g. `"99.99"`).
+                    + currency (string, required) - ISO 4217 currency code (e.g. `"USD"`).
+                + options (object, required) - Customisation options for this item.
+                    + size (string, required) - Size selected for this item.
+                + partner_data (object, optional) - Arbitrary key-value pairs to associate with this order item (e.g. a barcode).
+        + partner_data (object, optional) - Arbitrary key-value pairs to associate with the order as a whole (e.g. PO number, shipping method).
+        + shipping_address (object, required) - Delivery address for the order.
+            + name (string, required) - Recipient full name. Max 256 characters.
+            + company_name (string, optional) - Company name. Max 256 characters.
+            + address_1 (string, required) - First line of address. Max 256 characters.
+            + address_2 (string, optional) - Second line of address. Max 256 characters.
+            + city (string, required) - City. Max 256 characters.
+            + postal_code (string, required) - Postal or ZIP code. Max 20 characters.
+            + country (string, required) - ISO 3166-1 alpha-2 country code (e.g. `"GB"`).
+            + country_area (string, required) - State, province, or region. Max 128 characters.
+            + phone (string, optional) - Phone number. Max 30 characters.
+            + email (string, optional) - Email address. Max 256 characters.
 
 + Response 201 (application/json)
 
