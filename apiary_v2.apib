@@ -826,6 +826,9 @@ original design is not modified.
                 "size": "M"
             }
 
+    + Attributes
+        + size (string, required) - A valid size for the product this design belongs to (e.g. `S`, `M`, `L`).
+
 + Response 201 (application/json)
 
     + Body
@@ -928,6 +931,10 @@ Endpoint described above. If no 3D visualisation is available for the target pro
                 "product": "<product-slug>",
                 "design": "<design-id>"
             }
+
+    + Attributes
+        + product (string, required) - Slug of the target product to render the design against.
+        + design (string, required) - ID of the Design to use as the source.
 
 + Response 201 (application/json)
 
@@ -1150,6 +1157,293 @@ template roster design is provided:
                 "message": "Unsupported media type in request."
             }
 
+# Group Outfit API
+
+The Outfit API allows you to combine multiple individual Designs into a single multi-piece outfit — for example, a top 
+and a bottom that are customised and worn together. Each outfit is built from one or more **pieces**, where each piece 
+maps a **slot** (e.g. `top`, `bottom`) to a specific Design.
+
+Outfits are created against an **Outfit Spec**, which defines the set of slots that must be filled. You will receive 
+your outfit spec slug(s) and slot names from your Unmade customer contact when a new product range is being set up.
+
+Outfit visualisation is available if appropriate compatible 3D models and avatars have been configured for the given
+outfit spec. The availability of visualisation also depends on the sizes of the designs used in each slot of the outfit.
+Unmade will provide reccomendations on how best to integrate outfit creation and visualisation capabilities for your
+specific use case.
+
+## Create Outfit [/v2/outfits/]
+
+### Create an Outfit [POST]
+
+Creates a new outfit from a set of designs, one per slot defined by the given outfit spec.
+
+All slots defined in the outfit spec must be provided. Providing an unknown slot or supplying two pieces for the same 
+slot will return a 400 error.
+
++ Request (application/json)
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
+    + Body
+
+            {
+                "outfit_spec": "my-outfit-spec",
+                "name": "My Outfit",
+                "editor_user": "3fad6a89-8cec-4350",
+                "pieces": [
+                    {
+                        "slot_slug": "top",
+                        "design_id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4"
+                    },
+                    {
+                        "slot_slug": "bottom",
+                        "design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922"
+                    }
+                ]
+            }
+
+    + Attributes
+        + outfit_spec (string, required) - Slug of the Outfit Spec to use. Defines which slots must be filled.
+        + name (string, optional) - A human-readable label for this outfit.
+        + editor_user (string, optional) - The `external_id` of an existing EditorUser to associate with this outfit. Used to link the outfit to a specific end-user.
+        + pieces (array, required) - One object per slot in the outfit spec.
+            + slot_slug (string) - The slug of the slot this piece fills.
+            + design_id (string) - The ID of the Design to use for this slot. The design's product must belong to the given slot.
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "id": "f00f9780-e026-42f5-9876-41abb3619334",
+                "name": "My Outfit",
+                "outfit_spec": "my-outfit-spec",
+                "editor_user": "3fad6a89-8cec-4350",
+                "created": "2024-01-15T10:30:00Z",
+                "pieces": [
+                    {
+                        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "slot_slug": "top",
+                        "design_id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4"
+                    },
+                    {
+                        "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                        "slot_slug": "bottom",
+                        "design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922"
+                    }
+                ],
+                "previews": [
+                    {
+                        "name": "front",
+                        "image": "https://partner.embed.unmade.com/v2/outfits/f00f9780-e026-42f5-9876-41abb3619334/previews/c3d4e5f6-a7b8-9012-cdef-123456789012/preview/",
+                        "thumbnail": "https://partner.embed.unmade.com/v2/outfits/f00f9780-e026-42f5-9876-41abb3619334/previews/c3d4e5f6-a7b8-9012-cdef-123456789012/thumbnail/"
+                    }
+                ],
+                "scenes": [
+                    {
+                        "name": "default",
+                        "url": "https://partner.embed.unmade.com/v2/outfits/f00f9780-e026-42f5-9876-41abb3619334/3d/default/"
+                    }
+                ]
+            }
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "code": "bad_request",
+                "message": "Invalid input.",
+                "detail": {
+                    "pieces": "Missing pieces for slots: bottom."
+                }
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials."
+            }
+
++ Response 403 (application/json)
+
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action."
+            }
+
+
+## Retrieve Outfit [/v2/outfits/{outfit_id}/]
+
+### Retrieve an Outfit [GET]
+
+Returns the full representation of an outfit, including its pieces, previews, and any available 3D scenes.
+
++ Parameters
+    + outfit_id (uuid) - ID of the Outfit in the form of a uuid
+
++ Request
+
+    + Headers
+
+            Authorization: Token ABCDEF
+
++ Response 200 (application/json)
+
+    + Body
+
+            {
+                "id": "f00f9780-e026-42f5-9876-41abb3619334",
+                "name": "My Outfit",
+                "outfit_spec": "my-outfit-spec",
+                "editor_user": "3fad6a89-8cec-4350",
+                "created": "2024-01-15T10:30:00Z",
+                "pieces": [
+                    {
+                        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        "slot_slug": "top",
+                        "design_id": "8a2b6517-e020-46fd-8cd0-ec441d4ac4b4"
+                    },
+                    {
+                        "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                        "slot_slug": "bottom",
+                        "design_id": "5e39f63b-a084-4d80-ae29-1fdb87a79922"
+                    }
+                ],
+                "previews": [
+                    {
+                        "name": "front",
+                        "image": "https://partner.embed.unmade.com/v2/outfits/f00f9780-e026-42f5-9876-41abb3619334/previews/c3d4e5f6-a7b8-9012-cdef-123456789012/preview/",
+                        "thumbnail": "https://partner.embed.unmade.com/v2/outfits/f00f9780-e026-42f5-9876-41abb3619334/previews/c3d4e5f6-a7b8-9012-cdef-123456789012/thumbnail/"
+                    }
+                ],
+                "scenes": [
+                    {
+                        "name": "default",
+                        "url": "https://partner.embed.unmade.com/v2/outfits/f00f9780-e026-42f5-9876-41abb3619334/3d/default/"
+                    }
+                ]
+            }
+
++ Response 401 (application/json)
+
+    + Body
+
+            {
+                "code": "authentication_failed",
+                "message": "Incorrect authentication credentials."
+            }
+
++ Response 403 (application/json)
+
+    + Body
+
+            {
+                "code": "permission_denied",
+                "message": "You do not have permission to perform this action."
+            }
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
+
+
+## Outfit Preview [/v2/outfits/{outfit_id}/previews/{preview_id}/preview/]
+
+Preview and thumbnail URLs are returned as part of the outfit representation and do not require authentication.
+Both endpoints redirect (308) to the underlying image URL.
+
+If the image has not yet been generated at the time of the request, it will be generated on demand, which may cause
+a brief delay.
+
+### Outfit Preview [GET]
+
+Returns the full-size rendered image of the outfit for this preview.
+
++ Parameters
+    + outfit_id (uuid) - ID of the Outfit
+    + preview_id (uuid) - ID of the OutfitPreview (obtained from the `previews` array on the outfit)
+
++ Response 308
+
+    Permanent redirect to the image URL.
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
+
+
+## Outfit Thumbnail [/v2/outfits/{outfit_id}/previews/{preview_id}/thumbnail/]
+
+### Outfit Thumbnail [GET]
+
+Returns a smaller thumbnail version of the outfit preview image.
+
++ Parameters
+    + outfit_id (uuid) - ID of the Outfit
+    + preview_id (uuid) - ID of the OutfitPreview (obtained from the `previews` array on the outfit)
+
++ Response 308
+
+    Permanent redirect to the thumbnail URL.
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
+
+    
+## Outfit 3D View [/v2/outfits/{outfit_id}/3d/{avatar_scene_slug}/]
+
+If available for a given saved outfit, this endpoint returns an embeddable HTML page showing all
+pieces of the outfit rendered on a 3D avatar. It functions the same way as the [Design 3D View](#/group-design-api/resource-v2-designs-design_id-3d-scene,autosize,interactive,autorotate-bdc929d)
+endpoint and accepts the same optional query parameters.
+
+Available scene slugs are returned in the `scenes` array on the outfit object.
+
+This endpoint does not require authentication, and supports embedding as an iframe.
+
+### 3D View [GET]
+
++ Parameters
+    + outfit_id (uuid) - ID of the Outfit
+    + avatar_scene_slug (string) - Slug of the avatar scene (obtained from the `scenes` array on the outfit)
+    + autosize (boolean, optional) - If true, the canvas resizes to fit the browser viewport.
+    + interactive (boolean, optional) - If true, the model has limited mouse interactivity. Defaults to false.
+    + autorotate (number, optional) - If provided, the model automatically rotates at 360 degrees in N seconds.
+
++ Response 200 (text/html)
+
++ Response 404 (application/json)
+
+    + Body
+
+            {
+                "code": "not_found",
+                "message": "Not found."
+            }
+
 
 # Group Ecommerce Orders API
 
@@ -1194,7 +1488,7 @@ You may optionally provide a boolean value for the `is_test_order` field to indi
 production order. If this value is set to `true`, the order will be omitted from Unmade billing processes. Speak to your
 Unmade representative for more information about recommended integration testing procedures.
 
-+ Request Create Order
++ Request Create Order (application/json)
     + Headers
 
           Authorization: Token ABCDEF
@@ -1202,94 +1496,67 @@ Unmade representative for more information about recommended integration testing
     + Body
 
           {
-            "reference": "YOUR UNIQUE ORDER REFERENCE",       // Max chars: 256
+            "reference": "YOUR UNIQUE ORDER REFERENCE",
             "order_items": [
               {
                 "design": "UNMADE-DESIGN-ID",
-                "reference": "YOUR ORDER-ITEM 1 REFERENCE",   // Max chars: 256
+                "reference": "YOUR ORDER-ITEM REFERENCE",
                 "quantity": 2,
                 "unit_price": {
                   "value": "99.99",
-                  "currency": "USD"                           // ISO 4217 Currency Code
+                  "currency": "USD"
                 },
                 "options": {
                   "size": "M"
+                },
+                "partner_data": {
+                  "barcode": "98323928238372"
                 }
               }
             ],
+            "partner_data": {
+              "example_po_number": "example_number",
+              "example_po_type": "example_value"
+            },
             "shipping_address": {
-              "name": "John Smith",                           // Max chars: 256
-              "company_name": "unmade",                       // Max chars: 256   (Optional)
-              "address_1": "152 Strand",                      // Max chars: 256
-              "address_2": "Somerset House",                  // Max chars: 256   (Optional)
-              "city": "London",                               // Max chars: 256
-              "postal_code": "WC2R 1LA",                      // Max chars: 20
-              "country": "GB",                                // ISO 3166-1 A2 Country Code
-              "country_area": "London",                       // Max chars: 128
-              "phone": "0123456789"                           // Max chars: 30    (Optional)
-              "email": "john@smith.com"                       // Max chars: 256   (Optional)
+              "name": "John Smith",
+              "company_name": "unmade",
+              "address_1": "152 Strand",
+              "address_2": "Somerset House",
+              "city": "London",
+              "postal_code": "WC2R 1LA",
+              "country": "GB",
+              "country_area": "London",
+              "phone": "0123456789",
+              "email": "john@smith.com"
             }
           }
 
-+ Request With Partner Data
-    + Headers
-
-          Authorization: Token ABCDEF
-
-    + Body
-
-          {
-            "reference": "YOUR UNIQUE ORDER REFERENCE",       // Max chars: 256
-            "partner_data": {                                 // (Optional)
-              "example_po_number": "example_number",          // ┐
-              "example_po_type": "example_value",             // │ Arbitrary key-value pairs
-              "example_shipping_method": "superfast"          // ┘
-            },
-            "order_items": [
-              {
-                "design": "UNMADE-DESIGN-ID-1",
-                "reference": "YOUR ORDER-ITEM 1 REFERENCE",
-                "quantity": 2,
-                "unit_price": {
-                  "value": "99.99",
-                  "currency": "USD"                           // ISO 4217 Currency Code
-                },
-                "options": {
-                  "size": "M"
-                },
-                "partner_data": {                             // (Optional)
-                  "barcode": "98323928238372"                 // Arbitrary key-value pairs
-                }
-              },
-              {
-                "design": "UNMADE-DESIGN-ID-2",
-                "reference": "YOUR ORDER-ITEM 2 REFERENCE",
-                "quantity": 7,
-                "unit_price": {
-                  "value": "120.00",
-                  "currency": "USD"                           // ISO 4217 Currency Code
-                },
-                "options": {
-                  "size": "L"
-                },
-                "partner_data": {                             // (Optional)
-                  "barcode": "121345353"                      // Arbitrary key-value pairs
-                }
-              }
-            ],
-            "shipping_address": {
-              "name": "John Smith",                           // Max chars: 256
-              "company_name": "unmade",                       // Max chars: 256   (Optional)
-              "address_1": "152 Strand",                      // Max chars: 256
-              "address_2": "Somerset House",                  // Max chars: 256   (Optional)
-              "city": "London",                               // Max chars: 256
-              "postal_code": "WC2R 1LA",                      // Max chars: 20
-              "country": "GB",                                // ISO 3166-1 A2 Country Code
-              "country_area": "London",                       // Max chars: 128
-              "phone": "0123456789"                           // Max chars: 30    (Optional)
-              "email": "john@smith.com"                       // Max chars: 256   (Optional)
-            }
-          } 
+    + Attributes
+        + reference (string, required) - Your unique reference for this order. Max 256 characters.
+        + order_items (array, required) - One or more items to include in the order.
+            + (object)
+                + design (string, required) - The Unmade Design ID for this item.
+                + reference (string, required) - Your unique reference for this order item. Max 256 characters.
+                + quantity (number, required) - Number of units.
+                + unit_price (object, required) - Price per unit.
+                    + value (string, required) - Numeric price value as a string (e.g. `"99.99"`).
+                    + currency (string, required) - ISO 4217 currency code (e.g. `"USD"`).
+                + options (object, required) - Customisation options for this item.
+                    + size (string, required) - Size selected for this item.
+                + partner_data (object, optional) - Arbitrary key-value pairs to associate with this order item (e.g. a barcode).
+        + partner_data (object, optional) - Arbitrary key-value pairs to associate with the order as a whole (e.g. PO number, shipping method).
+        + shipping_address (object, required) - Delivery address for the order.
+            + name (string, required) - Recipient full name. Max 256 characters.
+            + company_name (string, optional) - Company name. Max 256 characters.
+            + address_1 (string, required) - First line of address. Max 256 characters.
+            + address_2 (string, optional) - Second line of address. Max 256 characters.
+            + city (string, required) - City. Max 256 characters.
+            + postal_code (string, required) - Postal or ZIP code. Max 20 characters.
+            + country (string, required) - ISO 3166-1 alpha-2 country code (e.g. `"GB"`).
+            + country_area (string, required) - State, province, or region. Max 128 characters.
+            + phone (string, optional) - Phone number. Max 30 characters.
+            + email (string, optional) - Email address. Max 256 characters.
 
 + Response 201 (application/json)
 
