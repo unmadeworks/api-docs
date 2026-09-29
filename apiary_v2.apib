@@ -282,12 +282,14 @@ window.addEventListener("message", receiveMessage, false);
 
 function receiveMessage (event) {
   var origin = event.origin || event.originalEvent.origin;
-  if (origin === "https://{your-partner-subdomain}.embed.unmade.com/") {
+  if (origin === "https://{your-partner-subdomain}.embed.unmade.com") {
     switch (event.data.type) {
         case 'UNMADE_design_saved':
             addToCart(event.data.payload);
+            break;
         case 'UNMADE_interaction':
-            resizeIFrame(event.data.payload);
+            handleInteraction(event.data.payload);
+            break;
         default:
             break;
     }
@@ -344,9 +346,9 @@ For example, if within the Unmade Iframe there is a link to a Size Guide that sh
 Example postMessage:
 ```
 {
+    type: "UNMADE_interaction",
     payload: {
-        clicked: 'sizing',
-        type: "UNMADE_interaction"
+        clicked: 'sizing'
     }
 }
 ```

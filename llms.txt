@@ -27,7 +27,7 @@ Should only be used for historical context or debugging existing implementations
 - **Integrating with Unmade** — Overview of the 4-step integration (product setup, editor embed, design ID capture, order creation)
 - **API Setup** — Authentication, subdomains, and general configuration
 - **Unmade Editor** — Embedding the iframe-based design editor into product detail pages
-- **JS Post Messaging Interactions** — Browser postMessage events between the editor iframe and the host page
+- **JS Post Messaging Interactions** — Browser postMessage events between the editor iframe and the host page: saved designs, user interactions, asset uploads, and iframe sizing (the host replies to `UNMADE_requestInnerHeight` with `innerHeight`, whose payload is a plain number, then sets the iframe height from `UNMADE_resize`)
 - **Transfer Preview API** — Retrieve rendered preview images of a customer's design
 - **Roster API** — Create designs programmatically from variable data using a base design
 - **Orders API** — Create orders, retrieve order status and production state, get tracking numbers

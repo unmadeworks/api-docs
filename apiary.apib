@@ -305,12 +305,20 @@ window.addEventListener("message", receiveMessage, false);
 
 function receiveMessage (event) {
   var origin = event.origin || event.originalEvent.origin;
-  if (origin === "https://{your-partner-subdomain}.embed.unmade.com/") {
+  if (origin === "https://{your-partner-subdomain}.embed.unmade.com") {
     switch (event.data.type) {
         case 'UNMADE_design_saved':
             addToCart(event.data.payload);
+            break;
         case 'UNMADE_interaction':
-            resizeIFrame(event.data.payload);
+            handleInteraction(event.data.payload);
+            break;
+        case 'UNMADE_requestInnerHeight':
+            sendInnerHeight();  // see "Iframe sizing" below
+            break;
+        case 'UNMADE_resize':
+            resizeIFrame(event.data.payload.height);
+            break;
         default:
             break;
     }
@@ -415,9 +423,9 @@ For example, if within the Unmade Iframe there is a link to a Size Guide that sh
 Example postMessage:
 ```
 {
+    type: "UNMADE_interaction",
     payload: {
-        clicked: 'sizing',
-        type: "UNMADE_interaction"
+        clicked: 'sizing'
     }
 }
 ```
@@ -450,6 +458,143 @@ Please note that to direct the user to help content about logo uploading, we als
 The Unmade Editor handles any the upload of logos for the users, however if configured those can be handled externally. And then the files can be received through postmessage.
 
 There are 2 types of messages that can be send ```type: UNMADE_upload_svg``` where the files are expected to be only `image/svg+xml` and ```type: UNMADE_upload_file``` where the types can be `image/svg+xml`, `image/png` or `image/jpeg`.
+
+## Iframe sizing
+```type: "UNMADE_requestInnerHeight"``` *optional*
+```type: "innerHeight"``` *optional*
+```type: "UNMADE_resize"``` *optional*
+
+The Unmade Editor can't resize its own iframe, so it works out the height it needs and asks the host website to apply it. The host website takes part in a short postMessage handshake:
+
+1. **Unmade → host:** `UNMADE_requestInnerHeight`. The Editor asks for the height of the host window.
+2. **Host → Unmade:** `innerHeight`. The host replies with `window.innerHeight`.
+3. **Unmade → host:** `UNMADE_resize`. The Editor tells the host the height to set on the iframe.
+
+If you don't take part in this handshake, the iframe stays at whatever height you give it.
+
+### Requesting the parent height
+
+```type: "UNMADE_requestInnerHeight"```
+
+Sent by the Editor to ask for the height of the host window. The payload is always empty.
+
+The Editor sends this message:
+
+    + about 1 second after the Editor loads
+    + every time the iframe's own window fires a `resize` event, including resizes caused by the host changing the iframe's height
+
+The host website should reply with an `innerHeight` message.
+
+Example postMessage:
+```
+{
+    type: "UNMADE_requestInnerHeight",
+    payload: {}
+}
+```
+
+### Sending the parent height
+
+```type: "innerHeight"```
+
+Sent by the host website to the iframe, giving the height of the host window. The payload must be a **plain number** (normally `window.innerHeight`), **not** an object such as `{ height: 900 }`. The Editor ignores a payload of `0`, `null` or `undefined`.
+
+The Editor handles this message even when it hasn't asked for it, so you can also send it when the host window resizes (see *Keeping the height in sync* below).
+
+Example:
+```
+iframe.contentWindow.postMessage(
+    { type: "innerHeight", payload: window.innerHeight },
+    "https://{your-partner-subdomain}.embed.unmade.com"
+);
+```
+
+### Resizing the iframe
+
+```type: "UNMADE_resize"```
+
+Sent by the Editor after it receives an `innerHeight` message. The payload contains the height, in CSS pixels, that the host website should set on the iframe. The Editor only sends this message when the height it needs differs from the iframe's current height.
+
+Example postMessage:
+```
+{
+    type: "UNMADE_resize",
+    payload: {
+        height: 900
+    }
+}
+```
+
+### How the Editor calculates the height
+
+The Editor uses the `innerHeight` value sent by the host (called `parentHeight` below). It shows its mobile layout when the iframe is 575px wide or less, or is in portrait orientation, and its desktop layout otherwise.
+
+    + Desktop
+        + **Height requested:** `parentHeight` minus 120px, with a minimum of 800px
+        + **Result:** The iframe fills the host window and leaves 120px for the host's header or other page content. On short windows the iframe stays at 800px and the host page scrolls.
+    + Mobile
+        + **Height requested:** `parentHeight` plus the height of any extra panels shown below the Editor, such as collection product pickers
+        + **Result:** The Editor fills the full window height. The iframe can be taller than the window, and the host page scrolls to show the extra panels.
+
+### Keeping the height in sync
+
+The Editor only asks for the host height when the iframe's own window resizes. If the host window changes height but the iframe stays the same width, for example when a mobile browser's toolbar shows or hides, the Editor won't notice. To handle this, also send `innerHeight` when the host window resizes. Debounce it so you aren't sending a message on every frame.
+
+Setting the iframe height fires a `resize` event inside the iframe, so the Editor asks for the host height again. On this second pass the height is already correct, so the Editor sends no further `UNMADE_resize` message and the cycle ends.
+
+### Referrer policy
+
+In production, the Editor only accepts messages from the page that embedded it. It checks this by comparing the message origin with `document.referrer`. If the host page's referrer policy strips the referrer from cross-origin requests, `document.referrer` is empty and the Editor **silently ignores `innerHeight` messages**. This happens with `no-referrer` and `same-origin`, whether they're set by a `Referrer-Policy` header, a `<meta name="referrer">` tag or the iframe's `referrerpolicy` attribute. The browser default, `strict-origin-when-cross-origin`, works, and so do `origin` and any other policy that sends at least the host origin.
+
+### Legacy message names
+
+For backwards compatibility, the Editor also sends each of its sizing messages under an older name. Both versions are sent at the same time and carry the same payload.
+
+    + `requestInnerHeight` is the legacy name for `UNMADE_requestInnerHeight`
+    + `resize` is the legacy name for `UNMADE_resize`
+
+New integrations should listen for the `UNMADE_` names only. If you listen for both, you'll reply and resize twice. The message the host sends, `innerHeight`, has no `UNMADE_` version.
+
+### Example integration
+
+```
+var UNMADE_ORIGIN = "https://{your-partner-subdomain}.embed.unmade.com";
+var iframe = document.getElementById("unmade-editor");
+
+function sendInnerHeight () {
+  iframe.contentWindow.postMessage(
+    { type: "innerHeight", payload: window.innerHeight },
+    UNMADE_ORIGIN
+  );
+}
+
+window.addEventListener("message", function (event) {
+  if (event.origin !== UNMADE_ORIGIN) return;
+  if (event.source !== iframe.contentWindow) return;
+
+  var data = event.data || {};
+
+  switch (data.type) {
+    case "UNMADE_requestInnerHeight":
+      sendInnerHeight();
+      break;
+    case "UNMADE_resize":
+      if (data.payload && typeof data.payload.height === "number") {
+        iframe.style.height = data.payload.height + "px";
+      }
+      break;
+    default:
+      break;
+  }
+}, false);
+
+// The Editor can't see changes to the host window's height on its own
+var resizeTimer;
+window.addEventListener("resize", function () {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(sendInnerHeight, 150);
+});
+```
 
 ## Group Design API
 ### Retrieve designs [/v1/designs/{design_id}/]
