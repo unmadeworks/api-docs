@@ -858,6 +858,9 @@ the entire request fails and no designs are saved.
 
 Returns an empty `designs` list if the collection has no other products.
 
+Repeated calls with the same source design and collection return the previously created designs rather than creating
+new ones. Designs are only created for products that do not already have a transferred design.
+
 ### Transfer Designs [POST]
 
 + Parameters
