@@ -1185,6 +1185,12 @@ Creates a new outfit from a set of designs, one per slot defined by the given ou
 All slots defined in the outfit spec must be provided. Providing an unknown slot or supplying two pieces for the same 
 slot will return a 400 error.
 
+This endpoint does not require authentication, so outfits can be created directly from the browser in the same way as 
+designs. An `Authorization` header may still be sent, but an invalid token will return a 401 error.
+
+The outfit can be linked to an end-user by sending either `editor_user` or `editor_user_token`. If both are sent, 
+`editor_user` is used. An invalid `editor_user_token` is ignored and the outfit is still created, without an editor user.
+
 + Request (application/json)
 
     + Headers
@@ -1213,6 +1219,7 @@ slot will return a 400 error.
         + outfit_spec (string, required) - Slug of the Outfit Spec to use. Defines which slots must be filled.
         + name (string, optional) - A human-readable label for this outfit.
         + editor_user (string, optional) - The `external_id` of an existing EditorUser to associate with this outfit. Used to link the outfit to a specific end-user.
+        + editor_user_token (string, optional) - A JWT payload encrypted with your shared key which includes a unique identifier for your customer, as used to initialise the Unmade Editor. Used to link the outfit to a specific end-user. See [advanced setup](#/group-api-setup#header-advanced-setup) for more information.
         + pieces (array, required) - One object per slot in the outfit spec.
             + slot_slug (string) - The slug of the slot this piece fills.
             + design_id (string) - The ID of the Design to use for this slot. The design's product must belong to the given slot.
@@ -1273,15 +1280,6 @@ slot will return a 400 error.
             {
                 "code": "authentication_failed",
                 "message": "Incorrect authentication credentials."
-            }
-
-+ Response 403 (application/json)
-
-    + Body
-
-            {
-                "code": "permission_denied",
-                "message": "You do not have permission to perform this action."
             }
 
 
