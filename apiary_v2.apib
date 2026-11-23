@@ -2455,7 +2455,7 @@ Unmade for details of when cancellation is possible for your specific case.
               "message": "Order cannot be set as cancelled"
           }
 
-## List Orders [/v2/orders/{?state,page,created_before,created_after}]
+## List Orders [/v2/orders/{?state,page,created_before,created_after,reference}]
 ## List Orders [GET]
 
 This endpoint can be used to retrieve the complete list of all orders that have been created to date.
@@ -2466,11 +2466,16 @@ select the desired page.
 You can optionally provide `created_before` and `created_after` query parameters in the format `YYYY-MM-DD` to filter 
 the listed orders by their creation date.
 
+You can optionally provide a `reference` query parameter to find orders whose reference starts with the given
+value. The match is case-sensitive, so `XYZ` matches `XYZ` and `XYZ-2` but not `xyz`. If no order matches, an
+empty list is returned. For example: `GET /v2/orders/?reference=XYZ`
+
 + Parameters
     + state (optional, string) - Show orders with this state (see Order States section above for allowed values)
     + page (optional, number) - Page number
     + created_before (optional, string) - Show orders created before this date (`YYYY-MM-DD`)
     + created_after (optional, string) - Show orders created after this date (`YYYY-MM-DD`)
+    + reference (optional, string) - Show orders whose reference starts with this value (case-sensitive)
 
 + Request List Orders
 
